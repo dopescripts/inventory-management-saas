@@ -1,27 +1,25 @@
 import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { attempt } from "@/routes/super-admin/login/index";
-import { register } from "@/routes/register/index";
+import { attempt } from '@/routes/super-admin/login';
 
 type Props = {
     status?: string;
-    canResetPassword: boolean;
 };
 
 export default function Login({ status }: Props) {
     return (
         <>
-            <Head title="Log in" />
+            <Head title="Super Admin Log in" />
 
             <Form
                 {...attempt.form()}
+                resetOnSuccess={['password']}
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
@@ -43,6 +41,9 @@ export default function Login({ status }: Props) {
                             </div>
 
                             <div className="grid gap-2">
+                                <div className="flex items-center">
+                                    <Label htmlFor="password">Password</Label>
+                                </div>
                                 <PasswordInput
                                     id="password"
                                     name="password"
@@ -74,13 +75,6 @@ export default function Login({ status }: Props) {
                                 Log in
                             </Button>
                         </div>
-
-                        <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Sign up
-                            </TextLink>
-                        </div>
                     </>
                 )}
             </Form>
@@ -95,6 +89,6 @@ export default function Login({ status }: Props) {
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+    title: 'Super Admin Login',
+    description: 'Enter your super admin credentials below to log in',
 };
