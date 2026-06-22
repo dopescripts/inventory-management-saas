@@ -5,14 +5,16 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SuperAdmin\PlanRequest;
 use App\Models\Plan;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PlanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('super-admin/plans/index', [
             'plans' => Plan::latest()->get(),
@@ -22,7 +24,7 @@ class PlanController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('super-admin/plans/create');
     }
@@ -30,7 +32,7 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PlanRequest $request)
+    public function store(PlanRequest $request): RedirectResponse
     {
         Plan::create($request->validated());
 
@@ -41,7 +43,7 @@ class PlanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Plan $plan)
+    public function edit(Plan $plan): Response
     {
         return Inertia::render('super-admin/plans/edit', [
             'plan' => $plan,
@@ -51,7 +53,7 @@ class PlanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PlanRequest $request, Plan $plan)
+    public function update(PlanRequest $request, Plan $plan): RedirectResponse
     {
         $plan->update($request->validated());
 
@@ -62,7 +64,7 @@ class PlanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plan $plan)
+    public function destroy(Plan $plan): RedirectResponse
     {
         // Check if there are active subscriptions before deleting
         if ($plan->subscriptions()->exists()) {

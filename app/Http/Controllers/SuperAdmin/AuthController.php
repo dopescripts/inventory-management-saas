@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
-
+use Inertia\Response;
 class AuthController extends Controller
 {
-    public function login()
+    public function login(): Response
     {
         return Inertia::render('super-admin/auth/login');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'string', 'email'],
@@ -33,7 +34,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('super_admin')->logout();
 

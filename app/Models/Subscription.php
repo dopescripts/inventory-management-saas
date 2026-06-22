@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,12 +21,13 @@ class Subscription extends Model
 {
     protected $table = 'plan_subscriptions';
 
-    public function tenant()
+
+    public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }
 
-    public function plan()
+    public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
     }

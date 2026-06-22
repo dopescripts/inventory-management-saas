@@ -15,7 +15,8 @@ class StaffInvitationMail extends Mailable
     public function __construct(
         public string $password,
         public string $loginUrl
-    ) {}
+    ) {
+    }
 
     public function envelope(): Envelope
     {
@@ -31,6 +32,10 @@ class StaffInvitationMail extends Mailable
         );
     }
 
+    /**
+     * Summary of attachments
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
     public function attachments(): array
     {
         return [];

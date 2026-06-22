@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StaffRequest;
 use App\Mail\StaffInvitationMail;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StaffController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $staff = User::where('tenant_id', auth()->user()->tenant_id)
             ->with('roles')
@@ -23,12 +25,12 @@ class StaffController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('staff/create');
     }
 
-    public function store(StaffRequest $request)
+    public function store(StaffRequest $request): RedirectResponse
     {
         $password = Str::random(12);
 
@@ -46,7 +48,7 @@ class StaffController extends Controller
         return redirect()->route('staff.index')->with('success', 'Staff member created and invited.');
     }
 
-    public function edit(User $staff)
+    public function edit(User $staff): Response
     {
         if ($staff->tenant_id !== auth()->user()->tenant_id) {
             abort(404);
@@ -59,7 +61,7 @@ class StaffController extends Controller
         ]);
     }
 
-    public function update(StaffRequest $request, User $staff)
+    public function update(StaffRequest $request, User $staff): RedirectResponse
     {
         if ($staff->tenant_id !== $request->user()->tenant_id) {
             abort(404);
@@ -83,7 +85,7 @@ class StaffController extends Controller
         return redirect()->route('staff.index')->with('success', 'Staff member updated.');
     }
 
-    public function destroy(User $staff)
+    public function destroy(User $staff): RedirectResponse
     {
         if ($staff->tenant_id !== auth()->user()->tenant_id) {
             abort(404);
