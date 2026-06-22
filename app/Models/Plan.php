@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Plan extends Model
 {
+    /**
+     * Summary of subscriptions
+     * @return HasMany<Subscription, Plan>
+     */
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);

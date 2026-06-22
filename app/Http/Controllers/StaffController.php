@@ -6,6 +6,7 @@ use App\Http\Requests\StaffRequest;
 use App\Mail\StaffInvitationMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ class StaffController extends Controller
 {
     public function index(): Response
     {
-        $staff = User::where('tenant_id', auth()->user()->tenant_id)
+        $staff = User::where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->with('roles')
             ->get();
 
@@ -50,7 +51,7 @@ class StaffController extends Controller
 
     public function edit(User $staff): Response
     {
-        if ($staff->tenant_id !== auth()->user()->tenant_id) {
+        if ($staff->tenant_id !== Auth::guard('web')->user()->tenant_id) {
             abort(404);
         }
 
@@ -63,11 +64,11 @@ class StaffController extends Controller
 
     public function update(StaffRequest $request, User $staff): RedirectResponse
     {
-        if ($staff->tenant_id !== $request->user()->tenant_id) {
+        if ($staff->tenant_id !== Auth::guard('web')->user()->tenant_id) {
             abort(404);
         }
 
-        if ($staff->id === $request->user()->id) {
+        if ($staff->id === Auth::guard('web')->user()->id) {
             return back()->with('error', 'You cannot modify yourself here.');
         }
 
@@ -87,11 +88,11 @@ class StaffController extends Controller
 
     public function destroy(User $staff): RedirectResponse
     {
-        if ($staff->tenant_id !== auth()->user()->tenant_id) {
+        if ($staff->tenant_id !== Auth::guard('web')->user()->tenant_id) {
             abort(404);
         }
 
-        if ($staff->id === auth()->id() || $staff->hasRole('owner')) {
+        if ($staff->id === Auth::guard('web')->user()->id || $staff->hasRole('owner')) {
             return back()->with('error', 'Cannot delete this user.');
         }
 

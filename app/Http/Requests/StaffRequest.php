@@ -6,11 +6,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StaffRequest extends FormRequest
 {
+    /**
+     * Summary of authorize
+     * @return bool
+     */
     public function authorize(): bool
     {
         return $this->user()->hasRole('owner');
     }
 
+    /**
+     * Summary of rules
+     * @return array<string, array<int, string>>
+     */
     public function rules(): array
     {
         $rules = [
@@ -21,7 +29,7 @@ class StaffRequest extends FormRequest
         if ($this->isMethod('POST')) {
             $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users'];
         } else {
-            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->route('staff')->id];
+            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->route('staff')->id];
         }
 
         return $rules;

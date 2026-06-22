@@ -8,14 +8,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
+/**
+ * @property int $id
+ * @property string $name
+ */
 #[Fillable(['name'])]
 class Tenant extends Model
 {
+    /**
+     * Summary of users
+     * @return HasMany<User, Tenant>
+     */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
+    /**
+     * Summary of activeSubscription
+     * @return HasOne<Subscription, Tenant>
+     */
     public function activeSubscription(): HasOne
     {
         return $this->hasOne(Subscription::class)
@@ -24,6 +36,10 @@ class Tenant extends Model
             ->latest();
     }
 
+    /**
+     * Summary of plan
+     * @return HasOneThrough<Plan, Subscription, Tenant>
+     */
     public function plan(): HasOneThrough
     {
         return $this->hasOneThrough(Plan::class, Subscription::class, 'tenant_id', 'id', 'id', 'plan_id')
@@ -31,6 +47,10 @@ class Tenant extends Model
             ->where('plan_subscriptions.expires_at', '>=', now());
     }
 
+    /**
+     * Summary of hasActiveSubscription
+     * @return bool
+     */
     public function hasActiveSubscription(): bool
     {
         return $this->activeSubscription()->exists();

@@ -21,12 +21,14 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property int|null $tenant_id
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Tenant|null $tenant
  */
 #[Fillable(['name', 'email', 'password', 'tenant_id'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -48,6 +50,10 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Summary of tenant
+     * @return BelongsTo<Tenant, User>
+     */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
