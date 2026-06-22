@@ -30,10 +30,16 @@ class Subscription extends Model
         return $this->belongsTo(Plan::class);
     }
 
-    public function checkActiveSubscription()
+    public function checkActiveSubscription(): ?self
     {
-        return $this->where('tenant_id', Auth::guard('web')->user()->tenant_id)
-            ->where('status', 'active')
+        $tenantId = Auth::guard('web')->user()?->tenant_id;
+
+        if ($tenantId === null) {
+            return null;
+        }
+
+        return $this->where('tenant_id', $tenantId)
+            ->whereIn('status', ['trial', 'active'])
             ->where('expires_at', '>=', Carbon::now())
             ->first();
     }

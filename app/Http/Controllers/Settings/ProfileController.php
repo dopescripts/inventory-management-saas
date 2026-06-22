@@ -22,6 +22,7 @@ class ProfileController extends Controller
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'companyName' => $request->user()->tenant?->name,
         ]);
     }
 
@@ -30,13 +31,24 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
+
+        $request->user()->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        if ($request->has('company_name') && $request->user()->hasRole('owner')) {
+            $request->user()->tenant?->update([
+                'name' => $validated['company_name'],
+            ]);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 

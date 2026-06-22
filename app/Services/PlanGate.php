@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\Feature;
+use App\Models\Plan;
 use App\Models\Tenant;
 
 class PlanGate
@@ -11,9 +13,9 @@ class PlanGate
      */
     public function canCreateWarehouse(Tenant $tenant): bool
     {
-        $plan = $tenant->activeSubscription?->plan;
-        
-        if (!$plan) {
+        $plan = $this->currentPlan($tenant);
+
+        if (! $plan) {
             return false;
         }
 
@@ -32,9 +34,9 @@ class PlanGate
      */
     public function canCreateProduct(Tenant $tenant): bool
     {
-        $plan = $tenant->activeSubscription?->plan;
+        $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -53,9 +55,9 @@ class PlanGate
      */
     public function canProcessOrder(Tenant $tenant): bool
     {
-        $plan = $tenant->activeSubscription?->plan;
+        $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -64,7 +66,7 @@ class PlanGate
         }
 
         // Note: Monthly count will be implemented once Order model is created
-        $currentCount = 0; 
+        $currentCount = 0;
 
         return $currentCount < $plan->max_orders;
     }
@@ -72,17 +74,21 @@ class PlanGate
     /**
      * Check if the tenant has access to a specific feature.
      */
-    public function hasFeature(Tenant $tenant, string $feature): bool
+    public function hasFeature(Tenant $tenant, Feature $feature): bool
     {
-        $plan = $tenant->activeSubscription?->plan;
+        $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
         return match ($feature) {
-            'whatsapp' => (bool) $plan->has_whatsapp,
-            default => false,
+            Feature::Whatsapp => (bool) $plan->has_whatsapp,
         };
+    }
+
+    private function currentPlan(Tenant $tenant): ?Plan
+    {
+        return $tenant->activeSubscription()->with('plan')->first()?->plan;
     }
 }

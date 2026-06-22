@@ -35,11 +35,31 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
+        $user?->loadMissing('tenant.activeSubscription.plan');
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user ? array_merge($user->toArray(), [
+                    'roles' => $user->getRoleNames(),
+                    'permissions' => $user->getAllPermissions()->pluck('name'),
+                ]) : null,
+                'tenant' => $user?->tenant ? [
+                    'id' => $user->tenant->id,
+                    'name' => $user->tenant->name,
+                    'subscription' => $user->tenant->activeSubscription ? [
+                        'id' => $user->tenant->activeSubscription->id,
+                        'status' => $user->tenant->activeSubscription->status,
+                        'expires_at' => $user->tenant->activeSubscription->expires_at,
+                        'plan' => $user->tenant->activeSubscription->plan ? [
+                            'id' => $user->tenant->activeSubscription->plan->id,
+                            'name' => $user->tenant->activeSubscription->plan->name,
+                        ] : null,
+                    ] : null,
+                ] : null,
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),

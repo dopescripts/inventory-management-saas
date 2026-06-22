@@ -5,7 +5,7 @@ use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\PlanController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['guest:super_admin'])->prefix('super-admin')->group(function () {
+Route::middleware(['guest:super_admin'])->prefix('super-admin/auth')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('super-admin.login');
     Route::post('login', [AuthController::class, 'store'])->name('super-admin.login.attempt');
 });

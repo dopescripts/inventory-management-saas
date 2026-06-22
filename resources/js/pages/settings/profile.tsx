@@ -18,11 +18,19 @@ type PageProps = {
 export default function Profile({
     mustVerifyEmail,
     status,
+    companyName,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    companyName?: string | null;
 }) {
     const { auth } = usePage<PageProps>().props;
+
+    if (!auth.user) {
+        return null;
+    }
+
+    const user = auth.user;
 
     return (
         <>
@@ -52,7 +60,7 @@ export default function Profile({
                                 <Input
                                     id="name"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.name}
+                                    defaultValue={user.name}
                                     name="name"
                                     required
                                     autoComplete="name"
@@ -72,7 +80,7 @@ export default function Profile({
                                     id="email"
                                     type="email"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.email}
+                                    defaultValue={user.email}
                                     name="email"
                                     required
                                     autoComplete="username"
@@ -85,8 +93,30 @@ export default function Profile({
                                 />
                             </div>
 
+                            <div className="grid gap-2">
+                                <Label htmlFor="company_name">
+                                    Company name
+                                </Label>
+
+                                <Input
+                                    id="company_name"
+                                    className="mt-1 block w-full"
+                                    defaultValue={companyName ?? ''}
+                                    name="company_name"
+                                    disabled={user.roles[0] !== 'owner'}
+                                    required
+                                    autoComplete="organization"
+                                    placeholder="Company name"
+                                />
+
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.company_name}
+                                />
+                            </div>
+
                             {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                                user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
                                             Your email address is unverified.{' '}
@@ -102,11 +132,11 @@ export default function Profile({
 
                                         {status ===
                                             'verification-link-sent' && (
-                                            <div className="mt-2 text-sm font-medium text-green-600">
-                                                A new verification link has been
-                                                sent to your email address.
-                                            </div>
-                                        )}
+                                                <div className="mt-2 text-sm font-medium text-green-600">
+                                                    A new verification link has been
+                                                    sent to your email address.
+                                                </div>
+                                            )}
                                     </div>
                                 )}
 

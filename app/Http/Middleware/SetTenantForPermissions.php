@@ -12,6 +12,10 @@ class SetTenantForPermissions
     {
         $tenantId = Auth::guard('web')->user()?->tenant_id;
 
+        if (! $tenantId) {
+            abort(403, 'Tenant access required.');
+        }
+
         setPermissionsTeamId($tenantId);
 
         return $next($request);

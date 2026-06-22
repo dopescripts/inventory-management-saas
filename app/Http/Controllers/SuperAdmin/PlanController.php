@@ -65,7 +65,7 @@ class PlanController extends Controller
     public function destroy(Plan $plan)
     {
         // Check if there are active subscriptions before deleting
-        if ($plan->subcriptions()->exists()) {
+        if ($plan->subscriptions()->exists()) {
             return back()->with('error', 'Cannot delete plan with active subscriptions.');
         }
 

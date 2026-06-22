@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Plan extends Model
 {
-    public function subcriptions()
+    public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
     }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['name'])]
-
 class Tenant extends Model
 {
     public function users()
@@ -17,7 +16,7 @@ class Tenant extends Model
     public function activeSubscription()
     {
         return $this->hasOne(Subscription::class)
-            ->where('status', 'active')
+            ->whereIn('status', ['trial', 'active'])
             ->where('expires_at', '>=', now())
             ->latest();
     }
@@ -25,7 +24,7 @@ class Tenant extends Model
     public function plan()
     {
         return $this->hasOneThrough(Plan::class, Subscription::class, 'tenant_id', 'id', 'id', 'plan_id')
-            ->where('plan_subscriptions.status', 'active')
+            ->whereIn('plan_subscriptions.status', ['trial', 'active'])
             ->where('plan_subscriptions.expires_at', '>=', now());
     }
 

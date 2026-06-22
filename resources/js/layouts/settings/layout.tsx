@@ -1,6 +1,7 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
@@ -8,7 +9,11 @@ import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
-import type { NavItem } from '@/types';
+import type { Auth, NavItem } from '@/types';
+
+type PageProps = {
+    auth: Auth;
+};
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -30,6 +35,9 @@ const sidebarNavItems: NavItem[] = [
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const { auth } = usePage<PageProps>().props;
+    const planName = auth.tenant?.subscription?.plan?.name ?? 'No active plan';
+    const planStatus = auth.tenant?.subscription?.status ?? 'inactive';
 
     return (
         <div className="px-4 py-6">
@@ -63,6 +71,22 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                             </Button>
                         ))}
                     </nav>
+                    {auth.tenant && (
+                        <div className="mt-6 rounded-md border border-sidebar-border/70 p-3">
+                            <p className="text-xs font-medium uppercase text-muted-foreground">
+                                Current tenant
+                            </p>
+                            <p className="mt-1 truncate text-sm font-medium">
+                                {auth.tenant.name}
+                            </p>
+                            <div className="mt-3 flex items-center gap-2">
+                                <Badge variant="secondary">{planName}</Badge>
+                                <span className="text-xs capitalize text-muted-foreground">
+                                    {planStatus}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                 </aside>
 
                 <Separator className="my-6 lg:hidden" />
