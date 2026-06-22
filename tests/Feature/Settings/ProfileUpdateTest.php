@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Settings;
 
+use App\Http\Middleware\SetTenantForPermissions;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
@@ -13,6 +14,15 @@ use Tests\TestCase;
 class ProfileUpdateTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Seed the roles and permissions required for testing
+        $this->artisan('db:seed', ['--class' => 'RoleSeeder']);
+        $this->artisan('db:seed', ['--class' => 'PermissionSeeder']);
+    }
 
     public function test_profile_page_is_displayed()
     {
@@ -42,18 +52,21 @@ class ProfileUpdateTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('companyName', 'Acme Inventory')
-                ->where('auth.tenant.name', 'Acme Inventory')
-                ->where('auth.tenant.subscription.status', 'trial')
-                ->where('auth.tenant.subscription.plan.name', 'Free Trial')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->where('companyName', 'Acme Inventory')
+                    ->where('auth.tenant.name', 'Acme Inventory')
+                    ->where('auth.tenant.subscription.status', 'trial')
+                    ->where('auth.tenant.subscription.plan.name', 'Free Trial')
             );
     }
 
-    public function test_profile_information_can_be_updated()
+    public function test_profile_information_can_be_updated_owner()
     {
         $tenant = Tenant::create(['name' => 'Old Company']);
         $user = User::factory()->create(['tenant_id' => $tenant->id]);
+        setPermissionsTeamId($tenant->id);
+        $user->assignRole('owner');
 
         $response = $this
             ->actingAs($user)
@@ -73,6 +86,33 @@ class ProfileUpdateTest extends TestCase
         $this->assertSame('test@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
         $this->assertSame('New Company', $tenant->refresh()->name);
+    }
+
+    public function test_profile_information_can_be_updated_not_owner()
+    {
+        $tenant = Tenant::create(['name' => 'Old Company']);
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
+        setPermissionsTeamId($tenant->id);
+        $user->assignRole('staff');
+
+        $response = $this
+            ->actingAs($user)
+            ->patch(route('profile.update'), [
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'company_name' => 'New Company',
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('profile.edit'));
+
+        $user->refresh();
+
+        $this->assertSame('Test User', $user->name);
+        $this->assertSame('test@example.com', $user->email);
+        $this->assertNull($user->email_verified_at);
+        $this->assertNotSame('New Company', $tenant->refresh()->name);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()

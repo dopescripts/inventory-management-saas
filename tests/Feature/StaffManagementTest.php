@@ -93,13 +93,13 @@ class StaffManagementTest extends TestCase
         $staffB->assignRole('staff');
 
         $response = $this->actingAs($ownerA)->get(route('staff.edit', $staffB));
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
         $response = $this->actingAs($ownerA)->put(route('staff.update', $staffB), [
             'name' => 'Hacked Name',
             'email' => 'hacked@test.com',
             'role' => 'manager',
         ]);
-        $response->assertStatus(404);
+        $response->assertStatus(403);
     }
 }
