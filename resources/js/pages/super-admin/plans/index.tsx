@@ -1,8 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import SuperAdminLayout from '@/layouts/super-admin/layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { BreadcrumbItem } from '@/types';
 

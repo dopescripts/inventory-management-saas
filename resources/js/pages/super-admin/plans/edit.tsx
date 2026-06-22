@@ -1,5 +1,4 @@
 import { Head, useForm } from '@inertiajs/react';
-import SuperAdminLayout from '@/layouts/super-admin/layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PlanForm from './form';
 import type { BreadcrumbItem } from '@/types';
