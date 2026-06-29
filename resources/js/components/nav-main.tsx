@@ -1,36 +1,66 @@
 import { Link } from '@inertiajs/react';
 import {
     SidebarGroup,
+    SidebarGroupContent,
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { useCurrentUrl } from '@/hooks/use-current-url';
-import type { NavItem } from '@/types';
+import type { NavGroup } from '@/types';
+import { ChevronRight } from 'lucide-react';
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
+export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
-        <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
+        <>
+            {navGroups.map((item) => (
+                <Collapsible
+                    key={item.title}
+                    title={item.title}
+                    defaultOpen
+                    className="group/collapsible"
+                >
+                    <SidebarGroup>
+                        <SidebarGroupLabel
                             asChild
-                            isActive={isCurrentUrl(item.href)}
-                            tooltip={{ children: item.title }}
+                            className="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-        </SidebarGroup>
+                            <CollapsibleTrigger className='cursor-pointer'>
+                                {item.title}{" "}
+                                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                            </CollapsibleTrigger>
+                        </SidebarGroupLabel>
+                        <CollapsibleContent>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {item.items.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                isActive={isCurrentUrl(item.href)}
+                                                tooltip={{ children: item.title }}
+                                            >
+                                                <Link href={item.href} prefetch>
+                                                    {item.icon && <item.icon />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </CollapsibleContent>
+                    </SidebarGroup>
+                </Collapsible>
+            ))}
+        </>
     );
 }

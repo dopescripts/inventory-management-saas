@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $name
@@ -48,6 +49,15 @@ class Warehouse extends Model
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Summary of locations
+     * @return HasMany<Location, Warehouse>
+     */
+    public function locations(): HasMany
+    {
+        return $this->hasMany(Location::class, 'warehouse_id');
     }
 
     /**

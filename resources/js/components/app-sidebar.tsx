@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, User } from 'lucide-react';
+import { Building2, LayoutGrid, User } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,8 +14,9 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavGroup, NavItem } from '@/types';
 import staff from '@/routes/staff';
+import warehouses from '@/routes/warehouses';
 
 const footerNavItems: NavItem[] = [];
 
@@ -23,21 +24,38 @@ export function AppSidebar() {
     const { auth } = usePage<any>().props;
     const isOwnerOrManager = auth.user.roles?.includes('owner') || auth.user.roles?.includes('manager');
 
-    const mainNavItems: NavItem[] = [
+
+
+    const mainNavItems: NavGroup[] = [
         {
-            title: 'Dashboard',
-            href: dashboard(),
-            icon: LayoutGrid,
+            title: 'Management',
+            items: [
+                {
+                    title: 'Dashboard',
+                    href: dashboard(),
+                    icon: LayoutGrid,
+                },
+                ...(isOwnerOrManager
+                    ? [
+                        {
+                            title: 'Manage Staff',
+                            href: staff.index(),
+                            icon: User,
+                        },
+                    ]
+                    : []),
+            ]
         },
-        ...(isOwnerOrManager
-            ? [
-                  {
-                      title: 'Manage Staff',
-                      href: staff.index(),
-                      icon: User,
-                  },
-              ]
-            : []),
+        {
+            title: "Organization",
+            items: [
+                {
+                    title: 'Warehouse',
+                    href: warehouses.index(),
+                    icon: Building2
+                }
+            ]
+        }
     ];
 
     return (
@@ -55,7 +73,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain navGroups={mainNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
