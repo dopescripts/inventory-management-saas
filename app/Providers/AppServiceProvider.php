@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\PlanGate;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(\App\Services\PlanGate::class, function ($app) {
-            return new \App\Services\PlanGate();
+        $this->app->singleton(PlanGate::class, function ($app) {
+            return new PlanGate;
         });
     }
 

@@ -11,9 +11,9 @@ export default function Create() {
         role: 'staff',
     });
 
-    const submit = (e: React.FormEvent) => {
+    const submit = (e: React.SubmitEvent) => {
         e.preventDefault();
-        post(staff.store());
+        post(staff.store.url());
     };
 
     return (

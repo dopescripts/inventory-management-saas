@@ -16,6 +16,8 @@ class SuperAdmin extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     protected $guard = 'super_admin';
+
     protected $guard_name = ['super_admin'];
 }

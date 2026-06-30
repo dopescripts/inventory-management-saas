@@ -23,22 +23,27 @@ class Subscription extends Model
 
     /**
      * Summary of tenant
+     *
      * @return BelongsTo<Tenant, Subscription>
      */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }
+
     /**
      * Summary of plan
+     *
      * @return BelongsTo<Plan, Subscription>
      */
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
     }
+
     /**
      * Summary of checkActiveSubscription
+     *
      * @return Subscription|\stdClass|null
      */
     public function checkActiveSubscription(): ?self

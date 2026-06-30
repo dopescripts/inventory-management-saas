@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -40,13 +40,16 @@ class HandleInertiaRequests extends Middleware
         $user = Auth::guard('web')->user();
 
         $user?->loadMissing('tenant.activeSubscription.plan');
-        setPermissionsTeamId($user->tenant_id);
+
+        if ($user) {
+            setPermissionsTeamId($user->tenant_id);
+        }
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                /** @var \App\Models\User|null $user */
+                /** @var User|null $user */
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
                     'permissions' => $user->getAllPermissions()->pluck('name'),
@@ -69,7 +72,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
-            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

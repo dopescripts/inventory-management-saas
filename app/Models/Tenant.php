@@ -17,6 +17,7 @@ class Tenant extends Model
 {
     /**
      * Summary of users
+     *
      * @return HasMany<User, Tenant>
      */
     public function users(): HasMany
@@ -26,6 +27,7 @@ class Tenant extends Model
 
     /**
      * Summary of activeSubscription
+     *
      * @return HasOne<Subscription, Tenant>
      */
     public function activeSubscription(): HasOne
@@ -38,6 +40,7 @@ class Tenant extends Model
 
     /**
      * Summary of plan
+     *
      * @return HasOneThrough<Plan, Subscription, Tenant>
      */
     public function plan(): HasOneThrough
@@ -49,7 +52,6 @@ class Tenant extends Model
 
     /**
      * Summary of hasActiveSubscription
-     * @return bool
      */
     public function hasActiveSubscription(): bool
     {

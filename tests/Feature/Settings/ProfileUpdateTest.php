@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Settings;
 
-use App\Http\Middleware\SetTenantForPermissions;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
@@ -53,7 +52,7 @@ class ProfileUpdateTest extends TestCase
         $response
             ->assertOk()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->where('companyName', 'Acme Inventory')
                     ->where('auth.tenant.name', 'Acme Inventory')
                     ->where('auth.tenant.subscription.status', 'trial')

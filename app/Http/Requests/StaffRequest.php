@@ -8,7 +8,6 @@ class StaffRequest extends FormRequest
 {
     /**
      * Summary of authorize
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -17,6 +16,7 @@ class StaffRequest extends FormRequest
 
     /**
      * Summary of rules
+     *
      * @return array<string, array<int, string>>
      */
     public function rules(): array
@@ -29,7 +29,7 @@ class StaffRequest extends FormRequest
         if ($this->isMethod('POST')) {
             $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users'];
         } else {
-            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->route('staff')->id];
+            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->route('staff')->id];
         }
 
         return $rules;

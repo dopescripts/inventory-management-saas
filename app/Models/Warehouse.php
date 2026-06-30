@@ -21,9 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_active
  * @property int $created_by
  * @property int $tenant_id
- *
- * @property-read \App\Models\User $createdBy
- * @property-read \App\Models\Tenant $tenant
+ * @property-read User $createdBy
+ * @property-read Tenant $tenant
  */
 #[Fillable([
     'name',
@@ -44,6 +43,7 @@ class Warehouse extends Model
 {
     /**
      * Summary of createdBy
+     *
      * @return BelongsTo<User, Warehouse>
      */
     public function createdBy(): BelongsTo
@@ -53,6 +53,7 @@ class Warehouse extends Model
 
     /**
      * Summary of locations
+     *
      * @return HasMany<Location, Warehouse>
      */
     public function locations(): HasMany
@@ -62,6 +63,7 @@ class Warehouse extends Model
 
     /**
      * Summary of tenant
+     *
      * @return BelongsTo<Tenant, Warehouse>
      */
     public function tenant(): BelongsTo

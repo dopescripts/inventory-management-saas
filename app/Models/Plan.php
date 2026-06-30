@@ -19,6 +19,7 @@ class Plan extends Model
 {
     /**
      * Summary of subscriptions
+     *
      * @return HasMany<Subscription, Plan>
      */
     public function subscriptions(): HasMany

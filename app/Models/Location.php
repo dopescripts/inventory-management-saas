@@ -18,10 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $created_by
  * @property int $tenant_id
  * @property int $warehouse_id
- *
- * @property-read \App\Models\User $createdBy
- * @property-read \App\Models\Tenant $tenant
- * @property-read \App\Models\Warehouse $warehouse
+ * @property-read User $createdBy
+ * @property-read Tenant $tenant
+ * @property-read Warehouse $warehouse
  */
 #[Fillable([
     'code',

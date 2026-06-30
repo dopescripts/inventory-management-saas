@@ -16,9 +16,10 @@ class EnsureSuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('super_admin')->check()) {
+        if (! Auth::guard('super_admin')->check()) {
             return abort(403);
         }
+
         return $next($request);
     }
 }

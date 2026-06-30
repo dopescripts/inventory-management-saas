@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Warehouse\WarehouseRequest;
 use App\Models\Warehouse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WarehouseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $warehouses = Warehouse::query()
             ->with('locations', 'createdBy:id,name,email')
@@ -29,17 +32,24 @@ class WarehouseController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('inventory/warehouse/create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WarehouseRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['tenant_id'] = Auth::guard('web')->user()->tenant_id;
+        $validated['created_by'] = Auth::guard('web')->id();
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        Warehouse::create($validated);
+
+        return redirect()->route('warehouses.index')->with('success', 'Warehouse created successfully.');
     }
 
     /**

@@ -20,7 +20,7 @@ function index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
                 <div className='flex justify-between items-center mb-6'>
                     <h1 className='text-2xl font-bold'>Warehouses</h1>
                     {
-                        (auth?.user?.roles?.includes('owner') || auth?.user?.roles?.includes('manager')) && (
+                        (auth?.user?.permissions?.includes('create_warehouses') || auth?.user?.roles?.includes('manager')) && (
                             <Button asChild>
                                 <Link href={warehouses.create()}>Create Warehouse</Link>
                             </Button>
