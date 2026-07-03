@@ -19,7 +19,8 @@ class WarehouseController extends Controller
     public function index(): Response
     {
         $warehouses = Warehouse::query()
-            ->with('locations', 'createdBy:id,name,email')
+            ->with('createdBy:id,name,email')
+            ->withCount('locations')
             ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->latest()
             ->paginate(5);
@@ -55,9 +56,13 @@ class WarehouseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): Response
     {
-        //
+        $warehouse = Warehouse::with(['locations', 'createdBy'])->where('tenant_id', Auth::guard('web')->user()->tenant_id)->where('id', $id)->firstOrFail();
+
+        return Inertia::render('inventory/warehouse/show', [
+            'warehouse' => $warehouse,
+        ]);
     }
 
     /**

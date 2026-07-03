@@ -14,6 +14,7 @@ export type User = {
 export type Tenant = {
     id: number;
     name: string;
+    logo: string | null;
     subscription: Subscription | null;
 };
 

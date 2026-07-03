@@ -19,6 +19,7 @@ trait ProfileValidationRules
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
             'company_name' => ['sometimes', 'string', 'max:255'],
+            'logo' => ['sometimes', 'image', 'max:2048', 'mimes:jpeg,png,jpg,gif,svg,webp'],
         ];
     }
 

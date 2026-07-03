@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 /**
  * @property int $id
  * @property string $name
+ * @property string $logo
  */
-#[Fillable(['name'])]
+#[Fillable(['name', 'logo'])]
 class Tenant extends Model
 {
     /**

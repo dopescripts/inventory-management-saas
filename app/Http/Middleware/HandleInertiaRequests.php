@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -57,6 +58,7 @@ class HandleInertiaRequests extends Middleware
                 'tenant' => $user?->tenant ? [
                     'id' => $user->tenant->id,
                     'name' => $user->tenant->name,
+                    'logo' => $user->tenant->logo ? Storage::url($user->tenant->logo) : null,
                     'subscription' => $user->tenant->activeSubscription ? [
                         'id' => $user->tenant->activeSubscription->id,
                         'status' => $user->tenant->activeSubscription->status,

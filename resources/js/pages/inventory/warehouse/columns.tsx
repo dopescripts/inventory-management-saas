@@ -6,17 +6,27 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Link, usePage } from "@inertiajs/react"
 import warehouses from "@/routes/warehouses"
+import { ArrowUpDown } from "lucide-react"
 
 export const columns: ColumnDef<any>[] = [
     {
         accessorKey: "name",
-        header: "Warehouse",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Warehouse
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             const name = row.getValue("name") as string;
             const code = row.original.code;
@@ -30,7 +40,7 @@ export const columns: ColumnDef<any>[] = [
     },
     {
         accessorKey: "location",
-        header: "Location",
+        header: "Address",
         cell: ({ row }) => {
             const city = row.original.city;
             const country = row.original.country;
@@ -43,23 +53,18 @@ export const columns: ColumnDef<any>[] = [
         }
     },
     {
-        accessorKey: "contact",
-        header: "Contact",
-        cell: ({ row }) => {
-            const email = row.original.email;
-            const phone = row.original.phone;
-            if (!email && !phone) return <span className="text-muted-foreground text-xs">N/A</span>;
-            return (
-                <div className="flex flex-col text-sm">
-                    {email && <span>{email}</span>}
-                    {phone && <span className="text-muted-foreground text-xs">{phone}</span>}
-                </div>
-            )
-        }
-    },
-    {
         accessorKey: "is_active",
-        header: "Status",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             const isActive = row.getValue("is_active");
             return (
@@ -67,6 +72,13 @@ export const columns: ColumnDef<any>[] = [
                     {isActive ? "Active" : "Inactive"}
                 </Badge>
             )
+        }
+    },
+    {
+        accessorKey: "locations",
+        header: "Locations",
+        cell: ({ row }) => {
+            return <Link href={warehouses.show({ warehouse: row.original.id })}><Button variant="link">{row.original.locations_count}</Button></Link>
         }
     },
     {

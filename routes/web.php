@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Inventory\WarehouseController;
+use App\Http\Controllers\Inventory\WarehouseLocationController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,12 @@ Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () 
         'update' => 'permission:update_warehouses',
         'destroy' => 'permission:delete_warehouses',
     ]);
+    Route::get('warehouses/{warehouse}/locations/create', [WarehouseLocationController::class, 'create'])
+        ->name('warehouses.locations.create')
+        ->middleware('permission:create_warehouses');
+    Route::post('warehouses/{warehouse}/locations', [WarehouseLocationController::class, 'store'])
+        ->name('warehouses.locations.store')
+        ->middleware('permission:create_warehouses');
 });
 
 require __DIR__.'/settings.php';

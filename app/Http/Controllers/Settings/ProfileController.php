@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,6 +24,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
             'companyName' => $request->user()->tenant?->name,
+            'companyLogo' => $request->user()->tenant?->logo,
         ]);
     }
 
@@ -47,6 +49,18 @@ class ProfileController extends Controller
         if ($request->has('company_name') && $request->user()->hasRole('owner')) {
             $request->user()->tenant?->update([
                 'name' => $validated['company_name'],
+            ]);
+        }
+
+        if ($request->hasFile('company_logo') && $request->user()->hasRole('owner')) {
+            $currentLogo = $request->user()->tenant->logo;
+
+            if ($currentLogo && Storage::disk('public')->exists($currentLogo)) {
+                Storage::disk('public')->delete($currentLogo);
+            }
+
+            $request->user()->tenant?->update([
+                'logo' => Storage::disk('public')->putFileAs('tenants/logos', $request->file('company_logo'), $request->user()->tenant->id.'.'.$request->file('company_logo')->getClientOriginalExtension()),
             ]);
         }
 

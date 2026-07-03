@@ -16,7 +16,10 @@ export function TenantContext({ tenant, compact = false }: Props) {
 
     return (
         <div className="flex min-w-0 items-center gap-2 rounded-md border border-sidebar-border/70 px-2.5 py-1.5">
-            <Building2 className="size-4 shrink-0 text-muted-foreground" />
+            {tenant.logo ?
+                <img src={tenant.logo} alt={tenant.name} className="w-4 h-4 rounded" />
+                : <Building2 className="size-4 shrink-0 text-muted-foreground" />
+            }
             <div className="min-w-0">
                 <p className="truncate text-sm font-medium leading-none">
                     {tenant.name}
