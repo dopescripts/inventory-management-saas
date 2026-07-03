@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers\Inventory;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Inventory\UnitRequest;
+use App\Models\Unit;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class UnitController extends Controller
+{
+    public function index(): Response
+    {
+        $units = Unit::query()
+            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
+            ->latest()
+            ->paginate(10);
+
+        return Inertia::render('inventory/unit/index', [
+            'units' => $units,
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('inventory/unit/create');
+    }
+
+    public function store(UnitRequest $request): RedirectResponse|JsonResponse
+    {
+        $unit = Unit::create([
+            ...$request->validated(),
+            'tenant_id' => $request->user()->tenant_id,
+            'created_by' => $request->user()->id,
+            'is_active' => $request->boolean('is_active', true),
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name]);
+        }
+
+        return redirect()->route('units.index')->with('success', 'Unit created successfully.');
+    }
+
+    public function show(string $id): never
+    {
+        abort(404);
+    }
+
+    public function edit(Unit $unit): Response
+    {
+        $this->ensureTenantOwnership($unit);
+
+        return Inertia::render('inventory/unit/edit', [
+            'unit' => $unit,
+        ]);
+    }
+
+    public function update(UnitRequest $request, Unit $unit): RedirectResponse
+    {
+        $this->ensureTenantOwnership($unit);
+
+        $unit->update([
+            ...$request->validated(),
+            'is_active' => $request->boolean('is_active', true),
+        ]);
+
+        return redirect()->route('units.index')->with('success', 'Unit updated successfully.');
+    }
+
+    public function destroy(Unit $unit): RedirectResponse
+    {
+        $this->ensureTenantOwnership($unit);
+        $unit->delete();
+
+        return redirect()->route('units.index')->with('success', 'Unit deleted successfully.');
+    }
+
+    private function ensureTenantOwnership(Unit $unit): void
+    {
+        abort_unless($unit->tenant_id === Auth::guard('web')->user()->tenant_id, 404);
+    }
+}

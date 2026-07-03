@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -18,6 +18,8 @@ import { ChevronRight } from 'lucide-react';
 
 export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();
+    const { auth } = usePage().props as any;
+    const hasPermission = (permission: string) => auth.user.permissions.includes(permission);
 
     return (
         <>
@@ -38,23 +40,30 @@ export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
                                 <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                             </CollapsibleTrigger>
                         </SidebarGroupLabel>
-                        <CollapsibleContent>
+                        <CollapsibleContent className='mt-1'>
                             <SidebarGroupContent>
                                 <SidebarMenu>
-                                    {item.items.map((item) => (
-                                        <SidebarMenuItem key={item.title}>
-                                            <SidebarMenuButton
-                                                asChild
-                                                isActive={isCurrentUrl(item.href)}
-                                                tooltip={{ children: item.title }}
-                                            >
-                                                <Link href={item.href} prefetch>
-                                                    {item.icon && <item.icon />}
-                                                    <span>{item.title}</span>
-                                                </Link>
-                                            </SidebarMenuButton>
-                                        </SidebarMenuItem>
-                                    ))}
+                                    {item.items.map((item) => {
+                                        if (item.permission && !hasPermission(item.permission)) {
+                                            return null;
+                                        }
+
+                                        return (
+
+                                            <SidebarMenuItem key={item.title}>
+                                                <SidebarMenuButton
+                                                    asChild
+                                                    isActive={isCurrentUrl(item.href)}
+                                                    tooltip={{ children: item.title }}
+                                                >
+                                                    <Link href={item.href} prefetch>
+                                                        {item.icon && <item.icon />}
+                                                        <span>{item.title}</span>
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        )
+                                    })}
                                 </SidebarMenu>
                             </SidebarGroupContent>
                         </CollapsibleContent>

@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Building2, LayoutGrid, User } from 'lucide-react';
+import { Boxes, Building2, LayoutGrid, Shapes, Tag, User } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -17,6 +17,10 @@ import { dashboard } from '@/routes';
 import type { NavGroup, NavItem } from '@/types';
 import staff from '@/routes/staff';
 import warehouses from '@/routes/warehouses';
+import brands from '@/routes/brands';
+import units from '@/routes/units';
+import categories from '@/routes/categories';
+import items from '@/routes/items';
 
 const footerNavItems: NavItem[] = [];
 
@@ -47,12 +51,41 @@ export function AppSidebar() {
             ]
         },
         {
+            title: "Inventory",
+            items: [
+                {
+                    title: 'Items',
+                    href: items.index(),
+                    icon: Boxes,
+                    permission: 'view_items'
+                },
+            ]
+        },
+        {
             title: "Organization",
             items: [
                 {
                     title: 'Warehouse',
                     href: warehouses.index(),
                     icon: Building2
+                },
+                {
+                    title: 'Brands',
+                    href: brands.index(),
+                    icon: Tag,
+                    permission: 'view_brands'
+                },
+                {
+                    title: 'Units',
+                    href: units.index(),
+                    icon: Boxes,
+                    permission: 'view_units'
+                },
+                {
+                    title: 'Category',
+                    href: categories.index(),
+                    icon: Shapes,
+                    permission: 'view_categories'
                 }
             ]
         }

@@ -13,7 +13,7 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $modules = ['warehouses', 'items', 'purchases', 'sales', 'reports', 'staff'];
+        $modules = ['warehouses', 'items', 'purchases', 'sales', 'reports', 'staff', 'units', 'brands', 'categories'];
         $actions = ['view', 'create', 'update', 'delete'];
 
         $permissions = [];

@@ -13,7 +13,6 @@ interface PaginatedWarehouses {
 function index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
     const auth = usePage().props.auth;
     const data = warehousesData;
-    console.log(data);
     return (
         <>
             <Head title="Warehouses" />

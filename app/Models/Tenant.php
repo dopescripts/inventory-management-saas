@@ -27,6 +27,16 @@ class Tenant extends Model
     }
 
     /**
+     * Summary of inventoryMovements
+     *
+     * @return HasMany<InventoryMovement, Tenant>
+     */
+    public function inventoryMovements(): HasMany
+    {
+        return $this->hasMany(InventoryMovement::class);
+    }
+
+    /**
      * Summary of activeSubscription
      *
      * @return HasOne<Subscription, Tenant>

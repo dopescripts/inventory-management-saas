@@ -62,6 +62,16 @@ class Warehouse extends Model
     }
 
     /**
+     * Summary of inventoryMovements
+     *
+     * @return HasMany<InventoryMovement, Warehouse>
+     */
+    public function inventoryMovements(): HasMany
+    {
+        return $this->hasMany(InventoryMovement::class);
+    }
+
+    /**
      * Summary of tenant
      *
      * @return BelongsTo<Tenant, Warehouse>
