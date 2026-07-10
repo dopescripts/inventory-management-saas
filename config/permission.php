@@ -152,6 +152,14 @@ return [
     'teams' => true,
 
     /*
+     * 🟢 ADD THESE TWO LINES HERE:
+     * When set to true, roles/permissions with a NULL team_id (tenant_id)
+     * are treated as global and will apply to ALL tenants universally.
+     */
+    'teams_roles_all_teams' => true,
+    'teams_permissions_all_teams' => true,
+
+    /*
      * The class to use to resolve the permissions team id
      */
     'team_resolver' => DefaultTeamResolver::class,

@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +43,7 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             setPermissionsTeamId($user->tenant_id);
+            $user->unsetRelation('roles')->unsetRelation('permissions');
         }
 
         return [

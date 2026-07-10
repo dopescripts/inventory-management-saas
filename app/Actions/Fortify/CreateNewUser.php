@@ -8,10 +8,10 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Spatie\Permission\Models\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -62,8 +62,9 @@ class CreateNewUser implements CreatesNewUsers
             ]);
 
             setPermissionsTeamId($tenant->id);
-            Role::findOrCreate('owner', 'web');
             $user->assignRole('owner');
+
+            Cache::forget('spatie.permission.cache');
 
             return $user;
         });

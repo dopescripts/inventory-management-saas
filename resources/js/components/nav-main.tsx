@@ -1,4 +1,10 @@
 import { Link, usePage } from '@inertiajs/react';
+import { ChevronRight } from 'lucide-react';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -7,14 +13,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavGroup } from '@/types';
-import { ChevronRight } from 'lucide-react';
 
 export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();

@@ -9,12 +9,24 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ItemController extends Controller
+class ItemController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view_items', only: ['index']),
+            new Middleware('permission:create_items', only: ['create', 'store']),
+            new Middleware('permission:update_items', only: ['edit', 'update']),
+            new Middleware('permission:delete_items', only: ['destroy']),
+        ];
+    }
+
     public function index(): Response
     {
         $items = Item::query()

@@ -98,8 +98,8 @@
 
     --radius: 0.625rem;
 
-    --sidebar: oklch(0.97 0.01 220);
-    --sidebar-foreground: oklch(0.25 0.02 230);
+    --sidebar: oklch(37.522% 0.04552 227.464);
+    --sidebar-foreground: oklch(0.97 0.01 220);
     --sidebar-primary: oklch(0.52 0.15 220);
     --sidebar-primary-foreground: oklch(0.985 0.005 220);
     --sidebar-accent: oklch(0.92 0.03 200);

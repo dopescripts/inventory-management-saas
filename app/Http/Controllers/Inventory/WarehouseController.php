@@ -7,12 +7,24 @@ use App\Http\Requests\Warehouse\WarehouseRequest;
 use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class WarehouseController extends Controller
+class WarehouseController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view_warehouses', only: ['index']),
+            new Middleware('permission:create_warehouses', only: ['create', 'store']),
+            new Middleware('permission:update_warehouses', only: ['edit', 'update']),
+            new Middleware('permission:delete_warehouses', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */

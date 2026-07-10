@@ -7,14 +7,25 @@ use App\Http\Requests\Inventory\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view_categories', only: ['index']),
+            new Middleware('permission:create_categories', only: ['create', 'store']),
+            new Middleware('permission:update_categories', only: ['edit', 'update']),
+            new Middleware('permission:delete_categories', only: ['destroy']),
+        ];
+    }
+
     public function index(): Response
     {
         $categories = Category::query()

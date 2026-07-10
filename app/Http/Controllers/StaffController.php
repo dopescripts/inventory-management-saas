@@ -7,6 +7,7 @@ use App\Mail\StaffInvitationMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -34,7 +35,6 @@ class StaffController extends Controller
     public function store(StaffRequest $request): RedirectResponse
     {
         $password = Str::random(12);
-
         $staff = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -42,7 +42,14 @@ class StaffController extends Controller
             'tenant_id' => $request->user()->tenant_id,
         ]);
 
+        $tenantId = $request->user()->tenant_id;
+        setPermissionsTeamId($tenantId);
+
+        // Assign the role
         $staff->assignRole($request->role);
+
+        // 🔴 CRITICAL: Clear the permission cache
+        $this->clearPermissionCache();
 
         Mail::to($staff->email)->send(new StaffInvitationMail($password, route('login')));
 
@@ -81,7 +88,14 @@ class StaffController extends Controller
             'email' => $request->email,
         ]);
 
+        $tenantId = $request->user()->tenant_id;
+        setPermissionsTeamId($tenantId);
+
+        // Sync roles
         $staff->syncRoles([$request->role]);
+
+        // 🔴 CRITICAL: Clear the permission cache
+        $this->clearPermissionCache();
 
         return redirect()->route('staff.index')->with('success', 'Staff member updated.');
     }
@@ -99,5 +113,15 @@ class StaffController extends Controller
         $staff->delete();
 
         return redirect()->route('staff.index')->with('success', 'Staff member deleted.');
+    }
+
+    /**
+     * Clear permission cache for a user
+     * Spatie caches permissions for 24 hours by default
+     */
+    private function clearPermissionCache(): void
+    {
+        // Clear Spatie's global permission cache key
+        Cache::forget('spatie.permission.cache');
     }
 }

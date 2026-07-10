@@ -7,12 +7,24 @@ use App\Http\Requests\Inventory\UnitRequest;
 use App\Models\Unit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UnitController extends Controller
+class UnitController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view_units', only: ['index']),
+            new Middleware('permission:create_units', only: ['create', 'store']),
+            new Middleware('permission:update_units', only: ['edit', 'update']),
+            new Middleware('permission:delete_units', only: ['destroy']),
+        ];
+    }
+
     public function index(): Response
     {
         $units = Unit::query()

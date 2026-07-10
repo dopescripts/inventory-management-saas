@@ -15,30 +15,24 @@ class PermissionSeeder extends Seeder
     {
         $modules = ['warehouses', 'items', 'purchases', 'sales', 'reports', 'staff', 'units', 'brands', 'categories'];
         $actions = ['view', 'create', 'update', 'delete'];
-
         $permissions = [];
-
         foreach ($modules as $module) {
             foreach ($actions as $action) {
                 // E.g. view_warehouses
                 $name = "{$action}_{$module}";
                 $permissions[] = $name;
-
                 Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
             }
         }
-
         // Owner gets everything implicitly or explicitly. Let's explicitly give them everything.
         $ownerRole = Role::firstOrCreate(['name' => 'owner', 'guard_name' => 'web']);
         $ownerRole->syncPermissions(Permission::where('guard_name', 'web')->get());
-
         // Manager gets most things except maybe deleting staff, or maybe they get everything except staff management
         $managerRole = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
         $managerPermissions = Permission::where('guard_name', 'web')
             ->where('name', 'not like', '%_staff')
             ->get();
         $managerRole->syncPermissions($managerPermissions);
-
         // Staff gets view and create, maybe update, but no delete
         $staffRole = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web']);
         $staffPermissions = Permission::where('guard_name', 'web')

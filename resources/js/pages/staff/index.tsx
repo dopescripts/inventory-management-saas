@@ -49,7 +49,7 @@ export default function Index({ staff }: { staff: any[] }) {
                                             size="icon"
                                             onClick={() => {
                                                 if (confirm('Are you sure you want to delete this staff member?')) {
-                                                    router.delete(staffRoute.destroy({ staff: user.id }).url());
+                                                    router.delete(staffRoute.destroy({ staff: user.id }).url);
                                                 }
                                             }}
                                             disabled={user.id === authUser.id || user.roles[0]?.name === 'owner'}

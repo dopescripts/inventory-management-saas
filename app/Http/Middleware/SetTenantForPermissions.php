@@ -18,6 +18,8 @@ class SetTenantForPermissions
 
         setPermissionsTeamId($tenantId);
 
+        Auth::guard('web')->user()->unsetRelation('roles')->unsetRelation('permissions');
+
         return $next($request);
     }
 }

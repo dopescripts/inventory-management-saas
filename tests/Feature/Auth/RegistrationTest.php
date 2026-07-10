@@ -19,6 +19,8 @@ class RegistrationTest extends TestCase
         parent::setUp();
 
         $this->skipUnlessFortifyHas(Features::registration());
+
+        $this->artisan('db:seed', ['--class' => 'RoleSeeder']);
     }
 
     public function test_registration_screen_can_be_rendered()

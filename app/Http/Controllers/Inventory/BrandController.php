@@ -7,12 +7,24 @@ use App\Http\Requests\Inventory\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class BrandController extends Controller
+class BrandController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view_brands', only: ['index']),
+            new Middleware('permission:create_brands', only: ['create', 'store']),
+            new Middleware('permission:update_brands', only: ['edit', 'update']),
+            new Middleware('permission:delete_brands', only: ['destroy']),
+        ];
+    }
+
     public function index(): Response
     {
         $brands = Brand::query()

@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\SetTenantForPermissions;
 use App\Services\PlanGate;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Http\Kernel;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +29,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /** @var Kernel $kernel */
+        $kernel = app()->make(Kernel::class);
+
         $this->configureDefaults();
+        $kernel->addToMiddlewarePriorityBefore(
+            SetTenantForPermissions::class,
+            SubstituteBindings::class,
+        );
     }
 
     /**
@@ -40,7 +50,8 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
+        Password::defaults(
+            fn (): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()
                 ->letters()
