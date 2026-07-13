@@ -8,9 +8,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Unit;
+use App\Services\PlanGate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,16 +49,22 @@ class ItemController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function store(ItemRequest $request): RedirectResponse
+    public function store(ItemRequest $request, PlanGate $gate): RedirectResponse
     {
-        Item::create([
-            ...$request->validated(),
-            'created_by' => $request->user()->id,
-            'track_inventory' => $request->boolean('track_inventory', true),
-            'is_active' => $request->boolean('is_active', true),
-        ]);
 
-        return redirect()->route('items.index')->with('success', 'Item created successfully.');
+
+        if ($gate->canCreateProduct(Auth::guard('web')->user()->tenant)) {
+            Item::create([
+                ...$request->validated(),
+                'created_by' => $request->user()->id,
+                'track_inventory' => $request->boolean('track_inventory', true),
+                'is_active' => $request->boolean('is_active', true),
+            ]);
+
+            return redirect()->route('items.index')->with('success', 'Item created successfully.');
+        }
+
+        return redirect()->route('items.index')->with('error', 'You have reached the maximum number of items allowed in your current plan');
     }
 
     public function show(string $id): never
@@ -100,7 +108,7 @@ class ItemController extends Controller implements HasMiddleware
         return Category::query()
             ->orderBy('name')
             ->get(['id', 'name'])
-            ->map(fn (Category $category): array => ['id' => $category->id, 'name' => $category->name])
+            ->map(fn(Category $category): array => ['id' => $category->id, 'name' => $category->name])
             ->all();
     }
 
@@ -112,7 +120,7 @@ class ItemController extends Controller implements HasMiddleware
         return Brand::query()
             ->orderBy('name')
             ->get(['id', 'name'])
-            ->map(fn (Brand $brand): array => ['id' => $brand->id, 'name' => $brand->name])
+            ->map(fn(Brand $brand): array => ['id' => $brand->id, 'name' => $brand->name])
             ->all();
     }
 
@@ -124,7 +132,7 @@ class ItemController extends Controller implements HasMiddleware
         return Unit::query()
             ->orderBy('name')
             ->get(['id', 'name', 'short_name'])
-            ->map(fn (Unit $unit): array => ['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name])
+            ->map(fn(Unit $unit): array => ['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name])
             ->all();
     }
 }

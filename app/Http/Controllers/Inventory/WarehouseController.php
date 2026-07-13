@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\WarehouseRequest;
 use App\Models\InventoryMovement;
 use App\Models\Warehouse;
+use App\Services\PlanGate;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,15 +46,19 @@ class WarehouseController extends Controller implements HasMiddleware
         return Inertia::render('inventory/warehouse/create');
     }
 
-    public function store(WarehouseRequest $request): RedirectResponse
+    public function store(WarehouseRequest $request, PlanGate $gate): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['created_by'] = $request->user()->id;
-        $validated['is_active'] = $request->boolean('is_active', true);
+        if ($gate->canCreateWarehouse(Auth::guard('web')->user()->tenant)) {
+            $validated['created_by'] = $request->user()->id;
+            $validated['is_active'] = $request->boolean('is_active', true);
 
-        Warehouse::create($validated);
+            Warehouse::create($validated);
 
-        return redirect()->route('warehouses.index')->with('success', 'Warehouse created successfully.');
+            return redirect()->route('warehouses.index')->with('success', 'Warehouse created successfully.');
+        }
+
+        return redirect()->route('warehouses.index')->with('error', 'You have reached the maximum number of warehouses.');
     }
 
     public function show(Warehouse $warehouse): Response

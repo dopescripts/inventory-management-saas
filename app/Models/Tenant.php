@@ -68,4 +68,14 @@ class Tenant extends Model
     {
         return $this->activeSubscription()->exists();
     }
+
+    public function warehouses()
+    {
+        return $this->hasMany(Warehouse::class, 'tenant_id', 'id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'tenant_id', 'id');
+    }
 }
