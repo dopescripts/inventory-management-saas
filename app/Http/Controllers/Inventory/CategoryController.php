@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,7 +28,6 @@ class CategoryController extends Controller implements HasMiddleware
     public function index(): Response
     {
         $categories = Category::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->withCount('items')
             ->latest()
             ->paginate(10);
@@ -48,7 +46,6 @@ class CategoryController extends Controller implements HasMiddleware
     {
         $category = Category::create([
             ...$request->validated(),
-            'tenant_id' => $request->user()->tenant_id,
             'created_by' => $request->user()->id,
             'slug' => $request->validated('slug') ?: Str::slug($request->validated('name')),
             'is_active' => $request->boolean('is_active', true),
@@ -68,8 +65,6 @@ class CategoryController extends Controller implements HasMiddleware
 
     public function edit(Category $category): Response
     {
-        $this->ensureTenantOwnership($category);
-
         return Inertia::render('inventory/category/edit', [
             'category' => $category,
         ]);
@@ -77,8 +72,6 @@ class CategoryController extends Controller implements HasMiddleware
 
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
-        $this->ensureTenantOwnership($category);
-
         $category->update([
             ...$request->validated(),
             'slug' => $request->validated('slug') ?: Str::slug($request->validated('name')),
@@ -90,14 +83,8 @@ class CategoryController extends Controller implements HasMiddleware
 
     public function destroy(Category $category): RedirectResponse
     {
-        $this->ensureTenantOwnership($category);
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
-    }
-
-    private function ensureTenantOwnership(Category $category): void
-    {
-        abort_unless($category->tenant_id === Auth::guard('web')->user()->tenant_id, 404);
     }
 }

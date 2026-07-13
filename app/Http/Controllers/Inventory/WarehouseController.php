@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\WarehouseRequest;
+use App\Models\InventoryMovement;
 use App\Models\Warehouse;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,15 +26,11 @@ class WarehouseController extends Controller implements HasMiddleware
         ];
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): Response
     {
         $warehouses = Warehouse::query()
             ->with('createdBy:id,name,email')
             ->withCount('locations')
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->latest()
             ->paginate(5);
 
@@ -42,22 +39,15 @@ class WarehouseController extends Controller implements HasMiddleware
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): Response
     {
         return Inertia::render('inventory/warehouse/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(WarehouseRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['tenant_id'] = Auth::guard('web')->user()->tenant_id;
-        $validated['created_by'] = Auth::guard('web')->id();
+        $validated['created_by'] = $request->user()->id;
         $validated['is_active'] = $request->boolean('is_active', true);
 
         Warehouse::create($validated);
@@ -65,39 +55,60 @@ class WarehouseController extends Controller implements HasMiddleware
         return redirect()->route('warehouses.index')->with('success', 'Warehouse created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id): Response
+    public function show(Warehouse $warehouse): Response
     {
-        $warehouse = Warehouse::with(['locations', 'createdBy'])->where('tenant_id', Auth::guard('web')->user()->tenant_id)->where('id', $id)->firstOrFail();
+        $warehouse->load(['locations', 'createdBy:id,name,email'])->loadCount('locations');
+
+        $inventory = $this->warehouseInventory($warehouse);
+
+        $recentMovements = $warehouse->inventoryMovements()
+            ->with([
+                'item:id,name,sku',
+                'location:id,code',
+                'performedBy:id,name',
+            ])
+            ->latest()
+            ->take(20)
+            ->get();
 
         return Inertia::render('inventory/warehouse/show', [
             'warehouse' => $warehouse,
+            'inventory' => $inventory,
+            'recentMovements' => $recentMovements,
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(string $id): void
+    {
+        //
+    }
+
+    public function update(Request $request, string $id): void
+    {
+        //
+    }
+
+    public function destroy(string $id): void
     {
         //
     }
 
     /**
-     * Update the specified resource in storage.
+     * Current stock levels per item+location for a warehouse.
+     *
+     * @return Collection<int, InventoryMovement>
      */
-    public function update(Request $request, string $id)
+    private function warehouseInventory(Warehouse $warehouse): Collection
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return $warehouse->inventoryMovements()
+            ->selectRaw('
+                item_id,
+                location_id,
+                SUM(CASE WHEN direction = ? THEN quantity ELSE quantity * -1 END) as balance
+            ', ['in'])
+            ->groupBy('item_id', 'location_id')
+            ->having('balance', '>', 0)
+            ->with(['item:id,name,sku', 'location:id,code'])
+            ->get();
     }
 }

@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Boxes, Building2, LayoutGrid, Shapes, Tag, User } from 'lucide-react';
+import { Boxes, Building2, LayoutGrid, RotateCcw, Shapes, Tag, User } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -21,6 +21,7 @@ import brands from '@/routes/brands';
 import units from '@/routes/units';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
+import adjustments from '@/routes/adjustments';
 
 const footerNavItems: NavItem[] = [];
 
@@ -59,6 +60,12 @@ export function AppSidebar() {
                     icon: Boxes,
                     permission: 'view_items'
                 },
+                {
+                    title: 'Adjustments',
+                    icon: RotateCcw,
+                    href: adjustments.index(),
+                    permission: 'view_adjustments'
+                }
             ]
         },
         {

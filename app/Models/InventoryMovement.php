@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InventoryMovementDirection;
 use App\Enums\InventoryMovementReferenceType;
+use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class InventoryMovement extends Model
 {
+    use BelongsToTenant;
+
     /**
      * Get the attributes that should be cast.
      *
@@ -59,6 +62,16 @@ class InventoryMovement extends Model
             'unit_cost' => 'decimal:4',
             'balance_after' => 'decimal:4',
         ];
+    }
+
+
+    /**
+     * Summary of item
+     * @return BelongsTo<Item, InventoryMovement>
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
     }
 
     /**

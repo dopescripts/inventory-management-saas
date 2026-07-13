@@ -11,7 +11,6 @@ use App\Models\Unit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,7 +29,6 @@ class ItemController extends Controller implements HasMiddleware
     public function index(): Response
     {
         $items = Item::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->with(['category:id,name', 'brand:id,name', 'unit:id,name,short_name'])
             ->latest()
             ->paginate(10);
@@ -53,7 +51,6 @@ class ItemController extends Controller implements HasMiddleware
     {
         Item::create([
             ...$request->validated(),
-            'tenant_id' => $request->user()->tenant_id,
             'created_by' => $request->user()->id,
             'track_inventory' => $request->boolean('track_inventory', true),
             'is_active' => $request->boolean('is_active', true),
@@ -69,8 +66,6 @@ class ItemController extends Controller implements HasMiddleware
 
     public function edit(Item $item): Response
     {
-        $this->ensureTenantOwnership($item);
-
         return Inertia::render('inventory/item/edit', [
             'item' => $item->load(['category', 'brand', 'unit']),
             'categories' => $this->categories(),
@@ -81,8 +76,6 @@ class ItemController extends Controller implements HasMiddleware
 
     public function update(ItemRequest $request, Item $item): RedirectResponse
     {
-        $this->ensureTenantOwnership($item);
-
         $item->update([
             ...$request->validated(),
             'track_inventory' => $request->boolean('track_inventory', true),
@@ -94,7 +87,6 @@ class ItemController extends Controller implements HasMiddleware
 
     public function destroy(Item $item): RedirectResponse
     {
-        $this->ensureTenantOwnership($item);
         $item->delete();
 
         return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
@@ -106,7 +98,6 @@ class ItemController extends Controller implements HasMiddleware
     private function categories(): array
     {
         return Category::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->orderBy('name')
             ->get(['id', 'name'])
             ->map(fn (Category $category): array => ['id' => $category->id, 'name' => $category->name])
@@ -119,7 +110,6 @@ class ItemController extends Controller implements HasMiddleware
     private function brands(): array
     {
         return Brand::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->orderBy('name')
             ->get(['id', 'name'])
             ->map(fn (Brand $brand): array => ['id' => $brand->id, 'name' => $brand->name])
@@ -132,15 +122,9 @@ class ItemController extends Controller implements HasMiddleware
     private function units(): array
     {
         return Unit::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->orderBy('name')
             ->get(['id', 'name', 'short_name'])
             ->map(fn (Unit $unit): array => ['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name])
             ->all();
-    }
-
-    private function ensureTenantOwnership(Item $item): void
-    {
-        abort_unless($item->tenant_id === Auth::guard('web')->user()->tenant_id, 404);
     }
 }

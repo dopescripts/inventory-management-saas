@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,7 +27,6 @@ class BrandController extends Controller implements HasMiddleware
     public function index(): Response
     {
         $brands = Brand::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->withCount('items')
             ->latest()
             ->paginate(10);
@@ -47,7 +45,6 @@ class BrandController extends Controller implements HasMiddleware
     {
         $brand = Brand::create([
             ...$request->validated(),
-            'tenant_id' => $request->user()->tenant_id,
             'created_by' => $request->user()->id,
             'is_active' => $request->boolean('is_active', true),
         ]);
@@ -66,8 +63,6 @@ class BrandController extends Controller implements HasMiddleware
 
     public function edit(Brand $brand): Response
     {
-        $this->ensureTenantOwnership($brand);
-
         return Inertia::render('inventory/brand/edit', [
             'brand' => $brand,
         ]);
@@ -75,8 +70,6 @@ class BrandController extends Controller implements HasMiddleware
 
     public function update(BrandRequest $request, Brand $brand): RedirectResponse
     {
-        $this->ensureTenantOwnership($brand);
-
         $brand->update([
             ...$request->validated(),
             'is_active' => $request->boolean('is_active', true),
@@ -87,14 +80,8 @@ class BrandController extends Controller implements HasMiddleware
 
     public function destroy(Brand $brand): RedirectResponse
     {
-        $this->ensureTenantOwnership($brand);
         $brand->delete();
 
         return redirect()->route('brands.index')->with('success', 'Brand deleted successfully.');
-    }
-
-    private function ensureTenantOwnership(Brand $brand): void
-    {
-        abort_unless($brand->tenant_id === Auth::guard('web')->user()->tenant_id, 404);
     }
 }

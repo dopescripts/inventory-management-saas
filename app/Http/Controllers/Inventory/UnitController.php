@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,7 +27,6 @@ class UnitController extends Controller implements HasMiddleware
     public function index(): Response
     {
         $units = Unit::query()
-            ->where('tenant_id', Auth::guard('web')->user()->tenant_id)
             ->latest()
             ->paginate(10);
 
@@ -46,7 +44,6 @@ class UnitController extends Controller implements HasMiddleware
     {
         $unit = Unit::create([
             ...$request->validated(),
-            'tenant_id' => $request->user()->tenant_id,
             'created_by' => $request->user()->id,
             'is_active' => $request->boolean('is_active', true),
         ]);
@@ -65,8 +62,6 @@ class UnitController extends Controller implements HasMiddleware
 
     public function edit(Unit $unit): Response
     {
-        $this->ensureTenantOwnership($unit);
-
         return Inertia::render('inventory/unit/edit', [
             'unit' => $unit,
         ]);
@@ -74,8 +69,6 @@ class UnitController extends Controller implements HasMiddleware
 
     public function update(UnitRequest $request, Unit $unit): RedirectResponse
     {
-        $this->ensureTenantOwnership($unit);
-
         $unit->update([
             ...$request->validated(),
             'is_active' => $request->boolean('is_active', true),
@@ -86,14 +79,8 @@ class UnitController extends Controller implements HasMiddleware
 
     public function destroy(Unit $unit): RedirectResponse
     {
-        $this->ensureTenantOwnership($unit);
         $unit->delete();
 
         return redirect()->route('units.index')->with('success', 'Unit deleted successfully.');
-    }
-
-    private function ensureTenantOwnership(Unit $unit): void
-    {
-        abort_unless($unit->tenant_id === Auth::guard('web')->user()->tenant_id, 404);
     }
 }

@@ -6,34 +6,46 @@ use App\Enums\InventoryMovementDirection;
 use App\Enums\InventoryMovementReferenceType;
 use App\Models\InventoryMovement;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class InventoryMovementService
 {
     /**
-     * Record a stock movement.
+     * Record a stock adjustment (increase or decrease).
      *
-     * @param array{
-     *     tenant_id: int,
-     *     item_id?: int|null,
-     *     variant_id?: int|null,
-     *     warehouse_id?: int|null,
-     *     location_id?: int|null,
-     *     reference_type: InventoryMovementReferenceType|string,
-     *     reference_id?: int|null,
-     *     direction: InventoryMovementDirection|string,
-     *     quantity: int|float|string,
-     *     unit_cost?: int|float|string|null,
-     *     balance_after?: int|float|string|null,
-     *     notes?: string|null,
-     *     performed_by?: int|null
-     * } $attributes
+     * This is the primary public entry point for writing to the movement ledger
+     * from user-facing actions. It computes balance_after automatically.
      */
-    public function record(array $attributes): InventoryMovement
-    {
-        return DB::transaction(function () use ($attributes): InventoryMovement {
-            return InventoryMovement::create($this->normalizeAttributes($attributes));
-        });
+    public function adjustStock(
+        int $itemId,
+        int $warehouseId,
+        ?int $locationId,
+        InventoryMovementDirection $direction,
+        string|float|int $quantity,
+        ?string $notes = null,
+        ?int $performedBy = null,
+    ): InventoryMovement {
+        $tenantId = Auth::guard('web')->user()->tenant_id;
+        $currentBalance = $this->itemBalance($tenantId, $itemId, $warehouseId, $locationId);
+        $qty = number_format((float) $quantity, 4, '.', '');
+
+        $balanceAfter = $direction === InventoryMovementDirection::In
+            ? bcadd($currentBalance, $qty, 4)
+            : bcsub($currentBalance, $qty, 4);
+
+        return $this->record([
+            'tenant_id' => $tenantId,
+            'item_id' => $itemId,
+            'warehouse_id' => $warehouseId,
+            'location_id' => $locationId,
+            'reference_type' => InventoryMovementReferenceType::Adjustment,
+            'direction' => $direction,
+            'quantity' => $quantity,
+            'balance_after' => $balanceAfter,
+            'notes' => $notes,
+            'performed_by' => $performedBy,
+        ]);
     }
 
     public function itemBalance(int $tenantId, int $itemId, ?int $warehouseId = null, ?int $locationId = null): string
@@ -62,6 +74,33 @@ class InventoryMovementService
             'location_id' => $locationId,
             'item_id' => $itemId,
         ]);
+    }
+
+    /**
+     * Persist a raw movement record. Internal use only — callers should use
+     * adjustStock() or domain-specific methods (e.g. recordOpeningStock).
+     *
+     * @param array{
+     *     tenant_id: int,
+     *     item_id?: int|null,
+     *     variant_id?: int|null,
+     *     warehouse_id?: int|null,
+     *     location_id?: int|null,
+     *     reference_type: InventoryMovementReferenceType|string,
+     *     reference_id?: int|null,
+     *     direction: InventoryMovementDirection|string,
+     *     quantity: int|float|string,
+     *     unit_cost?: int|float|string|null,
+     *     balance_after?: int|float|string|null,
+     *     notes?: string|null,
+     *     performed_by?: int|null
+     * } $attributes
+     */
+    protected function record(array $attributes): InventoryMovement
+    {
+        return DB::transaction(function () use ($attributes): InventoryMovement {
+            return InventoryMovement::create($this->normalizeAttributes($attributes));
+        });
     }
 
     /**

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
-import { Eye, Edit, Trash, Plus, MapPin, Activity, ArrowLeftRight, Info } from 'lucide-react';
+import { Eye, Edit, Trash, Plus, MapPin, Activity, ArrowLeftRight, Info, Box } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -20,6 +20,7 @@ interface Location {
     description: string | null;
     email: string | null;
     phone: string | null;
+    balance: number;
     is_active: boolean;
 }
 
@@ -65,6 +66,9 @@ const locationColumns: ColumnDef<Location>[] = [
         }
     },
     {
+        accessorKey: "balance"
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             return (
@@ -90,18 +94,42 @@ const locationColumns: ColumnDef<Location>[] = [
     },
 ];
 
-function Show({ warehouse }: { warehouse: Warehouse }) {
+const inventoryColumns: ColumnDef<any>[] = [
+    {
+        accessorKey: "item.sku",
+        header: "SKU",
+        cell: ({ row }) => <span className="font-medium text-muted-foreground">{row.original.item.sku}</span>
+    },
+    {
+        accessorKey: "item.name",
+        header: "Item",
+        cell: ({ row }) => <span className="font-medium">{row.original.item.name}</span>
+    },
+    {
+        accessorKey: "location.code",
+        header: "Location",
+        cell: ({ row }) => <span>{row.original.location?.code || '-'}</span>
+    },
+    {
+        accessorKey: "balance",
+        header: "On Hand",
+        cell: ({ row }) => <span className="font-medium">{Number(row.getValue("balance"))}</span>
+    }
+];
+
+function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse, inventory: any[], recentMovements: any[] }) {
     const { url } = usePage();
     const queryParams = new URLSearchParams(url.split('?')[1]);
     const tabParam = queryParams.get('tab') as any;
-    const [activeTab, setActiveTab] = useState<'overview' | 'locations' | 'transfers' | 'activity'>(
-        ['overview', 'locations', 'transfers', 'activity'].includes(tabParam) ? tabParam : 'overview'
+    const [activeTab, setActiveTab] = useState<'overview' | 'locations' | 'transfers' | 'inventory' | 'activity'>(
+        ['overview', 'locations', 'transfers', 'inventory', 'activity'].includes(tabParam) ? tabParam : 'overview'
     );
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: Info },
         { id: 'locations', label: 'Locations', icon: MapPin },
         { id: 'transfers', label: 'Transfers', icon: ArrowLeftRight },
+        { id: 'inventory', label: 'Inventory', icon: Box },
         { id: 'activity', label: 'Activity', icon: Activity },
     ] as const;
 
@@ -217,6 +245,17 @@ function Show({ warehouse }: { warehouse: Warehouse }) {
                         </div>
                     )}
 
+                    {activeTab === 'inventory' && (
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-lg font-semibold">Current Inventory</h2>
+                            </div>
+                            <div className="rounded-md border">
+                                <DataTable columns={inventoryColumns} data={inventory || []} />
+                            </div>
+                        </div>
+                    )}
+
                     {activeTab === 'transfers' && (
                         <div className="text-center py-10 text-muted-foreground">
                             <ArrowLeftRight className="mx-auto h-12 w-12 opacity-20 mb-4" />
@@ -225,9 +264,40 @@ function Show({ warehouse }: { warehouse: Warehouse }) {
                     )}
 
                     {activeTab === 'activity' && (
-                        <div className="text-center py-10 text-muted-foreground">
-                            <Activity className="mx-auto h-12 w-12 opacity-20 mb-4" />
-                            <p>Activity log coming soon.</p>
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold">Recent Activity</h2>
+                            <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+                                {recentMovements?.length > 0 ? (
+                                    <div className="divide-y">
+                                        {recentMovements.map((movement) => {
+                                            const isIncrease = movement.direction === 'in';
+                                            return (
+                                                <div key={movement.id} className="p-4 flex items-start justify-between">
+                                                    <div>
+                                                        <p className="font-medium">
+                                                            {movement.reference_type.replace('_', ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                                                            <span className="text-muted-foreground font-normal ml-2">
+                                                                {movement.item.name} ({movement.item.sku})
+                                                            </span>
+                                                        </p>
+                                                        <p className="text-sm text-muted-foreground mt-1">
+                                                            {new Date(movement.created_at).toLocaleString()} • by {movement.performed_by?.name || 'System'}
+                                                        </p>
+                                                    </div>
+                                                    <Badge variant={isIncrease ? "default" : "secondary"} className={isIncrease ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : ""}>
+                                                        {isIncrease ? "+" : "-"}{Number(movement.quantity)}
+                                                    </Badge>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-10 text-muted-foreground">
+                                        <Activity className="mx-auto h-12 w-12 opacity-20 mb-4" />
+                                        <p>No recent activity.</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

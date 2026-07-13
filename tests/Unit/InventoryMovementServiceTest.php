@@ -13,6 +13,18 @@ use App\Services\Inventory\InventoryMovementService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * Expose the protected record() method so unit tests can seed movements
+ * without going through the HTTP layer.
+ */
+class TestableInventoryMovementService extends InventoryMovementService
+{
+    public function record(array $attributes): InventoryMovement
+    {
+        return parent::record($attributes);
+    }
+}
+
 class InventoryMovementServiceTest extends TestCase
 {
     use RefreshDatabase;
@@ -21,7 +33,9 @@ class InventoryMovementServiceTest extends TestCase
     {
         [$tenant, $warehouse, $location, $user] = $this->createInventoryContext();
 
-        $movement = app(InventoryMovementService::class)->record([
+        $service = new TestableInventoryMovementService;
+
+        $movement = $service->record([
             'tenant_id' => $tenant->id,
             'item_id' => 42,
             'warehouse_id' => $warehouse->id,
@@ -60,6 +74,7 @@ class InventoryMovementServiceTest extends TestCase
     public function test_it_calculates_balances_by_scope(): void
     {
         [$tenant, $warehouseOne, $locationOne, $user] = $this->createInventoryContext();
+
         $warehouseTwo = Warehouse::create([
             'name' => 'Overflow Warehouse',
             'code' => 'WH-002',
@@ -67,6 +82,7 @@ class InventoryMovementServiceTest extends TestCase
             'created_by' => $user->id,
             'is_active' => true,
         ]);
+
         $locationTwo = Location::create([
             'tenant_id' => $tenant->id,
             'warehouse_id' => $warehouseTwo->id,
@@ -75,7 +91,7 @@ class InventoryMovementServiceTest extends TestCase
             'created_by' => $user->id,
         ]);
 
-        $service = app(InventoryMovementService::class);
+        $service = new TestableInventoryMovementService;
 
         $service->record([
             'tenant_id' => $tenant->id,

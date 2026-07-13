@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToTenant;
+use App\Services\Inventory\InventoryMovementService;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property string $code
@@ -38,6 +41,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Location extends Model
 {
+    use BelongsToTenant;
+
+    protected $appends = ['balance'];
+
     /**
      * Summary of createdBy
      *
@@ -76,5 +83,15 @@ class Location extends Model
     public function inventoryMovements(): HasMany
     {
         return $this->hasMany(InventoryMovement::class);
+    }
+
+
+    /**
+     * Summary of getBalanceAttribute
+     * @return string
+     */
+    public function getBalanceAttribute()
+    {
+        return app(InventoryMovementService::class)->locationBalance(Auth::guard('web')->user()->tenant_id, $this->id);
     }
 }
