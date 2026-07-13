@@ -13,7 +13,19 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $modules = ['warehouses', 'items', 'purchases', 'sales', 'reports', 'staff', 'units', 'brands', 'categories', 'adjustments'];
+        $modules = [
+            'warehouses',
+            'items',
+            'purchases',
+            'sales',
+            'reports',
+            'staff',
+            'units',
+            'brands',
+            'categories',
+            'adjustments',
+            'transfers',
+        ];
         $actions = ['view', 'create', 'update', 'delete'];
         $permissions = [];
         foreach ($modules as $module) {
@@ -24,6 +36,22 @@ class PermissionSeeder extends Seeder
                 Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
             }
         }
+
+        $workflowPermissions = [
+            'submit_transfers',
+            'approve_transfers',
+            'ship_transfers',
+            'receive_transfers',
+            'cancel_transfers',
+        ];
+
+        foreach ($workflowPermissions as $permission) {
+            Permission::firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web',
+            ]);
+        }
+
         // Owner gets everything implicitly or explicitly. Let's explicitly give them everything.
         $ownerRole = Role::firstOrCreate(['name' => 'owner', 'guard_name' => 'web']);
         $ownerRole->syncPermissions(Permission::where('guard_name', 'web')->get());

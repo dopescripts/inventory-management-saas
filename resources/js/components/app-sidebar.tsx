@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Boxes, Building2, LayoutGrid, RotateCcw, Shapes, Tag, User } from 'lucide-react';
+import { ArrowRightLeft, Boxes, Building2, LayoutGrid, RotateCcw, Shapes, Tag, User } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -22,6 +22,7 @@ import units from '@/routes/units';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
 import adjustments from '@/routes/adjustments';
+import transfers from '@/routes/transfers';
 
 const footerNavItems: NavItem[] = [];
 
@@ -65,6 +66,12 @@ export function AppSidebar() {
                     icon: RotateCcw,
                     href: adjustments.index(),
                     permission: 'view_adjustments'
+                },
+                {
+                    title: 'Transfers',
+                    icon: ArrowRightLeft,
+                    href: transfers.index(),
+                    permission: 'view_transfers'
                 }
             ]
         },

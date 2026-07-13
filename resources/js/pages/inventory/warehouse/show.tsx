@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
-import { Eye, Edit, Trash, Plus, MapPin, Activity, ArrowLeftRight, Info, Box } from 'lucide-react';
+import { Edit, Trash, Plus, MapPin, Activity, ArrowLeftRight, Info, Box } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -33,6 +33,8 @@ interface Warehouse {
     is_active: boolean;
     locations: Location[];
     locations_count: number;
+    phone: string;
+    email: string;
 }
 
 const locationColumns: ColumnDef<Location>[] = [
