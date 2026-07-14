@@ -67,7 +67,7 @@ class InventoryMovement extends Model
 
     /**
      * Summary of item
-     * @return BelongsTo<Item, InventoryMovement>
+     * @return BelongsTo<Item, $this>
      */
     public function item()
     {
@@ -77,7 +77,7 @@ class InventoryMovement extends Model
     /**
      * Summary of location
      *
-     * @return BelongsTo<Location, InventoryMovement>
+     * @return BelongsTo<Location, $this>
      */
     public function location(): BelongsTo
     {
@@ -87,7 +87,7 @@ class InventoryMovement extends Model
     /**
      * Summary of performedBy
      *
-     * @return BelongsTo<User, InventoryMovement>
+     * @return BelongsTo<User, $this>
      */
     public function performedBy(): BelongsTo
     {
@@ -97,7 +97,7 @@ class InventoryMovement extends Model
     /**
      * Summary of tenant
      *
-     * @return BelongsTo<Tenant, InventoryMovement>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -107,7 +107,7 @@ class InventoryMovement extends Model
     /**
      * Summary of warehouse
      *
-     * @return BelongsTo<Warehouse, InventoryMovement>
+     * @return BelongsTo<Warehouse, $this>
      */
     public function warehouse(): BelongsTo
     {

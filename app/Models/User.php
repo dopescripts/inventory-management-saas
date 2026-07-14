@@ -53,7 +53,7 @@ class User extends Authenticatable
     /**
      * Summary of tenant
      *
-     * @return BelongsTo<Tenant, User>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {

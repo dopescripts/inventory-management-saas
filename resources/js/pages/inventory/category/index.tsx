@@ -1,8 +1,8 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { Edit, Plus, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import categories from '@/routes/categories';
-import { Edit, Plus, Trash2 } from 'lucide-react';
 
 type Category = {
     id: number;
@@ -13,7 +13,11 @@ type Category = {
     items_count: number;
 };
 
-export default function Index({ categories: paginatedCategories }: { categories: { data: Category[] } }) {
+export default function Index({
+    categories: paginatedCategories,
+}: {
+    categories: { data: Category[] };
+}) {
     return (
         <>
             <Head title="Categories" />
@@ -34,22 +38,51 @@ export default function Index({ categories: paginatedCategories }: { categories:
                                 <th className="px-6 py-3">Slug</th>
                                 <th className="px-6 py-3">Items</th>
                                 <th className="px-6 py-3">Status</th>
-                                <th className="px-6 py-3 text-right">Actions</th>
+                                <th className="px-6 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedCategories.data.map((category) => (
-                                <tr key={category.id} className="border-b last:border-0 hover:bg-muted/50">
-                                    <td className="px-6 py-4 font-medium">{category.name}</td>
-                                    <td className="px-6 py-4 font-mono text-xs">{category.slug}</td>
-                                    <td className="px-6 py-4">{category.items_count}</td>
+                                <tr
+                                    key={category.id}
+                                    className="border-b last:border-0 hover:bg-muted/50"
+                                >
+                                    <td className="px-6 py-4 font-medium">
+                                        {category.name}
+                                    </td>
+                                    <td className="px-6 py-4 font-mono text-xs">
+                                        {category.slug}
+                                    </td>
                                     <td className="px-6 py-4">
-                                        <Badge variant={category.is_active ? 'default' : 'secondary'}>{category.is_active ? 'Active' : 'Inactive'}</Badge>
+                                        {category.items_count}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Badge
+                                            variant={
+                                                category.is_active
+                                                    ? 'default'
+                                                    : 'secondary'
+                                            }
+                                        >
+                                            {category.is_active
+                                                ? 'Active'
+                                                : 'Inactive'}
+                                        </Badge>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <Button variant="outline" size="icon" asChild>
-                                                <Link href={categories.edit({ category: category.id })}>
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={categories.edit({
+                                                        category: category.id,
+                                                    })}
+                                                >
                                                     <Edit className="h-4 w-4" />
                                                 </Link>
                                             </Button>
@@ -57,8 +90,19 @@ export default function Index({ categories: paginatedCategories }: { categories:
                                                 variant="destructive"
                                                 size="icon"
                                                 onClick={() => {
-                                                    if (confirm('Delete this category?')) {
-                                                        router.delete(categories.destroy({ category: category.id }).url());
+                                                    if (
+                                                        confirm(
+                                                            'Delete this category?',
+                                                        )
+                                                    ) {
+                                                        router.delete(
+                                                            categories
+                                                                .destroy({
+                                                                    category:
+                                                                        category.id,
+                                                                })
+                                                                .url(),
+                                                        );
                                                     }
                                                 }}
                                             >

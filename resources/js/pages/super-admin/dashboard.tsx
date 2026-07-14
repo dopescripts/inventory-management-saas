@@ -1,12 +1,4 @@
 import { Head } from '@inertiajs/react';
-import type { BreadcrumbItem } from '@/types';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/super-admin/dashboard',
-    },
-];
 
 export default function Dashboard() {
     return (
@@ -23,4 +15,3 @@ export default function Dashboard() {
         </>
     );
 }
-

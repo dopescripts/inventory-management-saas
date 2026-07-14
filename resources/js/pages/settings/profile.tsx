@@ -116,10 +116,10 @@ export default function Profile({
                             </div>
                             {user.roles[0] === 'owner' && (
                                 <div className="grid gap-2">
-                                    <Label htmlFor='company_logo'>Logo</Label>
+                                    <Label htmlFor="company_logo">Logo</Label>
                                     <Input
-                                        type='file'
-                                        accept='image/*'
+                                        type="file"
+                                        accept="image/*"
                                         id="company_logo"
                                         className="mt-1 block w-full"
                                         name="company_logo"
@@ -148,11 +148,11 @@ export default function Profile({
 
                                         {status ===
                                             'verification-link-sent' && (
-                                                <div className="mt-2 text-sm font-medium text-green-600">
-                                                    A new verification link has been
-                                                    sent to your email address.
-                                                </div>
-                                            )}
+                                            <div className="mt-2 text-sm font-medium text-green-600">
+                                                A new verification link has been
+                                                sent to your email address.
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 

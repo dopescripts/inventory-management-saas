@@ -24,7 +24,7 @@ class Subscription extends Model
     /**
      * Summary of tenant
      *
-     * @return BelongsTo<Tenant, Subscription>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -34,7 +34,7 @@ class Subscription extends Model
     /**
      * Summary of plan
      *
-     * @return BelongsTo<Plan, Subscription>
+     * @return BelongsTo<Plan, $this>
      */
     public function plan(): BelongsTo
     {
@@ -44,7 +44,7 @@ class Subscription extends Model
     /**
      * Summary of checkActiveSubscription
      *
-     * @return Subscription|\stdClass|null
+     * @return self|null
      */
     public function checkActiveSubscription(): ?self
     {

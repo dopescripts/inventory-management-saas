@@ -30,12 +30,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Brand extends Model
 {
     /** @use HasFactory<BrandFactory> */
+    use HasFactory;
     use BelongsToTenant;
 
-    use HasFactory;
 
     /**
-     * @return BelongsTo<Tenant, Brand>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -43,7 +43,7 @@ class Brand extends Model
     }
 
     /**
-     * @return BelongsTo<User, Brand>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -51,7 +51,7 @@ class Brand extends Model
     }
 
     /**
-     * @return HasMany<Item, Brand>
+     * @return HasMany<Item, $this>
      */
     public function items(): HasMany
     {

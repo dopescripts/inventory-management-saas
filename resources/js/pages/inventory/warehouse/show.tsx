@@ -1,13 +1,29 @@
-import { Head, Link, usePage } from '@inertiajs/react'
-import React, { useState } from 'react'
-import warehouses from '@/routes/warehouses'
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { DataTable } from '@/components/ui/data-table';
-import { ColumnDef } from '@tanstack/react-table';
-import { Edit, Trash, Plus, MapPin, Activity, ArrowLeftRight, Info, Box } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Head, Link, usePage } from '@inertiajs/react';
+import type { ColumnDef } from '@tanstack/react-table';
+import {
+    Edit,
+    Trash,
+    Plus,
+    MapPin,
+    Activity,
+    ArrowLeftRight,
+    Info,
+    Box,
+} from 'lucide-react';
 import { MoreHorizontal } from 'lucide-react';
+import React, { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import AppLayout from '@/layouts/app-layout';
+import warehouses from '@/routes/warehouses';
 
 interface Location {
     id: number;
@@ -39,40 +55,50 @@ interface Warehouse {
 
 const locationColumns: ColumnDef<Location>[] = [
     {
-        accessorKey: "code",
-        header: "Code",
-        cell: ({ row }) => <span className="font-medium">{row.getValue("code")}</span>
+        accessorKey: 'code',
+        header: 'Code',
+        cell: ({ row }) => (
+            <span className="font-medium">{row.getValue('code')}</span>
+        ),
     },
     {
-        accessorKey: "zone",
-        header: "Zone",
+        accessorKey: 'zone',
+        header: 'Zone',
     },
     {
-        accessorKey: "aisle",
-        header: "Aisle",
+        accessorKey: 'aisle',
+        header: 'Aisle',
     },
     {
-        accessorKey: "rack",
-        header: "Rack",
+        accessorKey: 'rack',
+        header: 'Rack',
     },
     {
-        accessorKey: "is_active",
-        header: "Status",
+        accessorKey: 'is_active',
+        header: 'Status',
         cell: ({ row }) => {
-            const isActive = row.getValue("is_active");
+            const isActive = row.getValue('is_active');
+
             return (
-                <Badge variant={isActive ? "default" : "secondary"} className={isActive ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20" : ""}>
-                    {isActive ? "Active" : "Inactive"}
+                <Badge
+                    variant={isActive ? 'default' : 'secondary'}
+                    className={
+                        isActive
+                            ? 'border-green-500/20 bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                            : ''
+                    }
+                >
+                    {isActive ? 'Active' : 'Inactive'}
                 </Badge>
-            )
-        }
+            );
+        },
     },
     {
-        accessorKey: "balance"
+        accessorKey: 'balance',
     },
     {
-        id: "actions",
-        cell: ({ row }) => {
+        id: 'actions',
+        cell: () => {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -86,45 +112,73 @@ const locationColumns: ColumnDef<Location>[] = [
                             <Edit className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive cursor-pointer">
+                        <DropdownMenuItem className="cursor-pointer text-destructive">
                             <Trash className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            )
+            );
         },
     },
 ];
 
 const inventoryColumns: ColumnDef<any>[] = [
     {
-        accessorKey: "item.sku",
-        header: "SKU",
-        cell: ({ row }) => <span className="font-medium text-muted-foreground">{row.original.item.sku}</span>
+        accessorKey: 'item.sku',
+        header: 'SKU',
+        cell: ({ row }) => (
+            <span className="font-medium text-muted-foreground">
+                {row.original.item.sku}
+            </span>
+        ),
     },
     {
-        accessorKey: "item.name",
-        header: "Item",
-        cell: ({ row }) => <span className="font-medium">{row.original.item.name}</span>
+        accessorKey: 'item.name',
+        header: 'Item',
+        cell: ({ row }) => (
+            <span className="font-medium">{row.original.item.name}</span>
+        ),
     },
     {
-        accessorKey: "location.code",
-        header: "Location",
-        cell: ({ row }) => <span>{row.original.location?.code || '-'}</span>
+        accessorKey: 'location.code',
+        header: 'Location',
+        cell: ({ row }) => <span>{row.original.location?.code || '-'}</span>,
     },
     {
-        accessorKey: "balance",
-        header: "On Hand",
-        cell: ({ row }) => <span className="font-medium">{Number(row.getValue("balance"))}</span>
-    }
+        accessorKey: 'balance',
+        header: 'On Hand',
+        cell: ({ row }) => (
+            <span className="font-medium">
+                {Number(row.getValue('balance'))}
+            </span>
+        ),
+    },
 ];
 
-function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse, inventory: any[], recentMovements: any[] }) {
+function Show({
+    warehouse,
+    inventory,
+    recentMovements,
+}: {
+    warehouse: Warehouse;
+    inventory: any[];
+    recentMovements: any[];
+}) {
     const { url } = usePage();
     const queryParams = new URLSearchParams(url.split('?')[1]);
     const tabParam = queryParams.get('tab') as any;
-    const [activeTab, setActiveTab] = useState<'overview' | 'locations' | 'transfers' | 'inventory' | 'activity'>(
-        ['overview', 'locations', 'transfers', 'inventory', 'activity'].includes(tabParam) ? tabParam : 'overview'
+    const [activeTab, setActiveTab] = useState<
+        'overview' | 'locations' | 'transfers' | 'inventory' | 'activity'
+    >(
+        [
+            'overview',
+            'locations',
+            'transfers',
+            'inventory',
+            'activity',
+        ].includes(tabParam)
+            ? tabParam
+            : 'overview',
     );
 
     const tabs = [
@@ -139,28 +193,54 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
         <>
             <Head title={`Warehouse - ${warehouse.name}`} />
 
-            <div className='flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 md:p-6'>
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 md:p-6">
                 {/* Header section */}
-                <div className='flex flex-col md:flex-row md:justify-between md:items-start gap-4'>
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className='text-3xl font-bold'>{warehouse.name}</h1>
-                            <Badge variant="outline" className="text-sm font-medium">
+                            <h1 className="text-3xl font-bold">
+                                {warehouse.name}
+                            </h1>
+                            <Badge
+                                variant="outline"
+                                className="text-sm font-medium"
+                            >
                                 {warehouse.locations?.length || 0} Locations
                             </Badge>
-                            <Badge variant={warehouse.is_active ? "default" : "secondary"} className={warehouse.is_active ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20" : ""}>
-                                {warehouse.is_active ? "Active" : "Inactive"}
+                            <Badge
+                                variant={
+                                    warehouse.is_active
+                                        ? 'default'
+                                        : 'secondary'
+                                }
+                                className={
+                                    warehouse.is_active
+                                        ? 'border-green-500/20 bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                                        : ''
+                                }
+                            >
+                                {warehouse.is_active ? 'Active' : 'Inactive'}
                             </Badge>
                         </div>
-                        <p className="text-muted-foreground mt-1 flex items-center gap-2">
-                            <span className="font-mono text-sm">{warehouse.code}</span>
+                        <p className="mt-1 flex items-center gap-2 text-muted-foreground">
+                            <span className="font-mono text-sm">
+                                {warehouse.code}
+                            </span>
                             •
-                            <span>{[warehouse.city, warehouse.country].filter(Boolean).join(", ")}</span>
+                            <span>
+                                {[warehouse.city, warehouse.country]
+                                    .filter(Boolean)
+                                    .join(', ')}
+                            </span>
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button variant="outline" asChild>
-                            <Link href={warehouses.edit({ warehouse: warehouse.id })}>
+                            <Link
+                                href={warehouses.edit({
+                                    warehouse: warehouse.id,
+                                })}
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Warehouse
                             </Link>
@@ -173,11 +253,12 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
                     <div className="flex space-x-6">
                         {tabs.map((tab) => {
                             const Icon = tab.icon;
+
                             return (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`pb-3 text-sm font-medium transition-colors flex items-center gap-2 relative ${activeTab === tab.id
+                                    className={`relative flex items-center gap-2 pb-3 text-sm font-medium transition-colors ${activeTab === tab.id
                                         ? 'text-foreground'
                                         : 'text-muted-foreground hover:text-foreground/80'
                                         }`}
@@ -185,7 +266,7 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
                                     <Icon className="h-4 w-4" />
                                     {tab.label}
                                     {activeTab === tab.id && (
-                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full" />
+                                        <div className="absolute right-0 bottom-0 left-0 h-0.5 rounded-t-full bg-primary" />
                                     )}
                                 </button>
                             );
@@ -196,34 +277,58 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
                 {/* Tab Content */}
                 <div className="mt-2">
                     {activeTab === 'overview' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6">
-                                <h3 className="font-semibold leading-none tracking-tight mb-2">Details</h3>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+                                <h3 className="mb-2 leading-none font-semibold tracking-tight">
+                                    Details
+                                </h3>
                                 <dl className="space-y-2 text-sm">
                                     <div className="flex justify-between">
-                                        <dt className="text-muted-foreground">Code</dt>
-                                        <dd className="font-medium">{warehouse.code}</dd>
+                                        <dt className="text-muted-foreground">
+                                            Code
+                                        </dt>
+                                        <dd className="font-medium">
+                                            {warehouse.code}
+                                        </dd>
                                     </div>
                                     <div className="flex justify-between">
-                                        <dt className="text-muted-foreground">City</dt>
-                                        <dd className="font-medium">{warehouse.city || 'N/A'}</dd>
+                                        <dt className="text-muted-foreground">
+                                            City
+                                        </dt>
+                                        <dd className="font-medium">
+                                            {warehouse.city || 'N/A'}
+                                        </dd>
                                     </div>
                                     <div className="flex justify-between">
-                                        <dt className="text-muted-foreground">Country</dt>
-                                        <dd className="font-medium">{warehouse.country || 'N/A'}</dd>
+                                        <dt className="text-muted-foreground">
+                                            Country
+                                        </dt>
+                                        <dd className="font-medium">
+                                            {warehouse.country || 'N/A'}
+                                        </dd>
                                     </div>
                                 </dl>
                             </div>
-                            <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6">
-                                <h3 className="font-semibold leading-none tracking-tight mb-2">Contact Details</h3>
+                            <div className="rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+                                <h3 className="mb-2 leading-none font-semibold tracking-tight">
+                                    Contact Details
+                                </h3>
                                 <dl className="space-y-2 text-sm">
                                     <div className="flex justify-between">
-                                        <dt className="text-muted-foreground">Contact Email</dt>
-                                        <dd className="font-medium">{warehouse.email}</dd>
+                                        <dt className="text-muted-foreground">
+                                            Contact Email
+                                        </dt>
+                                        <dd className="font-medium">
+                                            {warehouse.email}
+                                        </dd>
                                     </div>
                                     <div className="flex justify-between">
-                                        <dt className="text-muted-foreground">Phone</dt>
-                                        <dd className="font-medium">{warehouse.phone}</dd>
+                                        <dt className="text-muted-foreground">
+                                            Phone
+                                        </dt>
+                                        <dd className="font-medium">
+                                            {warehouse.phone}
+                                        </dd>
                                     </div>
                                 </dl>
                             </div>
@@ -232,70 +337,134 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
 
                     {activeTab === 'locations' && (
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-lg font-semibold">Locations</h2>
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-lg font-semibold">
+                                    Locations
+                                </h2>
                                 <Button asChild>
-                                    <Link href={warehouses.locations.create({ warehouse: warehouse.id })}>
+                                    <Link
+                                        href={warehouses.locations.create({
+                                            warehouse: warehouse.id,
+                                        })}
+                                    >
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Location
                                     </Link>
                                 </Button>
                             </div>
                             <div className="rounded-md border">
-                                <DataTable columns={locationColumns} data={warehouse.locations || []} />
+                                <DataTable
+                                    columns={locationColumns}
+                                    data={warehouse.locations || []}
+                                />
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'inventory' && (
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-lg font-semibold">Current Inventory</h2>
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-lg font-semibold">
+                                    Current Inventory
+                                </h2>
                             </div>
                             <div className="rounded-md border">
-                                <DataTable columns={inventoryColumns} data={inventory || []} />
+                                <DataTable
+                                    columns={inventoryColumns}
+                                    data={inventory || []}
+                                />
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'transfers' && (
-                        <div className="text-center py-10 text-muted-foreground">
-                            <ArrowLeftRight className="mx-auto h-12 w-12 opacity-20 mb-4" />
+                        <div className="py-10 text-center text-muted-foreground">
+                            <ArrowLeftRight className="mx-auto mb-4 h-12 w-12 opacity-20" />
                             <p>Transfers functionality coming soon.</p>
                         </div>
                     )}
 
                     {activeTab === 'activity' && (
                         <div className="space-y-4">
-                            <h2 className="text-lg font-semibold">Recent Activity</h2>
-                            <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+                            <h2 className="text-lg font-semibold">
+                                Recent Activity
+                            </h2>
+                            <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
                                 {recentMovements?.length > 0 ? (
                                     <div className="divide-y">
                                         {recentMovements.map((movement) => {
-                                            const isIncrease = movement.direction === 'in';
+                                            const isIncrease =
+                                                movement.direction === 'in';
+
                                             return (
-                                                <div key={movement.id} className="p-4 flex items-start justify-between">
+                                                <div
+                                                    key={movement.id}
+                                                    className="flex items-start justify-between p-4"
+                                                >
                                                     <div>
                                                         <p className="font-medium">
-                                                            {movement.reference_type.replace('_', ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
-                                                            <span className="text-muted-foreground font-normal ml-2">
-                                                                {movement.item.name} ({movement.item.sku})
+                                                            {movement.reference_type
+                                                                .replace(
+                                                                    '_',
+                                                                    ' ',
+                                                                )
+                                                                .replace(
+                                                                    /\b\w/g,
+                                                                    (
+                                                                        c: string,
+                                                                    ) =>
+                                                                        c.toUpperCase(),
+                                                                )}
+                                                            <span className="ml-2 font-normal text-muted-foreground">
+                                                                {
+                                                                    movement
+                                                                        .item
+                                                                        .name
+                                                                }{' '}
+                                                                (
+                                                                {
+                                                                    movement
+                                                                        .item
+                                                                        .sku
+                                                                }
+                                                                )
                                                             </span>
                                                         </p>
-                                                        <p className="text-sm text-muted-foreground mt-1">
-                                                            {new Date(movement.created_at).toLocaleString()} • by {movement.performed_by?.name || 'System'}
+                                                        <p className="mt-1 text-sm text-muted-foreground">
+                                                            {new Date(
+                                                                movement.created_at,
+                                                            ).toLocaleString()}{' '}
+                                                            • by{' '}
+                                                            {movement
+                                                                .performed_by
+                                                                ?.name ||
+                                                                'System'}
                                                         </p>
                                                     </div>
-                                                    <Badge variant={isIncrease ? "default" : "secondary"} className={isIncrease ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : ""}>
-                                                        {isIncrease ? "+" : "-"}{Number(movement.quantity)}
+                                                    <Badge
+                                                        variant={
+                                                            isIncrease
+                                                                ? 'default'
+                                                                : 'secondary'
+                                                        }
+                                                        className={
+                                                            isIncrease
+                                                                ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                                                                : ''
+                                                        }
+                                                    >
+                                                        {isIncrease ? '+' : '-'}
+                                                        {Number(
+                                                            movement.quantity,
+                                                        )}
                                                     </Badge>
                                                 </div>
                                             );
                                         })}
                                     </div>
                                 ) : (
-                                    <div className="text-center py-10 text-muted-foreground">
-                                        <Activity className="mx-auto h-12 w-12 opacity-20 mb-4" />
+                                    <div className="py-10 text-center text-muted-foreground">
+                                        <Activity className="mx-auto mb-4 h-12 w-12 opacity-20" />
                                         <p>No recent activity.</p>
                                     </div>
                                 )}
@@ -305,18 +474,23 @@ function Show({ warehouse, inventory, recentMovements }: { warehouse: Warehouse,
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-import AppLayout from '@/layouts/app-layout';
 
 const ShowLayout = ({ children }: { children: React.ReactNode }) => {
     const { warehouse } = usePage<any>().props;
+
     return (
-        <AppLayout breadcrumbs={[
-            { title: 'Warehouses', href: warehouses.index() },
-            { title: warehouse?.name || 'Details', href: warehouses.show({ warehouse: warehouse?.id }) }
-        ]}>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Warehouses', href: warehouses.index() },
+                {
+                    title: warehouse?.name || 'Details',
+                    href: warehouses.show({ warehouse: warehouse?.id }),
+                },
+            ]}
+        >
             {children}
         </AppLayout>
     );

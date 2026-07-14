@@ -73,7 +73,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     </nav>
                     {auth.tenant && (
                         <div className="mt-6 rounded-md border border-sidebar-border/70 p-3">
-                            <p className="text-xs font-medium uppercase text-muted-foreground">
+                            <p className="text-xs font-medium text-muted-foreground uppercase">
                                 Current tenant
                             </p>
                             <p className="mt-1 truncate text-sm font-medium">
@@ -81,7 +81,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                             </p>
                             <div className="mt-3 flex items-center gap-2">
                                 <Badge variant="secondary">{planName}</Badge>
-                                <span className="text-xs capitalize text-muted-foreground">
+                                <span className="text-xs text-muted-foreground capitalize">
                                     {planStatus}
                                 </span>
                             </div>

@@ -44,7 +44,9 @@ export default function Register({ passwordRules }: Props) {
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="company_name">Company name</Label>
+                                <Label htmlFor="company_name">
+                                    Company name
+                                </Label>
                                 <Input
                                     id="company_name"
                                     type="text"

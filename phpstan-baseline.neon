@@ -1,0 +1,205 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$email_verified_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Settings/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Settings/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method App\\Models\\SuperAdmin\|App\\Models\\User\:\:hasRole\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Settings/ProfileController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/StaffController.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\SetTenantForPermissions\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Middleware/SetTenantForPermissions.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Inventory\\AdjustmentRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/Inventory/AdjustmentRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/BrandRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/BrandRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/CategoryRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/CategoryRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/ItemRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/ItemRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/UnitRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Inventory/UnitRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/StaffRequest.php
+
+		-
+			message: '#^Call to an undefined method App\\Models\\SuperAdmin\|App\\Models\\User\:\:hasRole\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Requests/StaffRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Location\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Location\>\:\:\$warehouse_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Requests/Transfer/StoreTransferRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Transfer\\StoreTransferRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/Transfer/StoreTransferRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Transfer\\StoreTransferRequest\:\:withValidator\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/Transfer/StoreTransferRequest.php
+
+		-
+			message: '#^Access to an undefined property \(object\|string\)\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Transfer/UpdateTransferRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Location\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Location\>\:\:\$warehouse_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Requests/Transfer/UpdateTransferRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Transfer\\UpdateTransferRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/Transfer/UpdateTransferRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Transfer\\UpdateTransferRequest\:\:withValidator\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/Transfer/UpdateTransferRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SuperAdmin\|App\\Models\\User\:\:\$tenant_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Warehouse/WarehouseRequest.php
+
+		-
+			message: '#^Method App\\Services\\Inventory\\TransferService\:\:store\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/Inventory/TransferService.php
+
+		-
+			message: '#^Method App\\Services\\Inventory\\TransferService\:\:update\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/Inventory/TransferService.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/Inventory/TransferService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TransferItem\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\TransferItem\>\:\:\$item_id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TransferItem\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\TransferItem\>\:\:\$quantity_received\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TransferItem\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\TransferItem\>\:\:\$quantity_shipped\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Call to an undefined method App\\Models\\TransferItem\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\TransferItem\>\:\:save\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Method App\\Services\\Inventory\\TransferWorkflowService\:\:receive\(\) has parameter \$items with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Method App\\Services\\Inventory\\TransferWorkflowService\:\:ship\(\) has parameter \$items with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/Inventory/TransferWorkflowService.php
+
+		-
+			message: '#^Parameter \$performedBy of method App\\Services\\Inventory\\InventoryMovementService\:\:adjustStock\(\) expects int\|null, int\|string\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/Inventory/TransferWorkflowService.php

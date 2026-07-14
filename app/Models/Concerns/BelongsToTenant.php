@@ -21,6 +21,7 @@ trait BelongsToTenant
 
             if ($user) {
                 $query->where(
+                    // @phpstan-ignore new.static
                     (new static)->qualifyColumn('tenant_id'),
                     $user->tenant_id
                 );
@@ -29,6 +30,7 @@ trait BelongsToTenant
 
         static::creating(function (Model $model): void {
             if (empty($model->tenant_id)) {
+                // @phpstan-ignore property.notFound
                 $model->tenant_id = Auth::guard('web')->user()?->tenant_id;
             }
         });

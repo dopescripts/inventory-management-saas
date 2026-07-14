@@ -31,7 +31,9 @@ class InventoryMovementService
         $qty = number_format((float) $quantity, 4, '.', '');
 
         $balanceAfter = $direction === InventoryMovementDirection::In
+            // @phpstan-ignore argument.type
             ? bcadd($currentBalance, $qty, 4)
+            // @phpstan-ignore argument.type
             : bcsub($currentBalance, $qty, 4);
 
         return $this->record([
@@ -118,7 +120,7 @@ class InventoryMovementService
 
         $result = $query->first();
 
-        return number_format((float) ($result?->balance ?? 0), 4, '.', '');
+        return number_format((float) ($result->balance ?? 0), 4, '.', '');
     }
 
     /**
@@ -159,6 +161,7 @@ class InventoryMovementService
     }
 
     /**
+     * @param Builder<InventoryMovement> $query
      * @param  array<string, int|null>  $filters
      */
     private function applyFilters(Builder $query, array $filters): void

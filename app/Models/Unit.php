@@ -34,12 +34,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Unit extends Model
 {
     /** @use HasFactory<UnitFactory> */
+    use HasFactory;
     use BelongsToTenant;
 
-    use HasFactory;
 
     /**
-     * @return BelongsTo<Tenant, Unit>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -47,7 +47,7 @@ class Unit extends Model
     }
 
     /**
-     * @return BelongsTo<User, Unit>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -55,7 +55,7 @@ class Unit extends Model
     }
 
     /**
-     * @return HasMany<Item, Unit>
+     * @return HasMany<Item, $this>
      */
     public function items(): HasMany
     {

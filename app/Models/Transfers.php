@@ -46,7 +46,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Transfers extends Model
 {
-    use HasFactory, BelongsToTenant;
+
+    use BelongsToTenant;
 
     protected function casts(): array
     {
@@ -59,46 +60,86 @@ class Transfers extends Model
         ];
     }
 
+    /**
+     * Summary of tenant
+     * @return BelongsTo<Tenant, $this>
+     */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }
 
+    /**
+     * Summary of sourceWarehouse
+     * @return BelongsTo<Warehouse, $this>
+     */
+    /**
+     * Summary of sourceWarehouse
+     * @return BelongsTo<Warehouse, $this>
+     */
     public function sourceWarehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class, 'source_warehouse_id');
     }
 
+    /**
+     * Summary of sourceLocation
+     * @return BelongsTo<Location, $this>
+     */
     public function sourceLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'source_location_id');
     }
 
+    /**
+     * Summary of destinationWarehouse
+     * @return BelongsTo<Warehouse, $this>
+     */
     public function destinationWarehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class, 'destination_warehouse_id');
     }
 
+    /**
+     * Summary of destinationLocation
+     * @return BelongsTo<Location, $this>
+     */
     public function destinationLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'destination_location_id');
     }
 
+    /**
+     * Summary of requestedBy
+     * @return BelongsTo<User, $this>
+     */
     public function requestedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'requested_by');
     }
 
+    /**
+     * Summary of approvedBy
+     * @return BelongsTo<User, $this>
+     */
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
 
+    /**
+     * Summary of receivedBy
+     * @return BelongsTo<User, $this>
+     */
     public function receivedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'received_by');
     }
 
+    /**
+     * Summary of items
+     * @return HasMany<TransferItem, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(TransferItem::class, 'transfer_id');

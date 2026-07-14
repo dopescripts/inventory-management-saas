@@ -4,8 +4,8 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
-import SuperAdminLayout from '@/layouts/super-admin/layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import SuperAdminLayout from '@/layouts/super-admin/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -20,11 +20,13 @@ createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         let pageLayout;
+
         switch (true) {
             case name === 'welcome':
                 pageLayout = null;
                 break;
-            case name.startsWith('auth/') || name.startsWith('super-admin/auth'):
+            case name.startsWith('auth/') ||
+                name.startsWith('super-admin/auth'):
                 pageLayout = AuthLayout;
                 break;
             case name.startsWith('settings/'):
@@ -38,17 +40,19 @@ createInertiaApp({
                 break;
         }
 
-        if (pageLayout === null) return RootLayout;
-        if (Array.isArray(pageLayout)) return [RootLayout, ...pageLayout];
+        if (pageLayout === null) {
+return RootLayout;
+}
+
+        if (Array.isArray(pageLayout)) {
+return [RootLayout, ...pageLayout];
+}
+
         return [RootLayout, pageLayout];
     },
     strictMode: true,
     withApp(app) {
-        return (
-            <TooltipProvider delayDuration={0}>
-                {app}
-            </TooltipProvider>
-        );
+        return <TooltipProvider delayDuration={0}>{app}</TooltipProvider>;
     },
     progress: {
         color: '#4B5563',

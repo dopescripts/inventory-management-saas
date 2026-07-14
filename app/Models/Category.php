@@ -32,12 +32,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
-    use BelongsToTenant;
-
     use HasFactory;
 
+    use BelongsToTenant;
+
     /**
-     * @return BelongsTo<Tenant, Category>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -45,7 +45,7 @@ class Category extends Model
     }
 
     /**
-     * @return BelongsTo<User, Category>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -53,7 +53,7 @@ class Category extends Model
     }
 
     /**
-     * @return HasMany<Item, Category>
+     * @return HasMany<Item, $this>
      */
     public function items(): HasMany
     {

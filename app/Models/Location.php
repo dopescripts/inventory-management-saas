@@ -49,7 +49,7 @@ class Location extends Model
     /**
      * Summary of createdBy
      *
-     * @return BelongsTo<User, Location>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -59,7 +59,7 @@ class Location extends Model
     /**
      * Summary of tenant
      *
-     * @return BelongsTo<Tenant, Location>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -69,7 +69,7 @@ class Location extends Model
     /**
      * Summary of warehouse
      *
-     * @return BelongsTo<Warehouse, Location>
+     * @return BelongsTo<Warehouse, $this>
      */
     public function warehouse(): BelongsTo
     {
@@ -79,7 +79,7 @@ class Location extends Model
     /**
      * Summary of inventoryMovements
      *
-     * @return HasMany<InventoryMovement, Location>
+     * @return HasMany<InventoryMovement, $this>
      */
     public function inventoryMovements(): HasMany
     {
@@ -96,6 +96,11 @@ class Location extends Model
         return app(InventoryMovementService::class)->locationBalance(Auth::guard('web')->user()->tenant_id, $this->id);
     }
 
+    /**
+     * Summary of scopeActive
+     * @param Builder<$this> $query
+     * @return Builder<$this>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

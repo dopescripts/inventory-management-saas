@@ -48,7 +48,7 @@ class Warehouse extends Model
     /**
      * Summary of createdBy
      *
-     * @return BelongsTo<User, Warehouse>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -58,7 +58,7 @@ class Warehouse extends Model
     /**
      * Summary of locations
      *
-     * @return HasMany<Location, Warehouse>
+     * @return HasMany<Location, $this>
      */
     public function locations(): HasMany
     {
@@ -68,7 +68,7 @@ class Warehouse extends Model
     /**
      * Summary of inventoryMovements
      *
-     * @return HasMany<InventoryMovement, Warehouse>
+     * @return HasMany<InventoryMovement, $this>
      */
     public function inventoryMovements(): HasMany
     {
@@ -78,13 +78,18 @@ class Warehouse extends Model
     /**
      * Summary of tenant
      *
-     * @return BelongsTo<Tenant, Warehouse>
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 
+    /**
+     * Summary of scopeActive
+     * @param Builder<$this> $query
+     * @return Builder<$this>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

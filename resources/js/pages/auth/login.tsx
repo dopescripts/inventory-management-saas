@@ -20,10 +20,7 @@ export default function Login({ status }: Props) {
         <>
             <Head title="Log in" />
 
-            <Form
-                {...store.form()}
-                className="flex flex-col gap-6"
-            >
+            <Form {...store.form()} className="flex flex-col gap-6">
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">

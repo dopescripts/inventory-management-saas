@@ -4,7 +4,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from '@/components/ui/collapsible';
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -19,7 +19,8 @@ import type { NavGroup } from '@/types';
 export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();
     const { auth } = usePage().props as any;
-    const hasPermission = (permission: string) => auth.user.permissions.includes(permission);
+    const hasPermission = (permission: string) =>
+        auth.user.permissions.includes(permission);
 
     return (
         <>
@@ -35,34 +36,47 @@ export function NavMain({ navGroups = [] }: { navGroups: NavGroup[] }) {
                             asChild
                             className="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         >
-                            <CollapsibleTrigger className='cursor-pointer'>
-                                {item.title}{" "}
+                            <CollapsibleTrigger className="cursor-pointer">
+                                {item.title}{' '}
                                 <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                             </CollapsibleTrigger>
                         </SidebarGroupLabel>
-                        <CollapsibleContent className='mt-1'>
+                        <CollapsibleContent className="mt-1">
                             <SidebarGroupContent>
                                 <SidebarMenu>
                                     {item.items.map((item) => {
-                                        if (item.permission && !hasPermission(item.permission)) {
+                                        if (
+                                            item.permission &&
+                                            !hasPermission(item.permission)
+                                        ) {
                                             return null;
                                         }
 
                                         return (
-
                                             <SidebarMenuItem key={item.title}>
                                                 <SidebarMenuButton
                                                     asChild
-                                                    isActive={isCurrentUrl(item.href)}
-                                                    tooltip={{ children: item.title }}
+                                                    isActive={isCurrentUrl(
+                                                        item.href,
+                                                    )}
+                                                    tooltip={{
+                                                        children: item.title,
+                                                    }}
                                                 >
-                                                    <Link href={item.href} prefetch>
-                                                        {item.icon && <item.icon />}
-                                                        <span>{item.title}</span>
+                                                    <Link
+                                                        href={item.href}
+                                                        prefetch
+                                                    >
+                                                        {item.icon && (
+                                                            <item.icon />
+                                                        )}
+                                                        <span>
+                                                            {item.title}
+                                                        </span>
                                                     </Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
-                                        )
+                                        );
                                     })}
                                 </SidebarMenu>
                             </SidebarGroupContent>

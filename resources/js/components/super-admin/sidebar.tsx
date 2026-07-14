@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
 
-// We'll use hardcoded URLs for now if Wayfinder imports are tricky, 
+// We'll use hardcoded URLs for now if Wayfinder imports are tricky,
 // but ideally we use the generated actions.
 const mainNavItems: NavItem[] = [
     {
@@ -49,8 +49,12 @@ export function SuperAdminSidebar() {
                             <Link href="/super-admin/dashboard" prefetch>
                                 <AppLogo />
                                 <div className="flex flex-col gap-0.5 leading-none">
-                                    <span className="font-semibold">Super Admin</span>
-                                    <span className="text-xs text-muted-foreground">Control Panel</span>
+                                    <span className="font-semibold">
+                                        Super Admin
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                        Control Panel
+                                    </span>
                                 </div>
                             </Link>
                         </SidebarMenuButton>

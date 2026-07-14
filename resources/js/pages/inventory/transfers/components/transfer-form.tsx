@@ -1,16 +1,13 @@
 import { Link, useForm } from '@inertiajs/react';
+import { Plus, Trash2 } from 'lucide-react';
 import React, { useMemo } from 'react';
 
-import transfers from '@/routes/transfers';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import {
-    Field,
-    FieldError,
-    FieldLabel,
-} from '@/components/ui/field';
 
 import {
     Select,
@@ -20,17 +17,8 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import transfers from '@/routes/transfers';
 
-import {
-    Plus,
-    Trash2,
-} from 'lucide-react';
 
 interface Item {
     id: number;
@@ -86,28 +74,13 @@ interface Props {
     transfer?: Transfer;
 }
 
-export default function TransferForm({
-    warehouses,
-    items,
-    transfer,
-}: Props) {
-
+export default function TransferForm({ warehouses, items, transfer }: Props) {
     const isEdit = !!transfer;
 
-    const {
-        data,
-        setData,
-        post,
-        put,
-        processing,
-        errors,
-    } = useForm({
+    const { data, setData, post, put, processing, errors } = useForm({
+        source_warehouse_id: transfer?.source_warehouse_id?.toString() ?? '',
 
-        source_warehouse_id:
-            transfer?.source_warehouse_id?.toString() ?? '',
-
-        source_location_id:
-            transfer?.source_location_id?.toString() ?? '',
+        source_location_id: transfer?.source_location_id?.toString() ?? '',
 
         destination_warehouse_id:
             transfer?.destination_warehouse_id?.toString() ?? '',
@@ -115,145 +88,105 @@ export default function TransferForm({
         destination_location_id:
             transfer?.destination_location_id?.toString() ?? '',
 
-        notes:
-            transfer?.notes ?? '',
+        notes: transfer?.notes ?? '',
 
-        items:
-            transfer?.items?.map(item => ({
-                item_id: item.item_id.toString(),
-                quantity_requested:
-                    item.quantity_requested.toString(),
-                remarks:
-                    item.remarks ?? '',
-            })) ?? [
-                {
-                    item_id: '',
-                    quantity_requested: '',
-                    remarks: '',
-                },
-            ],
+        items: transfer?.items?.map((item) => ({
+            item_id: item.item_id.toString(),
+            quantity_requested: item.quantity_requested.toString(),
+            remarks: item.remarks ?? '',
+        })) ?? [
+            {
+                item_id: '',
+                quantity_requested: '',
+                remarks: '',
+            },
+        ],
     });
 
-    const submit = (
-        e: React.FormEvent
-    ) => {
-
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (isEdit) {
-
             put(
                 transfers.update({
                     transfer: transfer!.id,
-                }).url
+                }).url,
             );
 
             return;
         }
 
-        post(
-            transfers.store.url()
-        );
+        post(transfers.store.url());
     };
 
     const sourceWarehouse = useMemo(
         () =>
             warehouses.find(
-                w =>
-                    w.id.toString() ===
-                    data.source_warehouse_id
+                (w) => w.id.toString() === data.source_warehouse_id,
             ),
-        [
-            warehouses,
-            data.source_warehouse_id,
-        ]
+        [warehouses, data.source_warehouse_id],
     );
 
     const destinationWarehouse = useMemo(
         () =>
             warehouses.find(
-                w =>
-                    w.id.toString() ===
-                    data.destination_warehouse_id
+                (w) => w.id.toString() === data.destination_warehouse_id,
             ),
-        [
-            warehouses,
-            data.destination_warehouse_id,
-        ]
+        [warehouses, data.destination_warehouse_id],
     );
 
-    const sourceLocations =
-        sourceWarehouse?.locations ?? [];
+    const sourceLocations = sourceWarehouse?.locations ?? [];
 
-    const destinationLocations =
-        destinationWarehouse?.locations ?? [];
+    const destinationLocations = destinationWarehouse?.locations ?? [];
 
     const addItem = () => {
+        setData('items', [
+            ...data.items,
 
-        setData(
-            'items',
-            [
-                ...data.items,
-
-                {
-                    item_id: '',
-                    quantity_requested: '',
-                    remarks: '',
-                },
-            ]
-        );
+            {
+                item_id: '',
+                quantity_requested: '',
+                remarks: '',
+            },
+        ]);
     };
 
-    const removeItem = (
-        index: number
-    ) => {
-
+    const removeItem = (index: number) => {
         setData(
             'items',
-            data.items.filter(
-                (_, i) => i !== index
-            )
+            data.items.filter((_, i) => i !== index),
         );
     };
 
     const updateItem = (
         index: number,
         key: keyof TransferItemForm,
-        value: string
+        value: string,
     ) => {
-
         const items = [...data.items];
 
         items[index][key] = value;
 
-        setData(
-            'items',
-            items
-        );
+        setData('items', items);
     };
 
-    const selectedItems = data.items.map(
-        i => i.item_id
-    );
+    const selectedItems = data.items.map((i) => i.item_id);
+
     return (
         <form onSubmit={submit} className="space-y-6">
-
             <Card>
                 <CardHeader>
-                    <CardTitle>
-                        General Information
-                    </CardTitle>
+                    <CardTitle>General Information</CardTitle>
                 </CardHeader>
 
                 <CardContent className="grid gap-4 md:grid-cols-2">
-
                     <Field>
                         <FieldLabel>Source Warehouse</FieldLabel>
 
                         <Select
                             value={data.source_warehouse_id}
                             onValueChange={(value) =>
-                                setData(current => ({
+                                setData((current) => ({
                                     ...current,
                                     source_warehouse_id: value,
                                     source_location_id: '',
@@ -265,18 +198,14 @@ export default function TransferForm({
                             </SelectTrigger>
 
                             <SelectContent>
-
                                 {warehouses.map((warehouse) => (
-
                                     <SelectItem
                                         key={warehouse.id}
                                         value={warehouse.id.toString()}
                                     >
                                         {warehouse.name}
                                     </SelectItem>
-
                                 ))}
-
                             </SelectContent>
                         </Select>
 
@@ -287,19 +216,15 @@ export default function TransferForm({
                                 },
                             ]}
                         />
-
                     </Field>
 
                     <Field>
-
-                        <FieldLabel>
-                            Destination Warehouse
-                        </FieldLabel>
+                        <FieldLabel>Destination Warehouse</FieldLabel>
 
                         <Select
                             value={data.destination_warehouse_id}
                             onValueChange={(value) =>
-                                setData(current => ({
+                                setData((current) => ({
                                     ...current,
                                     destination_warehouse_id: value,
                                     destination_location_id: '',
@@ -311,45 +236,33 @@ export default function TransferForm({
                             </SelectTrigger>
 
                             <SelectContent>
-
                                 {warehouses.map((warehouse) => (
-
                                     <SelectItem
                                         key={warehouse.id}
                                         value={warehouse.id.toString()}
                                     >
                                         {warehouse.name}
                                     </SelectItem>
-
                                 ))}
-
                             </SelectContent>
                         </Select>
 
                         <FieldError
                             errors={[
                                 {
-                                    message:
-                                        errors.destination_warehouse_id,
+                                    message: errors.destination_warehouse_id,
                                 },
                             ]}
                         />
-
                     </Field>
 
                     <Field>
-
-                        <FieldLabel>
-                            Source Location
-                        </FieldLabel>
+                        <FieldLabel>Source Location</FieldLabel>
 
                         <Select
                             value={data.source_location_id}
                             onValueChange={(value) =>
-                                setData(
-                                    'source_location_id',
-                                    value
-                                )
+                                setData('source_location_id', value)
                             }
                             disabled={!data.source_warehouse_id}
                         >
@@ -358,46 +271,33 @@ export default function TransferForm({
                             </SelectTrigger>
 
                             <SelectContent>
-
-                                {sourceLocations.map(location => (
-
+                                {sourceLocations.map((location) => (
                                     <SelectItem
                                         key={location.id}
                                         value={location.id.toString()}
                                     >
                                         {location.code}
                                     </SelectItem>
-
                                 ))}
-
                             </SelectContent>
-
                         </Select>
 
                         <FieldError
                             errors={[
                                 {
-                                    message:
-                                        errors.source_location_id,
+                                    message: errors.source_location_id,
                                 },
                             ]}
                         />
-
                     </Field>
 
                     <Field>
-
-                        <FieldLabel>
-                            Destination Location
-                        </FieldLabel>
+                        <FieldLabel>Destination Location</FieldLabel>
 
                         <Select
                             value={data.destination_location_id}
                             onValueChange={(value) =>
-                                setData(
-                                    'destination_location_id',
-                                    value
-                                )
+                                setData('destination_location_id', value)
                             }
                             disabled={!data.destination_warehouse_id}
                         >
@@ -406,48 +306,33 @@ export default function TransferForm({
                             </SelectTrigger>
 
                             <SelectContent>
-
-                                {destinationLocations.map(location => (
-
+                                {destinationLocations.map((location) => (
                                     <SelectItem
                                         key={location.id}
                                         value={location.id.toString()}
                                     >
                                         {location.code}
                                     </SelectItem>
-
                                 ))}
-
                             </SelectContent>
-
                         </Select>
 
                         <FieldError
                             errors={[
                                 {
-                                    message:
-                                        errors.destination_location_id,
+                                    message: errors.destination_location_id,
                                 },
                             ]}
                         />
-
                     </Field>
 
                     <Field className="md:col-span-2">
-
-                        <FieldLabel>
-                            Notes
-                        </FieldLabel>
+                        <FieldLabel>Notes</FieldLabel>
 
                         <textarea
                             className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                             value={data.notes}
-                            onChange={(e) =>
-                                setData(
-                                    'notes',
-                                    e.target.value
-                                )
-                            }
+                            onChange={(e) => setData('notes', e.target.value)}
                         />
 
                         <FieldError
@@ -457,34 +342,21 @@ export default function TransferForm({
                                 },
                             ]}
                         />
-
                     </Field>
-
                 </CardContent>
-
             </Card>
 
             <Card>
-
                 <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Items</CardTitle>
 
-                    <CardTitle>
-                        Items
-                    </CardTitle>
-
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={addItem}
-                    >
+                    <Button type="button" variant="outline" onClick={addItem}>
                         <Plus className="mr-2 h-4 w-4" />
                         Add Item
                     </Button>
-
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-
                     {data.items.map((row, index) => (
                         <div
                             key={index}
@@ -504,15 +376,17 @@ export default function TransferForm({
                                     </SelectTrigger>
 
                                     <SelectContent>
-
                                         {items
-                                            .filter(item => {
+                                            .filter((item) => {
                                                 return (
-                                                    !selectedItems.includes(item.id.toString()) ||
-                                                    row.item_id === item.id.toString()
+                                                    !selectedItems.includes(
+                                                        item.id.toString(),
+                                                    ) ||
+                                                    row.item_id ===
+                                                        item.id.toString()
                                                 );
                                             })
-                                            .map(item => (
+                                            .map((item) => (
                                                 <SelectItem
                                                     key={item.id}
                                                     value={item.id.toString()}
@@ -520,7 +394,6 @@ export default function TransferForm({
                                                     {item.name} ({item.sku})
                                                 </SelectItem>
                                             ))}
-
                                     </SelectContent>
                                 </Select>
 
@@ -528,7 +401,9 @@ export default function TransferForm({
                                     errors={[
                                         {
                                             message:
-                                                errors[`items.${index}.item_id` as keyof typeof errors],
+                                                errors[
+                                                    `items.${index}.item_id` as keyof typeof errors
+                                                ],
                                         },
                                     ]}
                                 />
@@ -546,7 +421,7 @@ export default function TransferForm({
                                         updateItem(
                                             index,
                                             'quantity_requested',
-                                            e.target.value
+                                            e.target.value,
                                         )
                                     }
                                 />
@@ -555,7 +430,9 @@ export default function TransferForm({
                                     errors={[
                                         {
                                             message:
-                                                errors[`items.${index}.quantity_requested` as keyof typeof errors],
+                                                errors[
+                                                    `items.${index}.quantity_requested` as keyof typeof errors
+                                                ],
                                         },
                                     ]}
                                 />
@@ -570,7 +447,7 @@ export default function TransferForm({
                                         updateItem(
                                             index,
                                             'remarks',
-                                            e.target.value
+                                            e.target.value,
                                         )
                                     }
                                     placeholder="Optional remarks..."
@@ -590,34 +467,18 @@ export default function TransferForm({
                             </div>
                         </div>
                     ))}
-
                 </CardContent>
-
             </Card>
 
             <div className="flex items-center gap-3">
-
-                <Button
-                    type="submit"
-                    disabled={processing}
-                >
-                    {isEdit
-                        ? 'Update Transfer'
-                        : 'Create Transfer'}
+                <Button type="submit" disabled={processing}>
+                    {isEdit ? 'Update Transfer' : 'Create Transfer'}
                 </Button>
 
-                <Button
-                    variant="outline"
-                    asChild
-                    disabled={processing}
-                >
-                    <Link href={transfers.index()}>
-                        Cancel
-                    </Link>
+                <Button variant="outline" asChild disabled={processing}>
+                    <Link href={transfers.index()}>Cancel</Link>
                 </Button>
-
             </div>
-
         </form>
     );
 }

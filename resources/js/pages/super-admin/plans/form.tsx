@@ -1,8 +1,8 @@
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import InputError from '@/components/input-error';
 import { Spinner } from '@/components/ui/spinner';
 
 interface Props {
@@ -40,34 +40,46 @@ export default function PlanForm({ form, submit }: Props) {
                 </div>
 
                 <div className="grid gap-2">
-                    <Label htmlFor="max_warehouses">Max Warehouses (-1 for unlimited)</Label>
+                    <Label htmlFor="max_warehouses">
+                        Max Warehouses (-1 for unlimited)
+                    </Label>
                     <Input
                         id="max_warehouses"
                         type="number"
                         value={data.max_warehouses}
-                        onChange={(e) => setData('max_warehouses', parseInt(e.target.value))}
+                        onChange={(e) =>
+                            setData('max_warehouses', parseInt(e.target.value))
+                        }
                     />
                     <InputError message={errors.max_warehouses} />
                 </div>
 
                 <div className="grid gap-2">
-                    <Label htmlFor="max_items">Max Items (-1 for unlimited)</Label>
+                    <Label htmlFor="max_items">
+                        Max Items (-1 for unlimited)
+                    </Label>
                     <Input
                         id="max_items"
                         type="number"
                         value={data.max_items}
-                        onChange={(e) => setData('max_items', parseInt(e.target.value))}
+                        onChange={(e) =>
+                            setData('max_items', parseInt(e.target.value))
+                        }
                     />
                     <InputError message={errors.max_items} />
                 </div>
 
                 <div className="grid gap-2">
-                    <Label htmlFor="max_orders">Max Orders/Month (-1 for unlimited)</Label>
+                    <Label htmlFor="max_orders">
+                        Max Orders/Month (-1 for unlimited)
+                    </Label>
                     <Input
                         id="max_orders"
                         type="number"
                         value={data.max_orders}
-                        onChange={(e) => setData('max_orders', parseInt(e.target.value))}
+                        onChange={(e) =>
+                            setData('max_orders', parseInt(e.target.value))
+                        }
                     />
                     <InputError message={errors.max_orders} />
                 </div>
@@ -78,7 +90,9 @@ export default function PlanForm({ form, submit }: Props) {
                         id="trial_days"
                         type="number"
                         value={data.trial_days}
-                        onChange={(e) => setData('trial_days', parseInt(e.target.value))}
+                        onChange={(e) =>
+                            setData('trial_days', parseInt(e.target.value))
+                        }
                     />
                     <InputError message={errors.trial_days} />
                 </div>
@@ -88,7 +102,9 @@ export default function PlanForm({ form, submit }: Props) {
                 <Checkbox
                     id="has_whatsapp"
                     checked={data.has_whatsapp}
-                    onCheckedChange={(checked) => setData('has_whatsapp', !!checked)}
+                    onCheckedChange={(checked) =>
+                        setData('has_whatsapp', !!checked)
+                    }
                 />
                 <Label htmlFor="has_whatsapp">Include WhatsApp Features</Label>
                 <InputError message={errors.has_whatsapp} />

@@ -28,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class TransferItem extends Model
 {
-    use HasFactory, BelongsToTenant;
+
+    use BelongsToTenant;
 
     protected function casts(): array
     {
@@ -38,17 +39,28 @@ class TransferItem extends Model
             'quantity_received' => 'decimal:4',
         ];
     }
-
+    /**
+     * Summary of transfer
+     * @return BelongsTo<Transfers, $this>
+     */
     public function transfer(): BelongsTo
     {
         return $this->belongsTo(Transfers::class);
     }
 
+    /**
+     * Summary of item
+     * @return BelongsTo<Item, $this>
+     */
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);
     }
 
+    /**
+     * Summary of tenant
+     * @return BelongsTo<Tenant, $this>
+     */
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);

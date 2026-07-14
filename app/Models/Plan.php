@@ -20,7 +20,7 @@ class Plan extends Model
     /**
      * Summary of subscriptions
      *
-     * @return HasMany<Subscription, Plan>
+     * @return HasMany<Subscription, $this>
      */
     public function subscriptions(): HasMany
     {

@@ -21,7 +21,7 @@ export function AppSidebarHeader({
                 <SidebarTrigger className="-ml-1" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-            <div className="hidden min-w-0 max-w-xs md:block">
+            <div className="hidden max-w-xs min-w-0 md:block">
                 <TenantContext tenant={auth.tenant} compact />
             </div>
         </header>

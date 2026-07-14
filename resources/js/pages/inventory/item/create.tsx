@@ -2,7 +2,15 @@ import { Head } from '@inertiajs/react';
 import items from '@/routes/items';
 import ItemForm from './form';
 
-export default function Create({ categories, brands, units }: { categories: any[]; brands: any[]; units: any[] }) {
+export default function Create({
+    categories,
+    brands,
+    units,
+}: {
+    categories: any[];
+    brands: any[];
+    units: any[];
+}) {
     return (
         <>
             <Head title="Create Item" />
@@ -12,7 +20,11 @@ export default function Create({ categories, brands, units }: { categories: any[
                 </div>
 
                 <div className="max-w-4xl rounded-xl border bg-card p-6 text-card-foreground">
-                    <ItemForm categories={categories} brands={brands} units={units} />
+                    <ItemForm
+                        categories={categories}
+                        brands={brands}
+                        units={units}
+                    />
                 </div>
             </div>
         </>

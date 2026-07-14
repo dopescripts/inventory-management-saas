@@ -15,7 +15,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (! $plan) {
+        if (!$plan) {
             return false;
         }
 
@@ -24,7 +24,7 @@ class PlanGate
         }
 
         // Note: Count will be implemented once Warehouse model is created
-        $currentCount = method_exists($tenant, 'warehouses') ? $tenant->warehouses()->count() : 0;
+        $currentCount = $tenant->warehouses()->count();
 
         return $currentCount < $plan->max_warehouses;
     }
@@ -36,7 +36,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (! $plan) {
+        if (!$plan) {
             return false;
         }
 
@@ -45,7 +45,7 @@ class PlanGate
         }
 
         // Note: Count will be implemented once Item/Product model is created
-        $currentCount = method_exists($tenant, 'items') ? $tenant->items()->count() : 0;
+        $currentCount = $tenant->items()->count();
 
         return $currentCount < $plan->max_items;
     }
@@ -57,7 +57,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (! $plan) {
+        if (!$plan) {
             return false;
         }
 
@@ -78,7 +78,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (! $plan) {
+        if (!$plan) {
             return false;
         }
 

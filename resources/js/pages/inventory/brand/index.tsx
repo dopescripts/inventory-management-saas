@@ -1,8 +1,8 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { Edit, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import brands from '@/routes/brands';
-import { Edit, Trash2 } from 'lucide-react';
 
 type Brand = {
     id: number;
@@ -12,7 +12,11 @@ type Brand = {
     items_count: number;
 };
 
-export default function Index({ brands: paginatedBrands }: { brands: { data: Brand[] } }) {
+export default function Index({
+    brands: paginatedBrands,
+}: {
+    brands: { data: Brand[] };
+}) {
     return (
         <>
             <Head title="Brands" />
@@ -31,21 +35,48 @@ export default function Index({ brands: paginatedBrands }: { brands: { data: Bra
                                 <th className="px-6 py-3">Name</th>
                                 <th className="px-6 py-3">Items</th>
                                 <th className="px-6 py-3">Status</th>
-                                <th className="px-6 py-3 text-right">Actions</th>
+                                <th className="px-6 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedBrands.data.map((brand) => (
-                                <tr key={brand.id} className="border-b last:border-0 hover:bg-muted/50">
-                                    <td className="px-6 py-4 font-medium">{brand.name}</td>
-                                    <td className="px-6 py-4">{brand.items_count}</td>
+                                <tr
+                                    key={brand.id}
+                                    className="border-b last:border-0 hover:bg-muted/50"
+                                >
+                                    <td className="px-6 py-4 font-medium">
+                                        {brand.name}
+                                    </td>
                                     <td className="px-6 py-4">
-                                        <Badge variant={brand.is_active ? 'default' : 'secondary'}>{brand.is_active ? 'Active' : 'Inactive'}</Badge>
+                                        {brand.items_count}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Badge
+                                            variant={
+                                                brand.is_active
+                                                    ? 'default'
+                                                    : 'secondary'
+                                            }
+                                        >
+                                            {brand.is_active
+                                                ? 'Active'
+                                                : 'Inactive'}
+                                        </Badge>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <Button variant="outline" size="icon" asChild>
-                                                <Link href={brands.edit({ brand: brand.id })}>
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={brands.edit({
+                                                        brand: brand.id,
+                                                    })}
+                                                >
                                                     <Edit className="h-4 w-4" />
                                                 </Link>
                                             </Button>
@@ -53,8 +84,18 @@ export default function Index({ brands: paginatedBrands }: { brands: { data: Bra
                                                 variant="destructive"
                                                 size="icon"
                                                 onClick={() => {
-                                                    if (confirm('Delete this brand?')) {
-                                                        router.delete(brands.destroy({ brand: brand.id }).url());
+                                                    if (
+                                                        confirm(
+                                                            'Delete this brand?',
+                                                        )
+                                                    ) {
+                                                        router.delete(
+                                                            brands
+                                                                .destroy({
+                                                                    brand: brand.id,
+                                                                })
+                                                                .url(),
+                                                        );
                                                     }
                                                 }}
                                             >

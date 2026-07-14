@@ -19,7 +19,7 @@ class Tenant extends Model
     /**
      * Summary of users
      *
-     * @return HasMany<User, Tenant>
+     * @return HasMany<User, $this>
      */
     public function users(): HasMany
     {
@@ -29,7 +29,7 @@ class Tenant extends Model
     /**
      * Summary of inventoryMovements
      *
-     * @return HasMany<InventoryMovement, Tenant>
+     * @return HasMany<InventoryMovement, $this>
      */
     public function inventoryMovements(): HasMany
     {
@@ -39,7 +39,7 @@ class Tenant extends Model
     /**
      * Summary of activeSubscription
      *
-     * @return HasOne<Subscription, Tenant>
+     * @return HasOne<Subscription, $this>
      */
     public function activeSubscription(): HasOne
     {
@@ -52,7 +52,7 @@ class Tenant extends Model
     /**
      * Summary of plan
      *
-     * @return HasOneThrough<Plan, Subscription, Tenant>
+     * @return HasOneThrough<Plan, Subscription, $this>
      */
     public function plan(): HasOneThrough
     {
@@ -69,12 +69,20 @@ class Tenant extends Model
         return $this->activeSubscription()->exists();
     }
 
-    public function warehouses()
+    /**
+     * Summary of warehouses
+     * @return HasMany<Warehouse, $this>
+     */
+    public function warehouses(): HasMany
     {
         return $this->hasMany(Warehouse::class, 'tenant_id', 'id');
     }
 
-    public function items()
+    /**
+     * Summary of items
+     * @return HasMany<Item, $this>
+     */
+    public function items(): HasMany
     {
         return $this->hasMany(Item::class, 'tenant_id', 'id');
     }

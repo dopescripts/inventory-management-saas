@@ -48,9 +48,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Item extends Model
 {
     /** @use HasFactory<ItemFactory> */
-    use BelongsToTenant;
-
     use HasFactory;
+
+    use BelongsToTenant;
 
     /**
      * Get the attributes that should be cast.
@@ -66,7 +66,8 @@ class Item extends Model
     }
 
     /**
-     * @return BelongsTo<Tenant, Item>
+     * Summary of tenant
+     * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
     {
@@ -74,7 +75,7 @@ class Item extends Model
     }
 
     /**
-     * @return BelongsTo<Category, Item>
+     * @return BelongsTo<Category, $this>
      */
     public function category(): BelongsTo
     {
@@ -82,7 +83,7 @@ class Item extends Model
     }
 
     /**
-     * @return BelongsTo<Brand, Item>
+     * @return BelongsTo<Brand, $this>
      */
     public function brand(): BelongsTo
     {
@@ -90,7 +91,7 @@ class Item extends Model
     }
 
     /**
-     * @return BelongsTo<Unit, Item>
+     * @return BelongsTo<Unit, $this>
      */
     public function unit(): BelongsTo
     {
@@ -98,7 +99,7 @@ class Item extends Model
     }
 
     /**
-     * @return BelongsTo<User, Item>
+     * @return BelongsTo<User, $this>
      */
     public function createdBy(): BelongsTo
     {
@@ -106,13 +107,18 @@ class Item extends Model
     }
 
     /**
-     * @return HasMany<InventoryMovement, Item>
+     * @return HasMany<InventoryMovement, $this>
      */
     public function inventoryMovements(): HasMany
     {
         return $this->hasMany(InventoryMovement::class);
     }
 
+    /**
+     * Summary of scopeActive
+     * @param Builder<$this> $query
+     * @return Builder<$this>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

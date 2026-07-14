@@ -41,6 +41,7 @@ export default [
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
             'react/no-unescaped-entities': 'off',
+            'react-hooks/rules-of-hooks': ['error', { 'additionalHooks': 'usePage' }],
         },
         settings: {
             react: {

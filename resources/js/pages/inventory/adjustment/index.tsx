@@ -1,13 +1,13 @@
 import { Head, Link } from '@inertiajs/react';
-import React from 'react';
-import adjustmentsRoutes from '@/routes/adjustments';
-import AppLayout from '@/layouts/app-layout';
-import { DataTable } from '@/components/ui/data-table';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
 import { InertiaPagination } from '@/components/inertia-pagination';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
+import AppLayout from '@/layouts/app-layout';
+import adjustmentsRoutes from '@/routes/adjustments';
 
 interface Adjustment {
     id: number;
@@ -38,70 +38,89 @@ interface Adjustment {
 
 const columns: ColumnDef<Adjustment>[] = [
     {
-        accessorKey: "created_at",
-        header: "Date",
-        cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString()
+        accessorKey: 'created_at',
+        header: 'Date',
+        cell: ({ row }) =>
+            new Date(row.original.created_at).toLocaleDateString(),
     },
     {
-        accessorKey: "item.name",
-        header: "Item",
+        accessorKey: 'item.name',
+        header: 'Item',
         cell: ({ row }) => (
             <div>
                 <span className="font-medium">{row.original.item.name}</span>
-                <span className="text-xs text-muted-foreground ml-2">{row.original.item.sku}</span>
+                <span className="ml-2 text-xs text-muted-foreground">
+                    {row.original.item.sku}
+                </span>
             </div>
-        )
+        ),
     },
     {
-        accessorKey: "warehouse.name",
-        header: "Location",
+        accessorKey: 'warehouse.name',
+        header: 'Location',
         cell: ({ row }) => (
             <div>
                 <span>{row.original.warehouse.name}</span>
                 {row.original.location && (
-                    <span className="text-muted-foreground ml-1">/ {row.original.location.code}</span>
+                    <span className="ml-1 text-muted-foreground">
+                        / {row.original.location.code}
+                    </span>
                 )}
             </div>
-        )
+        ),
     },
     {
-        accessorKey: "direction",
-        header: "Adjustment",
+        accessorKey: 'direction',
+        header: 'Adjustment',
         cell: ({ row }) => {
             const dir = row.original.direction;
             const isIncrease = dir === 'in';
+
             return (
-                <Badge variant={isIncrease ? "default" : "secondary"} className={isIncrease ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : ""}>
-                    {isIncrease ? "+" : "-"}{Number(row.original.quantity)}
+                <Badge
+                    variant={isIncrease ? 'default' : 'secondary'}
+                    className={
+                        isIncrease
+                            ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                            : ''
+                    }
+                >
+                    {isIncrease ? '+' : '-'}
+                    {Number(row.original.quantity)}
                 </Badge>
             );
-        }
+        },
     },
     {
-        accessorKey: "notes",
-        header: "Reason / Notes",
+        accessorKey: 'notes',
+        header: 'Reason / Notes',
         cell: ({ row }) => (
-            <span className="text-muted-foreground truncate max-w-[200px] inline-block" title={row.original.notes || ''}>
+            <span
+                className="inline-block max-w-[200px] truncate text-muted-foreground"
+                title={row.original.notes || ''}
+            >
                 {row.original.notes || '-'}
             </span>
-        )
+        ),
     },
     {
-        accessorKey: "performed_by.name",
-        header: "Performed By",
-        cell: ({ row }) => row.original.performed_by?.name || 'System'
-    }
+        accessorKey: 'performed_by.name',
+        header: 'Performed By',
+        cell: ({ row }) => row.original.performed_by?.name || 'System',
+    },
 ];
 
 export default function Index({ adjustments }: { adjustments: any }) {
     return (
         <>
             <Head title="Inventory Adjustments" />
-            <div className='flex h-full flex-1 flex-col gap-4 rounded-xl p-4 md:p-6'>
-                <div className='flex items-center justify-between'>
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 md:p-6">
+                <div className="flex items-center justify-between">
                     <div>
-                        <h1 className='text-3xl font-bold'>Adjustments</h1>
-                        <p className="text-muted-foreground mt-1">Record and track manual stock changes.</p>
+                        <h1 className="text-3xl font-bold">Adjustments</h1>
+                        <p className="mt-1 text-muted-foreground">
+                            Record and track manual stock changes.
+                        </p>
                     </div>
                     <Button asChild>
                         <Link href={adjustmentsRoutes.create()}>
@@ -110,7 +129,7 @@ export default function Index({ adjustments }: { adjustments: any }) {
                         </Link>
                     </Button>
                 </div>
-                <div className='rounded-xl border bg-card text-card-foreground shadow-sm'>
+                <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
                     <DataTable columns={columns} data={adjustments.data} />
                 </div>
                 <InertiaPagination links={adjustments.links} />
@@ -120,7 +139,11 @@ export default function Index({ adjustments }: { adjustments: any }) {
 }
 
 Index.layout = (page: React.ReactNode) => (
-    <AppLayout breadcrumbs={[{ title: 'Adjustments', href: adjustmentsRoutes.index() }]}>
+    <AppLayout
+        breadcrumbs={[
+            { title: 'Adjustments', href: adjustmentsRoutes.index() },
+        ]}
+    >
         {page}
     </AppLayout>
 );

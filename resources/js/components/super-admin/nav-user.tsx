@@ -1,5 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { ChevronsUpDown } from 'lucide-react';
+import { SuperAdminUserMenuContent } from '@/components/super-admin/user-menu-content';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,7 +13,6 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { UserInfo } from '@/components/user-info';
-import { SuperAdminUserMenuContent } from '@/components/super-admin/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 export function SuperAdminNavUser() {

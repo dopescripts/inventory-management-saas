@@ -1,5 +1,14 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ArrowRightLeft, Boxes, Building2, LayoutGrid, RotateCcw, Shapes, Tag, User } from 'lucide-react';
+import {
+    ArrowRightLeft,
+    Boxes,
+    Building2,
+    LayoutGrid,
+    RotateCcw,
+    Shapes,
+    Tag,
+    User,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,23 +23,23 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavGroup, NavItem } from '@/types';
-import staff from '@/routes/staff';
-import warehouses from '@/routes/warehouses';
+import adjustments from '@/routes/adjustments';
 import brands from '@/routes/brands';
-import units from '@/routes/units';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
-import adjustments from '@/routes/adjustments';
+import staff from '@/routes/staff';
 import transfers from '@/routes/transfers';
+import units from '@/routes/units';
+import warehouses from '@/routes/warehouses';
+import type { NavGroup, NavItem } from '@/types';
 
 const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     const { auth } = usePage<any>().props;
-    const isOwnerOrManager = auth.user.roles?.includes('owner') || auth.user.roles?.includes('manager');
-
-
+    const isOwnerOrManager =
+        auth.user.roles?.includes('owner') ||
+        auth.user.roles?.includes('manager');
 
     const mainNavItems: NavGroup[] = [
         {
@@ -43,66 +52,66 @@ export function AppSidebar() {
                 },
                 ...(isOwnerOrManager
                     ? [
-                        {
-                            title: 'Manage Staff',
-                            href: staff.index(),
-                            icon: User,
-                        },
-                    ]
+                          {
+                              title: 'Manage Staff',
+                              href: staff.index(),
+                              icon: User,
+                          },
+                      ]
                     : []),
-            ]
+            ],
         },
         {
-            title: "Inventory",
+            title: 'Inventory',
             items: [
                 {
                     title: 'Items',
                     href: items.index(),
                     icon: Boxes,
-                    permission: 'view_items'
+                    permission: 'view_items',
                 },
                 {
                     title: 'Adjustments',
                     icon: RotateCcw,
                     href: adjustments.index(),
-                    permission: 'view_adjustments'
+                    permission: 'view_adjustments',
                 },
                 {
                     title: 'Transfers',
                     icon: ArrowRightLeft,
                     href: transfers.index(),
-                    permission: 'view_transfers'
-                }
-            ]
+                    permission: 'view_transfers',
+                },
+            ],
         },
         {
-            title: "Organization",
+            title: 'Organization',
             items: [
                 {
                     title: 'Warehouse',
                     href: warehouses.index(),
-                    icon: Building2
+                    icon: Building2,
                 },
                 {
                     title: 'Brands',
                     href: brands.index(),
                     icon: Tag,
-                    permission: 'view_brands'
+                    permission: 'view_brands',
                 },
                 {
                     title: 'Units',
                     href: units.index(),
                     icon: Boxes,
-                    permission: 'view_units'
+                    permission: 'view_units',
                 },
                 {
                     title: 'Category',
                     href: categories.index(),
                     icon: Shapes,
-                    permission: 'view_categories'
-                }
-            ]
-        }
+                    permission: 'view_categories',
+                },
+            ],
+        },
     ];
 
     return (
