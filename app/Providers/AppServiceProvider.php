@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Transfers;
+use App\Policies\TransferPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
             SetTenantForPermissions::class,
             SubstituteBindings::class,
         );
+
+        Gate::policy(Transfers::class, TransferPolicy::class);
     }
 
     /**

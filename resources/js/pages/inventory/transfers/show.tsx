@@ -1,5 +1,14 @@
-import React from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, Link, usePage, router, useForm } from '@inertiajs/react';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 import AppLayout from '@/layouts/app-layout';
 
@@ -99,27 +108,19 @@ interface Props {
 }
 
 const statusVariant = (status: string) => {
-
     switch (status) {
-
         case 'draft':
             return 'secondary';
-
         case 'pending_approval':
             return 'outline';
-
         case 'approved':
             return 'default';
-
         case 'processing':
             return 'default';
-
         case 'complete':
             return 'default';
-
         case 'cancelled':
             return 'destructive';
-
         default:
             return 'secondary';
     }
@@ -128,6 +129,40 @@ const statusVariant = (status: string) => {
 function Show({
     transfer,
 }: Props) {
+    const [isShipModalOpen, setIsShipModalOpen] = useState(false);
+    const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false);
+
+    const shipForm = useForm({
+        items: transfer.items.map(item => ({
+            id: item.id,
+            quantity: Math.max(0, item.quantity_requested - (item.quantity_shipped || 0)),
+        }))
+    });
+
+    const receiveForm = useForm({
+        items: transfer.items.map(item => ({
+            id: item.id,
+            quantity: Math.max(0, (item.quantity_shipped || 0) - (item.quantity_received || 0)),
+        }))
+    });
+
+    const handleAction = (action: 'submit' | 'approve' | 'cancel') => {
+        router.post(transfers[action]({ transfer: transfer.id }));
+    };
+
+    const submitShip = (e: React.FormEvent) => {
+        e.preventDefault();
+        shipForm.post(transfers.ship({ transfer: transfer.id }), {
+            onSuccess: () => setIsShipModalOpen(false)
+        });
+    };
+
+    const submitReceive = (e: React.FormEvent) => {
+        e.preventDefault();
+        receiveForm.post(transfers.receive({ transfer: transfer.id }), {
+            onSuccess: () => setIsReceiveModalOpen(false)
+        });
+    };
 
     return (
         <>
@@ -722,81 +757,61 @@ function Show({
                         </CardHeader>
 
                         <CardContent className="space-y-3">
-
                             {transfer.status === 'draft' && (
-
                                 <>
-                                    <Button className="w-full">
+                                    <Button className="w-full" onClick={() => handleAction('submit')}>
                                         Submit For Approval
                                     </Button>
 
                                     <Button
                                         variant="destructive"
                                         className="w-full"
+                                        onClick={() => handleAction('cancel')}
                                     >
                                         Cancel Transfer
                                     </Button>
                                 </>
-
                             )}
 
                             {transfer.status === 'pending_approval' && (
-
                                 <>
-                                    <Button className="w-full">
+                                    <Button className="w-full" onClick={() => handleAction('approve')}>
                                         Approve Transfer
                                     </Button>
 
                                     <Button
                                         variant="destructive"
                                         className="w-full"
+                                        onClick={() => handleAction('cancel')}
                                     >
-                                        Reject Transfer
+                                        Cancel Transfer
                                     </Button>
                                 </>
-
                             )}
 
-                            {transfer.status === 'approved' && (
-
-                                <Button className="w-full">
-
+                            {(transfer.status === 'approved' || transfer.status === 'processing') && transfer.items.some(i => (i.quantity_shipped || 0) < i.quantity_requested) && (
+                                <Button className="w-full" onClick={() => setIsShipModalOpen(true)}>
                                     Ship Items
-
                                 </Button>
-
                             )}
 
-                            {transfer.status === 'processing' && (
-
-                                <Button className="w-full">
-
+                            {transfer.status === 'processing' && transfer.items.some(i => (i.quantity_received || 0) < (i.quantity_shipped || 0)) && (
+                                <Button className="w-full" onClick={() => setIsReceiveModalOpen(true)}>
                                     Receive Items
-
                                 </Button>
-
                             )}
 
                             {transfer.status === 'complete' && (
-
                                 <div className="rounded-md border bg-muted p-4 text-center text-sm text-muted-foreground">
-
                                     Transfer completed successfully.
-
                                 </div>
-
                             )}
 
                             {transfer.status === 'cancelled' && (
-
                                 <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-center text-sm text-destructive">
-
                                     This transfer has been cancelled.
-
                                 </div>
-
                             )}
-
                         </CardContent>
 
                     </Card>
@@ -805,6 +820,89 @@ function Show({
 
             </div>
 
+            <Dialog open={isShipModalOpen} onOpenChange={setIsShipModalOpen}>
+                <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                        <DialogTitle>Ship Items</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={submitShip}>
+                        <div className="grid gap-4 py-4">
+                            {transfer.items.map((item, index) => {
+                                const remaining = item.quantity_requested - (item.quantity_shipped || 0);
+                                if (remaining <= 0) return null;
+                                return (
+                                    <div key={item.id} className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="col-span-1">{item.item.name}</Label>
+                                        <div className="col-span-3 flex items-center gap-2">
+                                            <Input
+                                                type="number"
+                                                step="0.0001"
+                                                max={remaining}
+                                                min="0"
+                                                value={shipForm.data.items[index].quantity}
+                                                onChange={(e) => {
+                                                    const newItems = [...shipForm.data.items];
+                                                    newItems[index].quantity = Number(e.target.value);
+                                                    shipForm.setData('items', newItems);
+                                                }}
+                                            />
+                                            <span className="text-sm text-muted-foreground shrink-0">
+                                                / {remaining} remaining
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsShipModalOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={shipForm.processing}>Ship Selected</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isReceiveModalOpen} onOpenChange={setIsReceiveModalOpen}>
+                <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                        <DialogTitle>Receive Items</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={submitReceive}>
+                        <div className="grid gap-4 py-4">
+                            {transfer.items.map((item, index) => {
+                                const remaining = (item.quantity_shipped || 0) - (item.quantity_received || 0);
+                                if (remaining <= 0) return null;
+                                return (
+                                    <div key={item.id} className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="col-span-1">{item.item.name}</Label>
+                                        <div className="col-span-3 flex items-center gap-2">
+                                            <Input
+                                                type="number"
+                                                step="0.0001"
+                                                max={remaining}
+                                                min="0"
+                                                value={receiveForm.data.items[index].quantity}
+                                                onChange={(e) => {
+                                                    const newItems = [...receiveForm.data.items];
+                                                    newItems[index].quantity = Number(e.target.value);
+                                                    receiveForm.setData('items', newItems);
+                                                }}
+                                            />
+                                            <span className="text-sm text-muted-foreground shrink-0">
+                                                / {remaining} remaining
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsReceiveModalOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={receiveForm.processing}>Receive Selected</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

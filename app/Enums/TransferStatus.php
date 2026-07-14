@@ -6,9 +6,9 @@ namespace App\Enums;
 enum TransferStatus: string
 {
     case Draft = 'draft';
-    case Pending = 'pending';
+    case Pending = 'pending_approval';
     case Approved = 'approved';
-    case Shipped = 'shipped';
-    case Received = 'received';
+    case Shipped = 'processing';
+    case Received = 'complete';
     case Cancelled = 'cancelled';
 }
