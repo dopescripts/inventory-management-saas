@@ -4,6 +4,8 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Models\Currency;
+use App\Models\Currency;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
@@ -32,6 +34,7 @@ class CreateNewUser implements CreatesNewUsers
         return DB::transaction(function () use ($input): User {
             $tenant = Tenant::create([
                 'name' => $input['company_name'],
+                'default_currency_id' => Currency::where('code', 'USD')->value('id'),
             ]);
 
             $user = User::create([

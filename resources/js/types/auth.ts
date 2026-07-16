@@ -11,10 +11,18 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Currency = {
+    id: number;
+    code: string;
+    symbol: string;
+    decimal_places: number;
+};
+
 export type Tenant = {
     id: number;
     name: string;
     logo: string | null;
+    currency: Currency | null;
     subscription: Subscription | null;
 };
 

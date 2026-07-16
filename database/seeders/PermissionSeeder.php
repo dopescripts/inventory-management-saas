@@ -25,6 +25,8 @@ class PermissionSeeder extends Seeder
             'categories',
             'adjustments',
             'transfers',
+            'vendors',
+            'bills',
         ];
         $actions = ['view', 'create', 'update', 'delete'];
         $permissions = [];
@@ -43,6 +45,12 @@ class PermissionSeeder extends Seeder
             'ship_transfers',
             'receive_transfers',
             'cancel_transfers',
+            'submit_purchases',
+            'approve_purchases',
+            'receive_purchases',
+            'cancel_purchases',
+            'close_purchases',
+            'download_bills',
         ];
 
         foreach ($workflowPermissions as $permission) {

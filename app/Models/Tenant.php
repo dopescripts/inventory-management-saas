@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property string $name
  * @property string $logo
  */
-#[Fillable(['name', 'logo'])]
+#[Fillable(['name', 'logo', 'default_currency_id', 'billing_address', 'billing_phone', 'billing_email', 'tax_id'])]
 class Tenant extends Model
 {
     /**
@@ -71,6 +72,7 @@ class Tenant extends Model
 
     /**
      * Summary of warehouses
+     *
      * @return HasMany<Warehouse, $this>
      */
     public function warehouses(): HasMany
@@ -80,10 +82,19 @@ class Tenant extends Model
 
     /**
      * Summary of items
+     *
      * @return HasMany<Item, $this>
      */
     public function items(): HasMany
     {
         return $this->hasMany(Item::class, 'tenant_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo<Currency, $this>
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'default_currency_id');
     }
 }

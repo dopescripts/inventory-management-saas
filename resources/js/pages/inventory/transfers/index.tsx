@@ -18,7 +18,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import AppLayout from '@/layouts/app-layout';
+
 import transfers from '@/routes/transfers';
 
 interface Transfer {

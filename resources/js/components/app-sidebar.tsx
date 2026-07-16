@@ -3,10 +3,13 @@ import {
     ArrowRightLeft,
     Boxes,
     Building2,
+    FileText,
     LayoutGrid,
     RotateCcw,
     Shapes,
+    ShoppingCart,
     Tag,
+    Truck,
     User,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -28,8 +31,11 @@ import brands from '@/routes/brands';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
 import staff from '@/routes/staff';
+import bills from '@/routes/bills';
+import purchases from '@/routes/purchases';
 import transfers from '@/routes/transfers';
 import units from '@/routes/units';
+import vendors from '@/routes/vendors';
 import warehouses from '@/routes/warehouses';
 import type { NavGroup, NavItem } from '@/types';
 
@@ -82,6 +88,18 @@ export function AppSidebar() {
                     href: transfers.index(),
                     permission: 'view_transfers',
                 },
+                {
+                    title: 'Purchases',
+                    icon: ShoppingCart,
+                    href: purchases.index(),
+                    permission: 'view_purchases',
+                },
+                {
+                    title: 'Bills',
+                    icon: FileText,
+                    href: bills.index(),
+                    permission: 'view_bills',
+                },
             ],
         },
         {
@@ -109,6 +127,12 @@ export function AppSidebar() {
                     href: categories.index(),
                     icon: Shapes,
                     permission: 'view_categories',
+                },
+                {
+                    title: 'Vendors',
+                    href: vendors.index(),
+                    icon: Truck,
+                    permission: 'view_vendors',
                 },
             ],
         },
