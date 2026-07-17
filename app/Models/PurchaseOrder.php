@@ -94,4 +94,12 @@ class PurchaseOrder extends Model
     {
         return $this->hasMany(PurchaseReceive::class);
     }
+
+    /**
+     * @return BelongsTo<Tenant, $this>
+     */
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }

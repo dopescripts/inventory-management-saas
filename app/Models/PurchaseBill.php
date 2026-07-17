@@ -68,4 +68,9 @@ class PurchaseBill extends Model
     {
         return $this->hasMany(PurchaseBillItem::class);
     }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }
