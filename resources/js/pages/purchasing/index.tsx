@@ -12,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCurrency } from '@/lib/currency';
 import purchases from '@/routes/purchases';
 
 interface PurchaseOrder {
@@ -55,105 +56,104 @@ const statusVariant = (status: string) => {
     }
 };
 
-const columns: ColumnDef<PurchaseOrder>[] = [
-    {
-        accessorKey: 'purchase_number',
-        header: 'PO #',
-        cell: ({ row }) => (
-            <span className="font-medium">
-                {row.original.purchase_number}
-            </span>
-        ),
-    },
-    {
-        accessorKey: 'vendor.name',
-        header: 'Vendor',
-    },
-    {
-        accessorKey: 'items_count',
-        header: 'Items',
-    },
-    {
-        accessorKey: 'total',
-        header: 'Total',
-        cell: ({ row }) => (
-            <span>
-                {parseFloat(row.original.total).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                })}
-            </span>
-        ),
-    },
-    {
-        accessorKey: 'ordered_by.name',
-        header: 'Ordered By',
-    },
-    {
-        accessorKey: 'expected_date',
-        header: 'Expected',
-        cell: ({ row }) =>
-            row.original.expected_date
-                ? new Date(row.original.expected_date).toLocaleDateString()
-                : '—',
-    },
-    {
-        accessorKey: 'status',
-        header: 'Status',
-        cell: ({ row }) => (
-            <Badge variant={statusVariant(row.original.status) as any}>
-                {row.original.status
-                    .replaceAll('_', ' ')
-                    .replace(/\b\w/g, (c) => c.toUpperCase())}
-            </Badge>
-        ),
-    },
-    {
-        id: 'actions',
-        cell: ({ row }) => (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                        <Link
-                            href={purchases.show({
-                                purchase_order: row.original.id,
-                            })}
-                        >
-                            <Eye className="mr-2 h-4 w-4" />
-                            View
-                        </Link>
-                    </DropdownMenuItem>
-                    {row.original.status === 'draft' && (
-                        <>
-                            <DropdownMenuItem asChild>
-                                <Link
-                                    href={purchases.edit({
-                                        purchase_order: row.original.id,
-                                    })}
-                                >
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    Edit
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">
-                                <Trash className="mr-2 h-4 w-4" />
-                                Delete
-                            </DropdownMenuItem>
-                        </>
-                    )}
-                </DropdownMenuContent>
-            </DropdownMenu>
-        ),
-    },
-];
-
 export default function Index({ purchaseOrders }: Props) {
+    const { format } = useCurrency();
+
+    const columns: ColumnDef<PurchaseOrder>[] = [
+        {
+            accessorKey: 'purchase_number',
+            header: 'PO #',
+            cell: ({ row }) => (
+                <span className="font-medium">
+                    {row.original.purchase_number}
+                </span>
+            ),
+        },
+        {
+            accessorKey: 'vendor.name',
+            header: 'Vendor',
+        },
+        {
+            accessorKey: 'items_count',
+            header: 'Items',
+        },
+        {
+            accessorKey: 'total',
+            header: 'Total',
+            cell: ({ row }) => (
+                <span>
+                    {format(row.original.total)}
+                </span>
+            ),
+        },
+        {
+            accessorKey: 'ordered_by.name',
+            header: 'Ordered By',
+        },
+        {
+            accessorKey: 'expected_date',
+            header: 'Expected',
+            cell: ({ row }) =>
+                row.original.expected_date
+                    ? new Date(row.original.expected_date).toLocaleDateString()
+                    : '—',
+        },
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: ({ row }) => (
+                <Badge variant={statusVariant(row.original.status) as any}>
+                    {row.original.status
+                        .replaceAll('_', ' ')
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </Badge>
+            ),
+        },
+        {
+            id: 'actions',
+            cell: ({ row }) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                            <Link
+                                href={purchases.show({
+                                    purchase_order: row.original.id,
+                                })}
+                            >
+                                <Eye className="mr-2 h-4 w-4" />
+                                View
+                            </Link>
+                        </DropdownMenuItem>
+                        {row.original.status === 'draft' && (
+                            <>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href={purchases.edit({
+                                            purchase_order: row.original.id,
+                                        })}
+                                    >
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="text-destructive">
+                                    <Trash className="mr-2 h-4 w-4" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+        },
+    ];
+
     return (
         <>
             <Head title="Purchase Orders" />

@@ -27,6 +27,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import purchases from '@/routes/purchases';
+import { useCurrency } from '@/lib/currency';
 
 interface Warehouse {
     id: number;
@@ -125,6 +126,8 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
     const selectedWarehouse = warehouses?.find(
         (w) => w.id.toString() === receiveForm.data.warehouse_id,
     );
+
+    const { format } = useCurrency();
 
     return (
         <>
@@ -233,7 +236,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                         </CardHeader>
                         <CardContent>
                             <div className="text-3xl font-bold">
-                                ${Number(purchaseOrder.total).toFixed(2)}
+                                {format(purchaseOrder.total)}
                             </div>
                         </CardContent>
                     </Card>
@@ -306,10 +309,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                 {item.quantity_received}
                                             </td>
                                             <td className="px-4 py-3 text-right">
-                                                ${Number(item.unit_cost).toFixed(2)}
+                                                {format(item.unit_cost)}
                                             </td>
                                             <td className="px-4 py-3 text-right font-medium">
-                                                ${Number(item.total).toFixed(2)}
+                                                {format(item.total)}
                                             </td>
                                         </tr>
                                     ))}
@@ -320,7 +323,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                             Subtotal
                                         </td>
                                         <td className="px-4 py-2 text-right">
-                                            ${Number(purchaseOrder.subtotal).toFixed(2)}
+                                            {format(purchaseOrder.subtotal)}
                                         </td>
                                     </tr>
                                     {Number(purchaseOrder.discount) > 0 && (
@@ -329,7 +332,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                 Discount
                                             </td>
                                             <td className="px-4 py-2 text-right text-destructive">
-                                                -${Number(purchaseOrder.discount).toFixed(2)}
+                                                -{format(purchaseOrder.discount)}
                                             </td>
                                         </tr>
                                     )}
@@ -339,7 +342,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                 Tax
                                             </td>
                                             <td className="px-4 py-2 text-right">
-                                                ${Number(purchaseOrder.tax).toFixed(2)}
+                                                {format(purchaseOrder.tax)}
                                             </td>
                                         </tr>
                                     )}
@@ -349,7 +352,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                 Shipping
                                             </td>
                                             <td className="px-4 py-2 text-right">
-                                                ${Number(purchaseOrder.shipping).toFixed(2)}
+                                                {format(purchaseOrder.shipping)}
                                             </td>
                                         </tr>
                                     )}
@@ -358,7 +361,7 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                             Total
                                         </td>
                                         <td className="px-4 py-3 text-right">
-                                            ${Number(purchaseOrder.total).toFixed(2)}
+                                            {format(purchaseOrder.total)}
                                         </td>
                                     </tr>
                                 </tfoot>
