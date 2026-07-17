@@ -205,6 +205,8 @@ Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () 
                 ->middleware('permission:update_bills')
                 ->name('cancel');
         });
+
+    Route::resource('customers', \App\Http\Controllers\Sales\CustomerController::class);
 });
 
 require __DIR__.'/settings.php';

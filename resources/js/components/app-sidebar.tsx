@@ -27,17 +27,18 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import adjustments from '@/routes/adjustments';
+import bills from '@/routes/bills';
 import brands from '@/routes/brands';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
-import staff from '@/routes/staff';
-import bills from '@/routes/bills';
 import purchases from '@/routes/purchases';
+import staff from '@/routes/staff';
 import transfers from '@/routes/transfers';
 import units from '@/routes/units';
 import vendors from '@/routes/vendors';
 import warehouses from '@/routes/warehouses';
 import type { NavGroup, NavItem } from '@/types';
+import customers from '@/routes/customers';
 
 const footerNavItems: NavItem[] = [];
 
@@ -58,12 +59,12 @@ export function AppSidebar() {
                 },
                 ...(isOwnerOrManager
                     ? [
-                          {
-                              title: 'Manage Staff',
-                              href: staff.index(),
-                              icon: User,
-                          },
-                      ]
+                        {
+                            title: 'Manage Staff',
+                            href: staff.index(),
+                            icon: User,
+                        },
+                    ]
                     : []),
             ],
         },
@@ -136,6 +137,17 @@ export function AppSidebar() {
                 },
             ],
         },
+        {
+            title: 'Sales',
+            items: [
+                {
+                    title: 'Customers',
+                    icon: User,
+                    href: customers.index(),
+                    permission: 'view_customers',
+                },
+            ]
+        }
     ];
 
     return (

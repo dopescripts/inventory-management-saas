@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'transfers',
             'vendors',
             'bills',
+            'customers',
         ];
         $actions = ['view', 'create', 'update', 'delete'];
         $permissions = [];
