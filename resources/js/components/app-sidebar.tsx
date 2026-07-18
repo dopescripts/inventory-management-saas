@@ -31,6 +31,7 @@ import bills from '@/routes/bills';
 import brands from '@/routes/brands';
 import categories from '@/routes/categories';
 import items from '@/routes/items';
+import orders from '@/routes/orders';
 import purchases from '@/routes/purchases';
 import staff from '@/routes/staff';
 import transfers from '@/routes/transfers';
@@ -140,6 +141,12 @@ export function AppSidebar() {
         {
             title: 'Sales',
             items: [
+                {
+                    title: 'Orders',
+                    icon: ShoppingCart,
+                    href: orders.index(),
+                    permission: 'view_customers',
+                },
                 {
                     title: 'Customers',
                     icon: User,

@@ -13,6 +13,9 @@ use App\Http\Controllers\Inventory\WarehouseLocationController;
 use App\Http\Controllers\Purchasing\PurchaseBillController;
 use App\Http\Controllers\Purchasing\PurchaseOrderController;
 use App\Http\Controllers\Purchasing\PurchaseWorkflowController;
+use App\Http\Controllers\Sales\CustomerController;
+use App\Http\Controllers\Sales\SalesOrderController;
+use App\Http\Controllers\Sales\SalesWorkflowController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
@@ -206,7 +209,19 @@ Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () 
                 ->name('cancel');
         });
 
-    Route::resource('customers', \App\Http\Controllers\Sales\CustomerController::class);
+    Route::resource('customers', CustomerController::class);
+
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::post('/{order}/confirm', [SalesWorkflowController::class, 'confirm'])
+            ->middleware('permission:update_bills') // Should be a sales permission eventually
+            ->name('confirm');
+
+        Route::post('/{order}/cancel', [SalesWorkflowController::class, 'cancel'])
+            ->middleware('permission:update_bills')
+            ->name('cancel');
+    });
+
+    Route::resource('orders', SalesOrderController::class);
 });
 
 require __DIR__.'/settings.php';

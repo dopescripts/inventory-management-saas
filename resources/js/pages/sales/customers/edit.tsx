@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, setLayoutProps } from '@inertiajs/react';
 import React from 'react';
 import customers from '@/routes/customers';
 import CustomerForm from './components/customer-form';
@@ -8,6 +8,15 @@ interface Props {
 }
 
 export default function Edit({ customer }: Props) {
+    setLayoutProps({
+        breadcrumbs: [
+            { title: 'Sales', href: '' },
+            { title: 'Customers', href: customers.index() },
+            { title: customer.name, href: customers.show({ customer: customer.id }) },
+            { title: 'Edit', href: customers.edit({ customer: customer.id }) },
+        ],
+    });
+
     return (
         <>
             <Head title={`Edit ${customer.name}`} />
@@ -25,22 +34,3 @@ export default function Edit({ customer }: Props) {
         </>
     );
 }
-
-Edit.layout = (page: React.ReactNode, props: any) => {
-    return React.cloneElement(page as React.ReactElement, {
-        breadcrumbs: [
-            {
-                title: 'Sales',
-                href: '',
-            },
-            {
-                title: 'Customers',
-                href: customers.index(),
-            },
-            {
-                title: 'Edit',
-                href: customers.edit({ customer: props.customer.id }),
-            },
-        ],
-    });
-};
