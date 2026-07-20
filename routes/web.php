@@ -10,6 +10,7 @@ use App\Http\Controllers\Inventory\UnitController;
 use App\Http\Controllers\Inventory\VendorController;
 use App\Http\Controllers\Inventory\WarehouseController;
 use App\Http\Controllers\Inventory\WarehouseLocationController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Purchasing\PurchaseBillController;
 use App\Http\Controllers\Purchasing\PurchaseOrderController;
 use App\Http\Controllers\Purchasing\PurchaseWorkflowController;
@@ -19,9 +20,16 @@ use App\Http\Controllers\Sales\SalesWorkflowController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::inertia('/', 'home')->name('home');
 
 Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () {
+    Route::get('onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
+    Route::post('onboarding/company', [OnboardingController::class, 'storeCompany'])->name('onboarding.company');
+    Route::post('onboarding/plan', [OnboardingController::class, 'storePlan'])->name('onboarding.plan');
+    Route::post('onboarding/payment', [OnboardingController::class, 'storePayment'])->name('onboarding.payment');
+});
+
+Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard')->middleware('role:manager|owner|staff');
 
     Route::middleware('role:owner|manager')->group(function () {

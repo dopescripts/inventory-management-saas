@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Users, Building2, ShieldCheck } from 'lucide-react';
+import { LayoutGrid, Users, Building2, ShieldCheck, CreditCard, Receipt } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/super-admin/nav-main';
 import { SuperAdminNavUser } from '@/components/super-admin/nav-user';
@@ -31,6 +31,16 @@ const mainNavItems: NavItem[] = [
         title: 'Tenants',
         href: '/super-admin/tenants',
         icon: Building2,
+    },
+    {
+        title: 'Subscriptions',
+        href: '/super-admin/subscriptions',
+        icon: CreditCard,
+    },
+    {
+        title: 'Payments',
+        href: '/super-admin/payments',
+        icon: Receipt,
     },
     {
         title: 'Admins',

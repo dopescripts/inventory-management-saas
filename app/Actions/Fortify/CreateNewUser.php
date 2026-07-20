@@ -5,7 +5,6 @@ namespace App\Actions\Fortify;
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use App\Models\Currency;
-use App\Models\Currency;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;

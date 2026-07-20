@@ -2,18 +2,20 @@
 
 namespace App\Providers;
 
+use App\Contracts\PaymentServiceInterface;
 use App\Http\Middleware\SetTenantForPermissions;
+use App\Models\Transfers;
+use App\Policies\TransferPolicy;
+use App\Services\MockPaymentService;
 use App\Services\PlanGate;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Transfers;
-use App\Policies\TransferPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PlanGate::class, function ($app) {
             return new PlanGate;
         });
+
+        $this->app->bind(PaymentServiceInterface::class, MockPaymentService::class);
     }
 
     /**

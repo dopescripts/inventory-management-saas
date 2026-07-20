@@ -22,7 +22,7 @@ createInertiaApp({
         let pageLayout;
 
         switch (true) {
-            case name === 'welcome':
+            case name === 'home':
                 pageLayout = null;
                 break;
             case name.startsWith('auth/') ||
@@ -41,12 +41,12 @@ createInertiaApp({
         }
 
         if (pageLayout === null) {
-return RootLayout;
-}
+            return RootLayout;
+        }
 
         if (Array.isArray(pageLayout)) {
-return [RootLayout, ...pageLayout];
-}
+            return [RootLayout, ...pageLayout];
+        }
 
         return [RootLayout, pageLayout];
     },

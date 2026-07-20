@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureOnboardingCompleted;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetTenantForPermissions;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.permission' => SetTenantForPermissions::class,
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
+            'onboarding' => EnsureOnboardingCompleted::class,
         ]);
         $middleware->priority([
             SetTenantForPermissions::class,
