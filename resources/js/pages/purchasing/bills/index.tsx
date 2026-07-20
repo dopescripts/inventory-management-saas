@@ -63,15 +63,14 @@ export default function Index({ bills: paginatedBills }: Props) {
             accessorKey: 'bill_number',
             header: 'Bill #',
             cell: ({ row }) => (
-                <span className="font-medium">
-                    {row.original.bill_number}
-                </span>
+                <span className="font-medium">{row.original.bill_number}</span>
             ),
         },
         {
             accessorKey: 'purchase_order.purchase_number',
             header: 'PO #',
-            cell: ({ row }) => row.original.purchase_order?.purchase_number ?? '—',
+            cell: ({ row }) =>
+                row.original.purchase_order?.purchase_number ?? '—',
         },
         {
             accessorKey: 'vendor.name',
@@ -124,7 +123,14 @@ export default function Index({ bills: paginatedBills }: Props) {
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <a href={bills.download({ bill: row.original.id }).url} target="_blank" rel="noreferrer">
+                            <a
+                                href={
+                                    bills.download({ bill: row.original.id })
+                                        .url
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 <Download className="mr-2 h-4 w-4" />
                                 Download PDF
                             </a>
@@ -135,7 +141,11 @@ export default function Index({ bills: paginatedBills }: Props) {
                                 <DropdownMenuItem
                                     className="text-destructive"
                                     onClick={() =>
-                                        router.post(bills.cancel({ bill: row.original.id }))
+                                        router.post(
+                                            bills.cancel({
+                                                bill: row.original.id,
+                                            }),
+                                        )
                                     }
                                 >
                                     Cancel

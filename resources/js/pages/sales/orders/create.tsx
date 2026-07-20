@@ -22,7 +22,11 @@ export default function Create({ customers, warehouses, items }: Props) {
                     </p>
                 </div>
 
-                <SalesOrderForm customers={customers} warehouses={warehouses} items={items} />
+                <SalesOrderForm
+                    customers={customers}
+                    warehouses={warehouses}
+                    items={items}
+                />
             </div>
         </>
     );

@@ -55,7 +55,11 @@ const columns: ColumnDef<Customer>[] = [
         accessorKey: 'status',
         header: 'Status',
         cell: ({ row }) => (
-            <Badge variant={row.original.status === 'active' ? 'default' : 'secondary'}>
+            <Badge
+                variant={
+                    row.original.status === 'active' ? 'default' : 'secondary'
+                }
+            >
                 {row.original.status === 'active' ? 'Active' : 'Inactive'}
             </Badge>
         ),
@@ -71,13 +75,23 @@ const columns: ColumnDef<Customer>[] = [
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                        <Link href={customers.show({ customer: row.original.id }).url}>
+                        <Link
+                            href={
+                                customers.show({ customer: row.original.id })
+                                    .url
+                            }
+                        >
                             <Eye className="mr-2 h-4 w-4" />
                             View
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href={customers.edit({ customer: row.original.id }).url}>
+                        <Link
+                            href={
+                                customers.edit({ customer: row.original.id })
+                                    .url
+                            }
+                        >
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
@@ -86,8 +100,16 @@ const columns: ColumnDef<Customer>[] = [
                     <DropdownMenuItem
                         className="text-destructive"
                         onClick={() => {
-                            if (confirm('Are you sure you want to delete this customer?')) {
-                                router.delete(customers.destroy({ customer: row.original.id }).url)
+                            if (
+                                confirm(
+                                    'Are you sure you want to delete this customer?',
+                                )
+                            ) {
+                                router.delete(
+                                    customers.destroy({
+                                        customer: row.original.id,
+                                    }).url,
+                                );
                             }
                         }}
                     >

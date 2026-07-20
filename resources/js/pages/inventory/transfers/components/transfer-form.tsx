@@ -2,12 +2,10 @@ import { Link, useForm } from '@inertiajs/react';
 import { Plus, Trash2 } from 'lucide-react';
 import React, { useMemo } from 'react';
 
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-
 
 import {
     Select,
@@ -18,7 +16,6 @@ import {
 } from '@/components/ui/select';
 
 import transfers from '@/routes/transfers';
-
 
 interface Item {
     id: number;

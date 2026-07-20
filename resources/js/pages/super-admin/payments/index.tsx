@@ -62,7 +62,9 @@ export default function Index({ payments, filters }: Props) {
                     {statusOptions.map((s) => (
                         <Button
                             key={s || 'all'}
-                            variant={filters.status === s ? 'default' : 'outline'}
+                            variant={
+                                filters.status === s ? 'default' : 'outline'
+                            }
                             size="sm"
                             onClick={() => filterByStatus(s)}
                         >

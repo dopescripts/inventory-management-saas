@@ -39,14 +39,18 @@ export default function Index({ tenants }: Props) {
 
     const statusBadge = (status: string | undefined) => {
         if (!status) return <Badge variant="secondary">No subscription</Badge>;
-        const variants: Record<string, 'default' | 'secondary' | 'destructive'> =
-            {
-                active: 'default',
-                trial: 'secondary',
-                cancelled: 'destructive',
-                inactive: 'destructive',
-            };
-        return <Badge variant={variants[status] ?? 'secondary'}>{status}</Badge>;
+        const variants: Record<
+            string,
+            'default' | 'secondary' | 'destructive'
+        > = {
+            active: 'default',
+            trial: 'secondary',
+            cancelled: 'destructive',
+            inactive: 'destructive',
+        };
+        return (
+            <Badge variant={variants[status] ?? 'secondary'}>{status}</Badge>
+        );
     };
 
     return (
@@ -113,8 +117,8 @@ export default function Index({ tenants }: Props) {
                                                 {tenant.billing_email ?? '—'}
                                             </td>
                                             <td className="p-4 align-middle">
-                                                {tenant.active_subscription?.plan
-                                                    ?.name ?? '—'}
+                                                {tenant.active_subscription
+                                                    ?.plan?.name ?? '—'}
                                             </td>
                                             <td className="p-4 align-middle">
                                                 {statusBadge(

@@ -112,9 +112,7 @@ export default function Show({ tenant, subscriptionHistory }: Props) {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>
-                                Users ({tenant.users.length})
-                            </CardTitle>
+                            <CardTitle>Users ({tenant.users.length})</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-3">

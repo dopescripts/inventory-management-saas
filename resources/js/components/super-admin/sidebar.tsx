@@ -1,5 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Users, Building2, ShieldCheck, CreditCard, Receipt } from 'lucide-react';
+import {
+    LayoutGrid,
+    Users,
+    Building2,
+    ShieldCheck,
+    CreditCard,
+    Receipt,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/super-admin/nav-main';
 import { SuperAdminNavUser } from '@/components/super-admin/nav-user';

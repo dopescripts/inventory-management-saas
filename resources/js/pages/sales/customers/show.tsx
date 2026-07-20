@@ -33,7 +33,10 @@ export default function Show({ customer }: Props) {
         breadcrumbs: [
             { title: 'Sales', href: '' },
             { title: 'Customers', href: customers.index() },
-            { title: customer.name, href: customers.show({ customer: customer.id }) },
+            {
+                title: customer.name,
+                href: customers.show({ customer: customer.id }),
+            },
         ],
     });
 
@@ -51,11 +54,19 @@ export default function Show({ customer }: Props) {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className="text-3xl font-bold">{customer.name}</h1>
+                            <h1 className="text-3xl font-bold">
+                                {customer.name}
+                            </h1>
                             <Badge
-                                variant={customer.status === 'active' ? 'default' : 'secondary'}
+                                variant={
+                                    customer.status === 'active'
+                                        ? 'default'
+                                        : 'secondary'
+                                }
                             >
-                                {customer.status === 'active' ? 'Active' : 'Inactive'}
+                                {customer.status === 'active'
+                                    ? 'Active'
+                                    : 'Inactive'}
                             </Badge>
                         </div>
                         {customer.company_name && (
@@ -67,7 +78,12 @@ export default function Show({ customer }: Props) {
                     </div>
                     <div className="flex items-center gap-2">
                         <Button variant="outline" asChild>
-                            <Link href={customers.edit({ customer: customer.id }).url}>
+                            <Link
+                                href={
+                                    customers.edit({ customer: customer.id })
+                                        .url
+                                }
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>
@@ -140,9 +156,11 @@ export default function Show({ customer }: Props) {
                         </CardHeader>
                         <CardContent>
                             {customer.billing_address ? (
-                                <p className="whitespace-pre-wrap">{customer.billing_address}</p>
+                                <p className="whitespace-pre-wrap">
+                                    {customer.billing_address}
+                                </p>
                             ) : (
-                                <p className="italic text-muted-foreground">
+                                <p className="text-muted-foreground italic">
                                     No billing address provided.
                                 </p>
                             )}
@@ -155,9 +173,11 @@ export default function Show({ customer }: Props) {
                         </CardHeader>
                         <CardContent>
                             {customer.shipping_address ? (
-                                <p className="whitespace-pre-wrap">{customer.shipping_address}</p>
+                                <p className="whitespace-pre-wrap">
+                                    {customer.shipping_address}
+                                </p>
                             ) : (
-                                <p className="italic text-muted-foreground">
+                                <p className="text-muted-foreground italic">
                                     No shipping address provided.
                                 </p>
                             )}
@@ -171,7 +191,9 @@ export default function Show({ customer }: Props) {
                             <CardTitle>Notes</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="whitespace-pre-wrap">{customer.notes}</p>
+                            <p className="whitespace-pre-wrap">
+                                {customer.notes}
+                            </p>
                         </CardContent>
                     </Card>
                 )}

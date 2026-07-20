@@ -80,11 +80,7 @@ export default function Index({ purchaseOrders }: Props) {
         {
             accessorKey: 'total',
             header: 'Total',
-            cell: ({ row }) => (
-                <span>
-                    {format(row.original.total)}
-                </span>
-            ),
+            cell: ({ row }) => <span>{format(row.original.total)}</span>,
         },
         {
             accessorKey: 'ordered_by.name',
@@ -161,9 +157,7 @@ export default function Index({ purchaseOrders }: Props) {
             <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold">
-                            Purchase Orders
-                        </h1>
+                        <h1 className="text-3xl font-bold">Purchase Orders</h1>
                         <p className="mt-1 text-muted-foreground">
                             Manage purchase orders from vendors.
                         </p>
@@ -177,10 +171,7 @@ export default function Index({ purchaseOrders }: Props) {
                 </div>
 
                 <div className="rounded-lg border">
-                    <DataTable
-                        columns={columns}
-                        data={purchaseOrders.data}
-                    />
+                    <DataTable columns={columns} data={purchaseOrders.data} />
                 </div>
             </div>
         </>

@@ -108,7 +108,9 @@ function QuickCreateVendorDialog({
                 </DialogHeader>
                 <form onSubmit={submit} className="space-y-4 pt-2">
                     <Field>
-                        <FieldLabel htmlFor="quick-vendor-name">Name</FieldLabel>
+                        <FieldLabel htmlFor="quick-vendor-name">
+                            Name
+                        </FieldLabel>
                         <Input
                             id="quick-vendor-name"
                             value={data.name}
@@ -203,24 +205,22 @@ export default function PurchaseForm({
             tax: item.tax?.toString() ?? '0',
             remarks: item.remarks ?? '',
         })) ?? [
-                {
-                    item_id: '',
-                    quantity_ordered: '',
-                    unit_cost: '',
-                    discount: '0',
-                    tax: '0',
-                    remarks: '',
-                },
-            ],
+            {
+                item_id: '',
+                quantity_ordered: '',
+                unit_cost: '',
+                discount: '0',
+                tax: '0',
+                remarks: '',
+            },
+        ],
     });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (isEdit) {
-            put(
-                purchases.update({ purchase_order: purchaseOrder!.id }).url,
-            );
+            put(purchases.update({ purchase_order: purchaseOrder!.id }).url);
 
             return;
         }
@@ -351,7 +351,9 @@ export default function PurchaseForm({
                             <FieldLabel>Notes</FieldLabel>
                             <Textarea
                                 value={data.notes}
-                                onChange={(e) => setData('notes', e.target.value)}
+                                onChange={(e) =>
+                                    setData('notes', e.target.value)
+                                }
                                 rows={3}
                             />
                             <FieldError errors={[{ message: errors.notes }]} />
@@ -362,7 +364,11 @@ export default function PurchaseForm({
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <CardTitle>Items</CardTitle>
-                        <Button type="button" variant="outline" onClick={addItem}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={addItem}
+                        >
                             <Plus className="mr-2 h-4 w-4" />
                             Add Item
                         </Button>
@@ -384,7 +390,11 @@ export default function PurchaseForm({
                                         <Select
                                             value={item.item_id}
                                             onValueChange={(value) =>
-                                                updateItem(index, 'item_id', value)
+                                                updateItem(
+                                                    index,
+                                                    'item_id',
+                                                    value,
+                                                )
                                             }
                                         >
                                             <SelectTrigger className="w-full">
@@ -398,7 +408,7 @@ export default function PurchaseForm({
                                                                 i.id.toString(),
                                                             ) ||
                                                             i.id.toString() ===
-                                                            item.item_id,
+                                                                item.item_id,
                                                     )
                                                     .map((i) => (
                                                         <SelectItem
@@ -413,10 +423,9 @@ export default function PurchaseForm({
                                         <FieldError
                                             errors={[
                                                 {
-                                                    message:
-                                                        (errors as any)[
+                                                    message: (errors as any)[
                                                         `items.${index}.item_id`
-                                                        ],
+                                                    ],
                                                 },
                                             ]}
                                         />
@@ -440,10 +449,9 @@ export default function PurchaseForm({
                                         <FieldError
                                             errors={[
                                                 {
-                                                    message:
-                                                        (errors as any)[
+                                                    message: (errors as any)[
                                                         `items.${index}.quantity_ordered`
-                                                        ],
+                                                    ],
                                                 },
                                             ]}
                                         />
@@ -467,10 +475,9 @@ export default function PurchaseForm({
                                         <FieldError
                                             errors={[
                                                 {
-                                                    message:
-                                                        (errors as any)[
+                                                    message: (errors as any)[
                                                         `items.${index}.unit_cost`
-                                                        ],
+                                                    ],
                                                 },
                                             ]}
                                         />
@@ -525,7 +532,9 @@ export default function PurchaseForm({
                                                 type="button"
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => removeItem(index)}
+                                                onClick={() =>
+                                                    removeItem(index)
+                                                }
                                             >
                                                 <Trash2 className="h-4 w-4 text-destructive" />
                                             </Button>
@@ -598,7 +607,9 @@ export default function PurchaseForm({
                         <Link href={purchases.index()}>Cancel</Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
-                        {isEdit ? 'Update Purchase Order' : 'Create Purchase Order'}
+                        {isEdit
+                            ? 'Update Purchase Order'
+                            : 'Create Purchase Order'}
                     </Button>
                 </div>
             </form>

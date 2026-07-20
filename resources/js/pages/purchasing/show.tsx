@@ -1,11 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import {
-    Edit,
-    Package,
-    ShoppingCart,
-    Truck,
-    User,
-} from 'lucide-react';
+import { Edit, Package, ShoppingCart, Truck, User } from 'lucide-react';
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -104,23 +98,30 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
         items: purchaseOrder.items.map((item) => ({
             purchase_order_item_id: item.id,
             item_id: item.item.id,
-            quantity: Math.max(0, item.quantity_ordered - item.quantity_received),
+            quantity: Math.max(
+                0,
+                item.quantity_ordered - item.quantity_received,
+            ),
             unit_cost: item.unit_cost,
             location_id: '',
         })),
     });
 
-    const handleAction = (action: 'submit' | 'approve' | 'cancel' | 'close') => {
+    const handleAction = (
+        action: 'submit' | 'approve' | 'cancel' | 'close',
+    ) => {
         router.post(purchases[action]({ purchase_order: purchaseOrder.id }));
     };
 
     const submitReceive = (e: React.FormEvent) => {
         e.preventDefault();
 
-        receiveForm.post(purchases.receive({ purchase_order: purchaseOrder.id }), {
-
-            onSuccess: () => setIsReceiveModalOpen(false),
-        });
+        receiveForm.post(
+            purchases.receive({ purchase_order: purchaseOrder.id }),
+            {
+                onSuccess: () => setIsReceiveModalOpen(false),
+            },
+        );
     };
 
     const selectedWarehouse = warehouses?.find(
@@ -141,7 +142,9 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                 {purchaseOrder.purchase_number}
                             </h1>
                             <Badge
-                                variant={statusVariant(purchaseOrder.status) as any}
+                                variant={
+                                    statusVariant(purchaseOrder.status) as any
+                                }
                             >
                                 {purchaseOrder.status
                                     .replaceAll('_', ' ')
@@ -188,21 +191,23 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
 
                         {(purchaseOrder.status === 'approved' ||
                             purchaseOrder.status === 'partially_received') && (
-                                <>
-                                    {purchaseOrder.status === 'approved' && (
-                                        <Button
-                                            variant="destructive"
-                                            onClick={() => handleAction('cancel')}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    )}
-                                    <Button onClick={() => setIsReceiveModalOpen(true)}>
-                                        <Package className="mr-2 h-4 w-4" />
-                                        Receive Goods
+                            <>
+                                {purchaseOrder.status === 'approved' && (
+                                    <Button
+                                        variant="destructive"
+                                        onClick={() => handleAction('cancel')}
+                                    >
+                                        Cancel
                                     </Button>
-                                </>
-                            )}
+                                )}
+                                <Button
+                                    onClick={() => setIsReceiveModalOpen(true)}
+                                >
+                                    <Package className="mr-2 h-4 w-4" />
+                                    Receive Goods
+                                </Button>
+                            </>
+                        )}
 
                         {purchaseOrder.status === 'received' && (
                             <Button onClick={() => handleAction('close')}>
@@ -282,12 +287,24 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b">
-                                        <th className="px-4 py-3 text-left">SKU</th>
-                                        <th className="px-4 py-3 text-left">Item</th>
-                                        <th className="px-4 py-3 text-right">Ordered</th>
-                                        <th className="px-4 py-3 text-right">Received</th>
-                                        <th className="px-4 py-3 text-right">Unit Cost</th>
-                                        <th className="px-4 py-3 text-right">Total</th>
+                                        <th className="px-4 py-3 text-left">
+                                            SKU
+                                        </th>
+                                        <th className="px-4 py-3 text-left">
+                                            Item
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Ordered
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Received
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Unit Cost
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Total
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -319,7 +336,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                 </tbody>
                                 <tfoot>
                                     <tr className="border-t">
-                                        <td colSpan={5} className="px-4 py-2 text-right font-medium">
+                                        <td
+                                            colSpan={5}
+                                            className="px-4 py-2 text-right font-medium"
+                                        >
                                             Subtotal
                                         </td>
                                         <td className="px-4 py-2 text-right">
@@ -328,17 +348,24 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                     </tr>
                                     {Number(purchaseOrder.discount) > 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-4 py-2 text-right font-medium">
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-right font-medium"
+                                            >
                                                 Discount
                                             </td>
                                             <td className="px-4 py-2 text-right text-destructive">
-                                                -{format(purchaseOrder.discount)}
+                                                -
+                                                {format(purchaseOrder.discount)}
                                             </td>
                                         </tr>
                                     )}
                                     {Number(purchaseOrder.tax) > 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-4 py-2 text-right font-medium">
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-right font-medium"
+                                            >
                                                 Tax
                                             </td>
                                             <td className="px-4 py-2 text-right">
@@ -348,7 +375,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                     )}
                                     {Number(purchaseOrder.shipping) > 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-4 py-2 text-right font-medium">
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-right font-medium"
+                                            >
                                                 Shipping
                                             </td>
                                             <td className="px-4 py-2 text-right">
@@ -357,7 +387,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                         </tr>
                                     )}
                                     <tr className="border-t font-bold">
-                                        <td colSpan={5} className="px-4 py-3 text-right">
+                                        <td
+                                            colSpan={5}
+                                            className="px-4 py-3 text-right"
+                                        >
                                             Total
                                         </td>
                                         <td className="px-4 py-3 text-right">
@@ -384,7 +417,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                 )}
             </div>
 
-            <Dialog open={isReceiveModalOpen} onOpenChange={setIsReceiveModalOpen}>
+            <Dialog
+                open={isReceiveModalOpen}
+                onOpenChange={setIsReceiveModalOpen}
+            >
                 <DialogContent className="max-w-3xl!">
                     <DialogHeader>
                         <DialogTitle>Receive Goods</DialogTitle>
@@ -397,7 +433,10 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                 <Select
                                     value={receiveForm.data.warehouse_id}
                                     onValueChange={(value) =>
-                                        receiveForm.setData('warehouse_id', value)
+                                        receiveForm.setData(
+                                            'warehouse_id',
+                                            value,
+                                        )
                                     }
                                 >
                                     <SelectTrigger>
@@ -421,25 +460,41 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b bg-muted/50">
-                                        <th className="px-4 py-2 text-left">Item</th>
-                                        <th className="px-4 py-2 text-right">Ordered</th>
-                                        <th className="px-4 py-2 text-right">Already Received</th>
-                                        <th className="px-4 py-2 text-right">Remaining</th>
-                                        <th className="px-4 py-2 text-right">Receive Now</th>
-                                        <th className="px-4 py-2 text-left">Location</th>
+                                        <th className="px-4 py-2 text-left">
+                                            Item
+                                        </th>
+                                        <th className="px-4 py-2 text-right">
+                                            Ordered
+                                        </th>
+                                        <th className="px-4 py-2 text-right">
+                                            Already Received
+                                        </th>
+                                        <th className="px-4 py-2 text-right">
+                                            Remaining
+                                        </th>
+                                        <th className="px-4 py-2 text-right">
+                                            Receive Now
+                                        </th>
+                                        <th className="px-4 py-2 text-left">
+                                            Location
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {purchaseOrder.items.map((item, index) => {
                                         const remaining =
-                                            item.quantity_ordered - item.quantity_received;
+                                            item.quantity_ordered -
+                                            item.quantity_received;
 
                                         if (remaining <= 0) {
                                             return null;
                                         }
 
                                         return (
-                                            <tr key={item.id} className="border-b">
+                                            <tr
+                                                key={item.id}
+                                                className="border-b"
+                                            >
                                                 <td className="px-4 py-2">
                                                     <div className="font-medium">
                                                         {item.item.name}
@@ -460,22 +515,26 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                 <td className="px-4 py-2 text-right">
                                                     <Input
                                                         type="number"
-                                                        className="w-24 ml-auto"
+                                                        className="ml-auto w-24"
                                                         min={0}
                                                         max={remaining}
                                                         value={
-                                                            receiveForm.data.items[index]
+                                                            receiveForm.data
+                                                                .items[index]
                                                                 ?.quantity ?? 0
                                                         }
                                                         onChange={(e) => {
                                                             const items = [
-                                                                ...receiveForm.data.items,
+                                                                ...receiveForm
+                                                                    .data.items,
                                                             ];
                                                             items[index] = {
                                                                 ...items[index],
-                                                                quantity: Number(
-                                                                    e.target.value,
-                                                                ),
+                                                                quantity:
+                                                                    Number(
+                                                                        e.target
+                                                                            .value,
+                                                                    ),
                                                             };
                                                             receiveForm.setData(
                                                                 'items',
@@ -485,19 +544,31 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                     />
                                                 </td>
                                                 <td className="px-4 py-2">
-                                                    {selectedWarehouse?.locations?.length ? (
+                                                    {selectedWarehouse
+                                                        ?.locations?.length ? (
                                                         <Select
                                                             value={
-                                                                receiveForm.data.items[index]
-                                                                    ?.location_id ?? ''
+                                                                receiveForm.data
+                                                                    .items[
+                                                                    index
+                                                                ]
+                                                                    ?.location_id ??
+                                                                ''
                                                             }
-                                                            onValueChange={(value) => {
+                                                            onValueChange={(
+                                                                value,
+                                                            ) => {
                                                                 const items = [
-                                                                    ...receiveForm.data.items,
+                                                                    ...receiveForm
+                                                                        .data
+                                                                        .items,
                                                                 ];
                                                                 items[index] = {
-                                                                    ...items[index],
-                                                                    location_id: value,
+                                                                    ...items[
+                                                                        index
+                                                                    ],
+                                                                    location_id:
+                                                                        value,
                                                                 };
                                                                 receiveForm.setData(
                                                                     'items',
@@ -512,10 +583,14 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                                                                 {selectedWarehouse.locations.map(
                                                                     (loc) => (
                                                                         <SelectItem
-                                                                            key={loc.id}
+                                                                            key={
+                                                                                loc.id
+                                                                            }
                                                                             value={loc.id.toString()}
                                                                         >
-                                                                            {loc.code}
+                                                                            {
+                                                                                loc.code
+                                                                            }
                                                                         </SelectItem>
                                                                     ),
                                                                 )}

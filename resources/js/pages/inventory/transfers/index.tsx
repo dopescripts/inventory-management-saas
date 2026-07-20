@@ -1,8 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
 
-
-
-
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { MoreHorizontal, Eye, Edit, Trash, Plus } from 'lucide-react';

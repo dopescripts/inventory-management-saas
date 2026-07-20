@@ -37,7 +37,12 @@ interface Props {
 
 const steps = ['Company Details', 'Select Plan', 'Payment', 'Welcome'];
 
-export default function Onboarding({ step, tenant, plans, selectedPlanId }: Props) {
+export default function Onboarding({
+    step,
+    tenant,
+    plans,
+    selectedPlanId,
+}: Props) {
     const selectedPlan = plans.find((p) => p.id === selectedPlanId);
     // console.log(selectedPlan);
 
@@ -47,7 +52,9 @@ export default function Onboarding({ step, tenant, plans, selectedPlanId }: Prop
             <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
                 <div className="w-full max-w-2xl">
                     <div className="mb-8">
-                        <h1 className="text-center text-2xl font-bold">Set Up Your Account</h1>
+                        <h1 className="text-center text-2xl font-bold">
+                            Set Up Your Account
+                        </h1>
                         <p className="mt-2 text-center text-sm text-muted-foreground">
                             Complete these steps to get started
                         </p>
@@ -55,20 +62,27 @@ export default function Onboarding({ step, tenant, plans, selectedPlanId }: Prop
 
                     <div className="mb-8 flex items-center justify-center gap-2">
                         {steps.map((label, index) => (
-                            <div key={label} className="flex items-center gap-2">
+                            <div
+                                key={label}
+                                className="flex items-center gap-2"
+                            >
                                 <div
-                                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${index + 1 < step
-                                        ? 'bg-primary text-primary-foreground'
-                                        : index + 1 === step
-                                            ? 'bg-primary text-primary-foreground ring-2 ring-primary/30 ring-offset-2'
-                                            : 'bg-muted text-muted-foreground'
-                                        }`}
+                                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
+                                        index + 1 < step
+                                            ? 'bg-primary text-primary-foreground'
+                                            : index + 1 === step
+                                              ? 'bg-primary text-primary-foreground ring-2 ring-primary/30 ring-offset-2'
+                                              : 'bg-muted text-muted-foreground'
+                                    }`}
                                 >
                                     {index + 1 < step ? '✓' : index + 1}
                                 </div>
                                 <span
-                                    className={`hidden text-sm sm:inline ${index + 1 === step ? 'font-medium' : 'text-muted-foreground'
-                                        }`}
+                                    className={`hidden text-sm sm:inline ${
+                                        index + 1 === step
+                                            ? 'font-medium'
+                                            : 'text-muted-foreground'
+                                    }`}
                                 >
                                     {label}
                                 </span>
@@ -81,7 +95,12 @@ export default function Onboarding({ step, tenant, plans, selectedPlanId }: Prop
 
                     <div className="rounded-lg border bg-card p-6 shadow-sm">
                         {step === 1 && <CompanyDetailsStep tenant={tenant} />}
-                        {step === 2 && <PlanSelectionStep plans={plans} currentPlanId={selectedPlanId} />}
+                        {step === 2 && (
+                            <PlanSelectionStep
+                                plans={plans}
+                                currentPlanId={selectedPlanId}
+                            />
+                        )}
                         {step === 3 && selectedPlan && (
                             <PaymentStep
                                 planName={selectedPlan.name}

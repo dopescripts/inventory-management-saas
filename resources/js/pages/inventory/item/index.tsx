@@ -122,11 +122,9 @@ export default function Index({
                                                         )
                                                     ) {
                                                         router.delete(
-                                                            items
-                                                                .destroy({
-                                                                    item: item.id,
-                                                                })
-                                                                .url,
+                                                            items.destroy({
+                                                                item: item.id,
+                                                            }).url,
                                                         );
                                                     }
                                                 }}

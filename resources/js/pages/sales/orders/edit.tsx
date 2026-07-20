@@ -10,12 +10,20 @@ interface Props {
     items: any[];
 }
 
-export default function Edit({ salesOrder, customers, warehouses, items }: Props) {
+export default function Edit({
+    salesOrder,
+    customers,
+    warehouses,
+    items,
+}: Props) {
     setLayoutProps({
         breadcrumbs: [
             { title: 'Sales', href: '' },
             { title: 'Orders', href: orders.index() },
-            { title: salesOrder.number, href: orders.show({ order: salesOrder.id }) },
+            {
+                title: salesOrder.number,
+                href: orders.show({ order: salesOrder.id }),
+            },
             { title: 'Edit', href: orders.edit({ order: salesOrder.id }) },
         ],
     });
@@ -26,7 +34,9 @@ export default function Edit({ salesOrder, customers, warehouses, items }: Props
 
             <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6">
                 <div>
-                    <h1 className="text-3xl font-bold">Edit {salesOrder.number}</h1>
+                    <h1 className="text-3xl font-bold">
+                        Edit {salesOrder.number}
+                    </h1>
                     <p className="mt-1 text-muted-foreground">
                         Modify the details of this draft sales order.
                     </p>

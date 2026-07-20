@@ -24,12 +24,12 @@ function Index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
                     <h1 className="text-2xl font-bold">Warehouses</h1>
                     {(auth?.user?.permissions?.includes('create_warehouses') ||
                         auth?.user?.roles?.includes('manager')) && (
-                            <Button asChild>
-                                <Link href={warehouses.create()}>
-                                    Create Warehouse
-                                </Link>
-                            </Button>
-                        )}
+                        <Button asChild>
+                            <Link href={warehouses.create()}>
+                                Create Warehouse
+                            </Link>
+                        </Button>
+                    )}
                 </div>
                 <DataTable columns={columns} data={data.data} />
                 <InertiaPagination links={data.links} />

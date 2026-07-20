@@ -36,9 +36,7 @@ export default function Show({ subscription, plans }: Props) {
                 'Are you sure you want to cancel this subscription? This cannot be undone.',
             )
         ) {
-            router.post(
-                `/super-admin/subscriptions/${subscription.id}/cancel`,
-            );
+            router.post(`/super-admin/subscriptions/${subscription.id}/cancel`);
         }
     };
 
@@ -172,18 +170,16 @@ export default function Show({ subscription, plans }: Props) {
                                                 value={plan.id}
                                             >
                                                 {plan.name} ($
-                                                {parseFloat(
-                                                    plan.price,
-                                                ).toFixed(2)}
+                                                {parseFloat(plan.price).toFixed(
+                                                    2,
+                                                )}
                                                 /mo)
                                             </option>
                                         ))}
                                     </select>
                                     <Button
                                         type="submit"
-                                        disabled={
-                                            changePlanForm.processing
-                                        }
+                                        disabled={changePlanForm.processing}
                                         className="w-full"
                                     >
                                         {changePlanForm.processing && (

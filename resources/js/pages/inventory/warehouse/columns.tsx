@@ -14,7 +14,6 @@ import {
 import warehouses from '@/routes/warehouses';
 
 export function getColumns(auth: any): ColumnDef<any>[] {
-
     return [
         {
             accessorKey: 'name',
@@ -27,8 +26,8 @@ export function getColumns(auth: any): ColumnDef<any>[] {
                         }
                     >
                         Warehouse
-                        < ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button >
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
                 );
             },
             cell: ({ row }) => {
@@ -37,7 +36,9 @@ export function getColumns(auth: any): ColumnDef<any>[] {
 
                 return (
                     <div className="flex flex-col">
-                        <span className="font-medium text-foreground">{name}</span>
+                        <span className="font-medium text-foreground">
+                            {name}
+                        </span>
                         <span className="text-xs text-muted-foreground uppercase">
                             {code}
                         </span>
@@ -54,7 +55,9 @@ export function getColumns(auth: any): ColumnDef<any>[] {
 
                 if (!city && !country) {
                     return (
-                        <span className="text-xs text-muted-foreground">N/A</span>
+                        <span className="text-xs text-muted-foreground">
+                            N/A
+                        </span>
                     );
                 }
 
@@ -102,7 +105,9 @@ export function getColumns(auth: any): ColumnDef<any>[] {
             header: 'Locations',
             cell: ({ row }) => {
                 return (
-                    <Link href={warehouses.show({ warehouse: row.original.id })}>
+                    <Link
+                        href={warehouses.show({ warehouse: row.original.id })}
+                    >
                         <Button variant="link">
                             {row.original.locations_count}
                         </Button>
@@ -143,13 +148,17 @@ export function getColumns(auth: any): ColumnDef<any>[] {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild className="cursor-pointer">
+                            <DropdownMenuItem
+                                asChild
+                                className="cursor-pointer"
+                            >
                                 <Link
                                     href={warehouses.show({
                                         warehouse: warehouse.id,
                                     })}
                                 >
-                                    <Eye className="mr-2 h-4 w-4" /> View Details
+                                    <Eye className="mr-2 h-4 w-4" /> View
+                                    Details
                                 </Link>
                             </DropdownMenuItem>
                             {canEdit && (
@@ -170,7 +179,8 @@ export function getColumns(auth: any): ColumnDef<any>[] {
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem className="cursor-pointer text-destructive focus:bg-destructive focus:text-destructive-foreground">
-                                        <Trash className="mr-2 h-4 w-4" /> Delete
+                                        <Trash className="mr-2 h-4 w-4" />{' '}
+                                        Delete
                                     </DropdownMenuItem>
                                 </>
                             )}

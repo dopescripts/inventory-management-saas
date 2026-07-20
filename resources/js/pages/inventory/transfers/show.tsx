@@ -23,7 +23,6 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import transfers from '@/routes/transfers';
 
-
 interface Warehouse {
     id: number;
     name: string;
@@ -328,20 +327,20 @@ function Show({ transfer }: Props) {
 
                                                 <td className="px-4 py-3 text-right">
                                                     {item.quantity_shipped ===
-                                                        null
+                                                    null
                                                         ? '-'
                                                         : Number(
-                                                            item.quantity_shipped,
-                                                        )}
+                                                              item.quantity_shipped,
+                                                          )}
                                                 </td>
 
                                                 <td className="px-4 py-3 text-right">
                                                     {item.quantity_received ===
-                                                        null
+                                                    null
                                                         ? '-'
                                                         : Number(
-                                                            item.quantity_received,
-                                                        )}
+                                                              item.quantity_received,
+                                                          )}
                                                 </td>
                                             </tr>
                                         ))}

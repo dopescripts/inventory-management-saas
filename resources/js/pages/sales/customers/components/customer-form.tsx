@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import customers from '@/routes/customers';
 
 interface Customer {
@@ -76,9 +82,13 @@ export default function CustomerForm({ customer }: Props) {
                         <FieldLabel>Company Name</FieldLabel>
                         <Input
                             value={data.company_name}
-                            onChange={(e) => setData('company_name', e.target.value)}
+                            onChange={(e) =>
+                                setData('company_name', e.target.value)
+                            }
                         />
-                        <FieldError errors={[{ message: errors.company_name }]} />
+                        <FieldError
+                            errors={[{ message: errors.company_name }]}
+                        />
                     </Field>
 
                     <Field>
@@ -99,12 +109,14 @@ export default function CustomerForm({ customer }: Props) {
                         />
                         <FieldError errors={[{ message: errors.phone }]} />
                     </Field>
-                    
+
                     <Field>
                         <FieldLabel>Tax Number</FieldLabel>
                         <Input
                             value={data.tax_number}
-                            onChange={(e) => setData('tax_number', e.target.value)}
+                            onChange={(e) =>
+                                setData('tax_number', e.target.value)
+                            }
                         />
                         <FieldError errors={[{ message: errors.tax_number }]} />
                     </Field>
@@ -120,7 +132,9 @@ export default function CustomerForm({ customer }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="inactive">Inactive</SelectItem>
+                                <SelectItem value="inactive">
+                                    Inactive
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         <FieldError errors={[{ message: errors.status }]} />
@@ -130,41 +144,57 @@ export default function CustomerForm({ customer }: Props) {
                         <FieldLabel>Billing Address</FieldLabel>
                         <Textarea
                             value={data.billing_address}
-                            onChange={(e) => setData('billing_address', e.target.value)}
+                            onChange={(e) =>
+                                setData('billing_address', e.target.value)
+                            }
                             rows={3}
                         />
-                        <FieldError errors={[{ message: errors.billing_address }]} />
+                        <FieldError
+                            errors={[{ message: errors.billing_address }]}
+                        />
                     </Field>
 
                     <Field className="md:col-span-2">
                         <FieldLabel>Shipping Address</FieldLabel>
                         <Textarea
                             value={data.shipping_address}
-                            onChange={(e) => setData('shipping_address', e.target.value)}
+                            onChange={(e) =>
+                                setData('shipping_address', e.target.value)
+                            }
                             rows={3}
                         />
-                        <FieldError errors={[{ message: errors.shipping_address }]} />
+                        <FieldError
+                            errors={[{ message: errors.shipping_address }]}
+                        />
                     </Field>
-                    
+
                     <Field>
                         <FieldLabel>Credit Limit</FieldLabel>
                         <Input
                             type="number"
                             step="0.01"
                             value={data.credit_limit}
-                            onChange={(e) => setData('credit_limit', e.target.value)}
+                            onChange={(e) =>
+                                setData('credit_limit', e.target.value)
+                            }
                         />
-                        <FieldError errors={[{ message: errors.credit_limit }]} />
+                        <FieldError
+                            errors={[{ message: errors.credit_limit }]}
+                        />
                     </Field>
-                    
+
                     <Field>
                         <FieldLabel>Payment Terms</FieldLabel>
                         <Input
                             placeholder="e.g. Net 30"
                             value={data.payment_terms}
-                            onChange={(e) => setData('payment_terms', e.target.value)}
+                            onChange={(e) =>
+                                setData('payment_terms', e.target.value)
+                            }
                         />
-                        <FieldError errors={[{ message: errors.payment_terms }]} />
+                        <FieldError
+                            errors={[{ message: errors.payment_terms }]}
+                        />
                     </Field>
 
                     <Field className="md:col-span-2">

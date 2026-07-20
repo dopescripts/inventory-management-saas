@@ -34,12 +34,18 @@ interface Props {
     };
 }
 
-const statusVariant = (status: string): 'default' | 'secondary' | 'destructive' | 'outline' => {
+const statusVariant = (
+    status: string,
+): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
-        case 'confirmed': return 'default';
-        case 'draft': return 'secondary';
-        case 'cancelled': return 'destructive';
-        default: return 'outline';
+        case 'confirmed':
+            return 'default';
+        case 'draft':
+            return 'secondary';
+        case 'cancelled':
+            return 'destructive';
+        default:
+            return 'outline';
     }
 };
 
@@ -65,14 +71,17 @@ export default function Index({ salesOrders }: Props) {
         {
             accessorKey: 'order_date',
             header: 'Order Date',
-            cell: ({ row }) => new Date(row.original.order_date).toLocaleDateString(),
+            cell: ({ row }) =>
+                new Date(row.original.order_date).toLocaleDateString(),
         },
         {
             accessorKey: 'expected_ship_date',
             header: 'Ship By',
             cell: ({ row }) =>
                 row.original.expected_ship_date
-                    ? new Date(row.original.expected_ship_date).toLocaleDateString()
+                    ? new Date(
+                          row.original.expected_ship_date,
+                      ).toLocaleDateString()
                     : '—',
         },
         {
@@ -85,7 +94,9 @@ export default function Index({ salesOrders }: Props) {
             header: 'Status',
             cell: ({ row }) => (
                 <Badge variant={statusVariant(row.original.status)}>
-                    {row.original.status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+                    {row.original.status
+                        .replace(/_/g, ' ')
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
                 </Badge>
             ),
         },
@@ -100,7 +111,11 @@ export default function Index({ salesOrders }: Props) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                            <Link href={orders.show({ order: row.original.id }).url}>
+                            <Link
+                                href={
+                                    orders.show({ order: row.original.id }).url
+                                }
+                            >
                                 <Eye className="mr-2 h-4 w-4" />
                                 View
                             </Link>
@@ -108,7 +123,13 @@ export default function Index({ salesOrders }: Props) {
                         {row.original.status === 'draft' && (
                             <>
                                 <DropdownMenuItem asChild>
-                                    <Link href={orders.edit({ order: row.original.id }).url}>
+                                    <Link
+                                        href={
+                                            orders.edit({
+                                                order: row.original.id,
+                                            }).url
+                                        }
+                                    >
                                         <Edit className="mr-2 h-4 w-4" />
                                         Edit
                                     </Link>
@@ -117,8 +138,14 @@ export default function Index({ salesOrders }: Props) {
                                 <DropdownMenuItem
                                     className="text-destructive"
                                     onClick={() => {
-                                        if (confirm('Delete this sales order?')) {
-                                            router.delete(orders.destroy({ order: row.original.id }).url);
+                                        if (
+                                            confirm('Delete this sales order?')
+                                        ) {
+                                            router.delete(
+                                                orders.destroy({
+                                                    order: row.original.id,
+                                                }).url,
+                                            );
                                         }
                                     }}
                                 >

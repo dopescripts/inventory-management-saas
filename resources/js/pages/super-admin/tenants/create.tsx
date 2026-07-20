@@ -78,9 +78,7 @@ export default function Create({ plans }: Props) {
                                         }
                                         required
                                     />
-                                    <InputError
-                                        message={errors.company_name}
-                                    />
+                                    <InputError message={errors.company_name} />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="billing_email">
@@ -201,9 +199,7 @@ export default function Create({ plans }: Props) {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="plan_id">
-                                        Assign Plan
-                                    </Label>
+                                    <Label htmlFor="plan_id">Assign Plan</Label>
                                     <select
                                         id="plan_id"
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
@@ -221,9 +217,9 @@ export default function Create({ plans }: Props) {
                                                 value={plan.id}
                                             >
                                                 {plan.name} ($
-                                                {parseFloat(
-                                                    plan.price,
-                                                ).toFixed(2)}
+                                                {parseFloat(plan.price).toFixed(
+                                                    2,
+                                                )}
                                                 /mo)
                                             </option>
                                         ))}

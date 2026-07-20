@@ -1,11 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Download,
-    FileText,
-    Package,
-    Truck,
-    User,
-} from 'lucide-react';
+import { Download, FileText, Package, Truck, User } from 'lucide-react';
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -40,7 +34,12 @@ interface PurchaseBill {
     purchase_order: { id: number; purchase_number: string } | null;
     purchase_receive: { id: number; received_at: string } | null;
     vendor: { id: number; name: string } | null;
-    currency: { id: number; code: string; symbol: string; decimal_places: number } | null;
+    currency: {
+        id: number;
+        code: string;
+        symbol: string;
+        decimal_places: number;
+    } | null;
     created_by: { id: number; name: string };
     items: BillItem[];
 }
@@ -92,7 +91,8 @@ export default function Show({ bill }: Props) {
                         </div>
                         {bill.purchase_order && (
                             <p className="mt-2 text-muted-foreground">
-                                Bill for PO {bill.purchase_order.purchase_number}
+                                Bill for PO{' '}
+                                {bill.purchase_order.purchase_number}
                                 {bill.vendor && ` from ${bill.vendor.name}`}
                             </p>
                         )}
@@ -100,16 +100,23 @@ export default function Show({ bill }: Props) {
 
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
-                            <a href={bills.download({ bill: bill.id }).url} target="_blank" rel="noreferrer">
+                            <a
+                                href={bills.download({ bill: bill.id }).url}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 <Download className="mr-2 h-4 w-4" />
                                 Download PDF
                             </a>
                         </Button>
 
-                        {(bill.status === 'draft' || bill.status === 'pending') && (
+                        {(bill.status === 'draft' ||
+                            bill.status === 'pending') && (
                             <Button
                                 onClick={() =>
-                                    router.post(bills.markPaid({ bill: bill.id }))
+                                    router.post(
+                                        bills.markPaid({ bill: bill.id }),
+                                    )
                                 }
                             >
                                 Mark as Paid
@@ -183,8 +190,12 @@ export default function Show({ bill }: Props) {
                             <div>{bill.created_by.name}</div>
                             <div className="mt-1 text-sm text-muted-foreground">
                                 {bill.issued_at
-                                    ? new Date(bill.issued_at).toLocaleDateString()
-                                    : new Date(bill.created_at).toLocaleDateString()}
+                                    ? new Date(
+                                          bill.issued_at,
+                                      ).toLocaleDateString()
+                                    : new Date(
+                                          bill.created_at,
+                                      ).toLocaleDateString()}
                             </div>
                         </CardContent>
                     </Card>
@@ -199,12 +210,24 @@ export default function Show({ bill }: Props) {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b">
-                                        <th className="px-4 py-3 text-left">Item</th>
-                                        <th className="px-4 py-3 text-right">Qty</th>
-                                        <th className="px-4 py-3 text-right">Unit Cost</th>
-                                        <th className="px-4 py-3 text-right">Discount</th>
-                                        <th className="px-4 py-3 text-right">Tax</th>
-                                        <th className="px-4 py-3 text-right">Total</th>
+                                        <th className="px-4 py-3 text-left">
+                                            Item
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Qty
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Unit Cost
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Discount
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Tax
+                                        </th>
+                                        <th className="px-4 py-3 text-right">
+                                            Total
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -215,7 +238,8 @@ export default function Show({ bill }: Props) {
                                         >
                                             <td className="px-4 py-3">
                                                 <div className="font-medium">
-                                                    {item.description || item.item.name}
+                                                    {item.description ||
+                                                        item.item.name}
                                                 </div>
                                                 <div className="text-xs text-muted-foreground">
                                                     {item.item.sku}
@@ -241,7 +265,10 @@ export default function Show({ bill }: Props) {
                                 </tbody>
                                 <tfoot>
                                     <tr className="border-t">
-                                        <td colSpan={5} className="px-4 py-2 text-right font-medium">
+                                        <td
+                                            colSpan={5}
+                                            className="px-4 py-2 text-right font-medium"
+                                        >
                                             Subtotal
                                         </td>
                                         <td className="px-4 py-2 text-right">
@@ -250,7 +277,10 @@ export default function Show({ bill }: Props) {
                                     </tr>
                                     {Number(bill.discount) > 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-4 py-2 text-right text-muted-foreground">
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-right text-muted-foreground"
+                                            >
                                                 Discount
                                             </td>
                                             <td className="px-4 py-2 text-right text-muted-foreground">
@@ -260,7 +290,10 @@ export default function Show({ bill }: Props) {
                                     )}
                                     {Number(bill.tax) > 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-4 py-2 text-right text-muted-foreground">
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-right text-muted-foreground"
+                                            >
                                                 Tax
                                             </td>
                                             <td className="px-4 py-2 text-right text-muted-foreground">
@@ -269,7 +302,10 @@ export default function Show({ bill }: Props) {
                                         </tr>
                                     )}
                                     <tr className="border-t font-bold">
-                                        <td colSpan={5} className="px-4 py-3 text-right">
+                                        <td
+                                            colSpan={5}
+                                            className="px-4 py-3 text-right"
+                                        >
                                             Total
                                         </td>
                                         <td className="px-4 py-3 text-right">

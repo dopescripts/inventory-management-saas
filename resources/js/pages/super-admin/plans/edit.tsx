@@ -18,7 +18,6 @@ interface Props {
 }
 
 export default function Edit({ plan }: Props) {
-
     const form = useForm({
         name: plan.name,
         max_warehouses: plan.max_warehouses,

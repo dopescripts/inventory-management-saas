@@ -1,5 +1,12 @@
 import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
-import { Building2, CheckCircle, Edit, Package, Trash, XCircle } from 'lucide-react';
+import {
+    Building2,
+    CheckCircle,
+    Edit,
+    Package,
+    Trash,
+    XCircle,
+} from 'lucide-react';
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -46,7 +53,9 @@ interface Props {
     salesOrder: SalesOrder;
 }
 
-const statusVariant = (status: string): 'default' | 'secondary' | 'destructive' | 'outline' => {
+const statusVariant = (
+    status: string,
+): 'default' | 'secondary' | 'destructive' | 'outline' => {
     switch (status) {
         case 'confirmed':
             return 'default';
@@ -66,7 +75,10 @@ export default function Show({ salesOrder }: Props) {
         breadcrumbs: [
             { title: 'Sales', href: '' },
             { title: 'Orders', href: orders.index() },
-            { title: salesOrder.number, href: orders.show({ order: salesOrder.id }) },
+            {
+                title: salesOrder.number,
+                href: orders.show({ order: salesOrder.id }),
+            },
         ],
     });
 
@@ -77,7 +89,11 @@ export default function Show({ salesOrder }: Props) {
     };
 
     const handleCancel = () => {
-        if (window.confirm(`Cancel order ${salesOrder.number}? This cannot be undone.`)) {
+        if (
+            window.confirm(
+                `Cancel order ${salesOrder.number}? This cannot be undone.`,
+            )
+        ) {
             router.post(orders.cancel({ order: salesOrder.id }).url);
         }
     };
@@ -97,7 +113,9 @@ export default function Show({ salesOrder }: Props) {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className="text-3xl font-bold">{salesOrder.number}</h1>
+                            <h1 className="text-3xl font-bold">
+                                {salesOrder.number}
+                            </h1>
                             <Badge variant={statusVariant(salesOrder.status)}>
                                 {salesOrder.status
                                     .replace(/_/g, ' ')
@@ -105,9 +123,18 @@ export default function Show({ salesOrder }: Props) {
                             </Badge>
                         </div>
                         <p className="mt-1 text-muted-foreground">
-                            Ordered on {new Date(salesOrder.order_date).toLocaleDateString()}
+                            Ordered on{' '}
+                            {new Date(
+                                salesOrder.order_date,
+                            ).toLocaleDateString()}
                             {salesOrder.expected_ship_date && (
-                                <> · Ships by {new Date(salesOrder.expected_ship_date).toLocaleDateString()}</>
+                                <>
+                                    {' '}
+                                    · Ships by{' '}
+                                    {new Date(
+                                        salesOrder.expected_ship_date,
+                                    ).toLocaleDateString()}
+                                </>
                             )}
                         </p>
                     </div>
@@ -116,7 +143,13 @@ export default function Show({ salesOrder }: Props) {
                         {salesOrder.status === 'draft' && (
                             <>
                                 <Button variant="outline" asChild>
-                                    <Link href={orders.edit({ order: salesOrder.id }).url}>
+                                    <Link
+                                        href={
+                                            orders.edit({
+                                                order: salesOrder.id,
+                                            }).url
+                                        }
+                                    >
                                         <Edit className="mr-2 h-4 w-4" />
                                         Edit
                                     </Link>
@@ -125,14 +158,20 @@ export default function Show({ salesOrder }: Props) {
                                     <CheckCircle className="mr-2 h-4 w-4" />
                                     Confirm Order
                                 </Button>
-                                <Button variant="destructive" onClick={handleDelete}>
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleDelete}
+                                >
                                     <Trash className="mr-2 h-4 w-4" />
                                     Delete
                                 </Button>
                             </>
                         )}
                         {salesOrder.status === 'confirmed' && (
-                            <Button variant="destructive" onClick={handleCancel}>
+                            <Button
+                                variant="destructive"
+                                onClick={handleCancel}
+                            >
                                 <XCircle className="mr-2 h-4 w-4" />
                                 Cancel Order
                             </Button>
@@ -149,7 +188,9 @@ export default function Show({ salesOrder }: Props) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="font-semibold">{salesOrder.customer?.name ?? '—'}</p>
+                            <p className="font-semibold">
+                                {salesOrder.customer?.name ?? '—'}
+                            </p>
                             {salesOrder.customer?.email && (
                                 <p className="text-sm text-muted-foreground">
                                     {salesOrder.customer.email}
@@ -179,7 +220,9 @@ export default function Show({ salesOrder }: Props) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-2xl font-bold">{format(salesOrder.total)}</p>
+                            <p className="text-2xl font-bold">
+                                {format(salesOrder.total)}
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
@@ -197,11 +240,21 @@ export default function Show({ salesOrder }: Props) {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Item</TableHead>
-                                    <TableHead className="text-right">Ordered</TableHead>
-                                    <TableHead className="text-right">Picked</TableHead>
-                                    <TableHead className="text-right">Shipped</TableHead>
-                                    <TableHead className="text-right">Unit Price</TableHead>
-                                    <TableHead className="text-right">Total</TableHead>
+                                    <TableHead className="text-right">
+                                        Ordered
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Picked
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Shipped
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Unit Price
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Total
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -209,7 +262,9 @@ export default function Show({ salesOrder }: Props) {
                                     <TableRow key={lineItem.id}>
                                         <TableCell>
                                             <div>
-                                                <p className="font-medium">{lineItem.item.name}</p>
+                                                <p className="font-medium">
+                                                    {lineItem.item.name}
+                                                </p>
                                                 {lineItem.item.sku && (
                                                     <p className="text-sm text-muted-foreground">
                                                         SKU: {lineItem.item.sku}
@@ -241,25 +296,39 @@ export default function Show({ salesOrder }: Props) {
                         <div className="mt-4 flex justify-end">
                             <div className="w-64 space-y-1 text-sm">
                                 <div className="flex justify-between">
-                                    <span className="text-muted-foreground">Subtotal</span>
+                                    <span className="text-muted-foreground">
+                                        Subtotal
+                                    </span>
                                     <span>{format(salesOrder.subtotal)}</span>
                                 </div>
-                                {parseFloat(salesOrder.discount as string) > 0 && (
+                                {parseFloat(salesOrder.discount as string) >
+                                    0 && (
                                     <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Discount</span>
-                                        <span>-{format(salesOrder.discount)}</span>
+                                        <span className="text-muted-foreground">
+                                            Discount
+                                        </span>
+                                        <span>
+                                            -{format(salesOrder.discount)}
+                                        </span>
                                     </div>
                                 )}
                                 {parseFloat(salesOrder.tax as string) > 0 && (
                                     <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Tax</span>
+                                        <span className="text-muted-foreground">
+                                            Tax
+                                        </span>
                                         <span>{format(salesOrder.tax)}</span>
                                     </div>
                                 )}
-                                {parseFloat(salesOrder.shipping as string) > 0 && (
+                                {parseFloat(salesOrder.shipping as string) >
+                                    0 && (
                                     <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Shipping</span>
-                                        <span>{format(salesOrder.shipping)}</span>
+                                        <span className="text-muted-foreground">
+                                            Shipping
+                                        </span>
+                                        <span>
+                                            {format(salesOrder.shipping)}
+                                        </span>
                                     </div>
                                 )}
                                 <div className="flex justify-between border-t pt-1 font-semibold">
@@ -278,7 +347,9 @@ export default function Show({ salesOrder }: Props) {
                             <CardTitle>Notes</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="whitespace-pre-wrap text-sm">{salesOrder.notes}</p>
+                            <p className="text-sm whitespace-pre-wrap">
+                                {salesOrder.notes}
+                            </p>
                         </CardContent>
                     </Card>
                 )}

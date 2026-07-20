@@ -60,12 +60,12 @@ export function AppSidebar() {
                 },
                 ...(isOwnerOrManager
                     ? [
-                        {
-                            title: 'Manage Staff',
-                            href: staff.index(),
-                            icon: User,
-                        },
-                    ]
+                          {
+                              title: 'Manage Staff',
+                              href: staff.index(),
+                              icon: User,
+                          },
+                      ]
                     : []),
             ],
         },
@@ -153,8 +153,8 @@ export function AppSidebar() {
                     href: customers.index(),
                     permission: 'view_customers',
                 },
-            ]
-        }
+            ],
+        },
     ];
 
     return (

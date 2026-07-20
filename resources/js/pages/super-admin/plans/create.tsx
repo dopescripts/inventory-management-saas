@@ -2,7 +2,6 @@ import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PlanForm from './form';
 
-
 export default function Create() {
     const form = useForm({
         name: '',

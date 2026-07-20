@@ -25,8 +25,8 @@ interface PaginationProps {
 export function InertiaPagination({ links }: PaginationProps) {
     // Guard clause for instances with single-page datasets
     if (links.length <= 3) {
-return null;
-}
+        return null;
+    }
 
     const previousLink = links[0];
     const nextLink = links[links.length - 1];

@@ -120,10 +120,7 @@ export default function Index({ vendors: paginatedVendors }: Props) {
                 </div>
 
                 <div className="rounded-lg border">
-                    <DataTable
-                        columns={columns}
-                        data={paginatedVendors.data}
-                    />
+                    <DataTable columns={columns} data={paginatedVendors.data} />
                 </div>
             </div>
         </>

@@ -12,7 +12,10 @@ export default function Edit({ customer }: Props) {
         breadcrumbs: [
             { title: 'Sales', href: '' },
             { title: 'Customers', href: customers.index() },
-            { title: customer.name, href: customers.show({ customer: customer.id }) },
+            {
+                title: customer.name,
+                href: customers.show({ customer: customer.id }),
+            },
             { title: 'Edit', href: customers.edit({ customer: customer.id }) },
         ],
     });

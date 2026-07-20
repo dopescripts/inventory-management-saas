@@ -29,13 +29,19 @@ export default function PaymentStep({ planName, planPrice }: Props) {
         return (
             <div className="space-y-6 text-center">
                 <div className="rounded-lg border bg-muted/30 p-6">
-                    <h3 className="text-lg font-semibold">Free Plan Selected</h3>
+                    <h3 className="text-lg font-semibold">
+                        Free Plan Selected
+                    </h3>
                     <p className="mt-2 text-muted-foreground">
                         No payment required for the {planName} plan.
                     </p>
                 </div>
                 <form onSubmit={submit}>
-                    <Button type="submit" className="w-full" disabled={processing}>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={processing}
+                    >
                         {processing && <Spinner />}
                         Complete Setup
                     </Button>
@@ -66,7 +72,6 @@ export default function PaymentStep({ planName, planPrice }: Props) {
                         required
                     />
                     <InputError message={errors.card_holder} />
-
                 </div>
 
                 <div className="grid gap-2">
@@ -88,9 +93,7 @@ export default function PaymentStep({ planName, planPrice }: Props) {
                         <Input
                             id="expiry"
                             value={data.expiry}
-                            onChange={(e) =>
-                                setData('expiry', e.target.value)
-                            }
+                            onChange={(e) => setData('expiry', e.target.value)}
                             placeholder="MM/YY"
                             maxLength={5}
                             required

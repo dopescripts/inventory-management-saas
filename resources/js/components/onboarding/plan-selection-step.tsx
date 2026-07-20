@@ -64,7 +64,10 @@ export default function PlanSelectionStep({ plans, currentPlanId }: Props) {
                                     ${parseFloat(plan.price).toFixed(0)}
                                 </span>
                                 <span className="text-sm text-muted-foreground">
-                                    /{plan.billing_period === 'yearly' ? 'year' : 'month'}
+                                    /
+                                    {plan.billing_period === 'yearly'
+                                        ? 'year'
+                                        : 'month'}
                                 </span>
                             </div>
                             {plan.description && (
@@ -77,7 +80,8 @@ export default function PlanSelectionStep({ plans, currentPlanId }: Props) {
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-center gap-2">
                                     <Check className="h-4 w-4 text-primary" />
-                                    {formatLimit(plan.max_warehouses)} warehouses
+                                    {formatLimit(plan.max_warehouses)}{' '}
+                                    warehouses
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <Check className="h-4 w-4 text-primary" />

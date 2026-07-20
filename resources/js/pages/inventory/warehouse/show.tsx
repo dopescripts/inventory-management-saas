@@ -258,10 +258,11 @@ function Show({
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`relative flex items-center gap-2 pb-3 text-sm font-medium transition-colors ${activeTab === tab.id
-                                        ? 'text-foreground'
-                                        : 'text-muted-foreground hover:text-foreground/80'
-                                        }`}
+                                    className={`relative flex items-center gap-2 pb-3 text-sm font-medium transition-colors ${
+                                        activeTab === tab.id
+                                            ? 'text-foreground'
+                                            : 'text-muted-foreground hover:text-foreground/80'
+                                    }`}
                                 >
                                     <Icon className="h-4 w-4" />
                                     {tab.label}
@@ -476,7 +477,6 @@ function Show({
         </>
     );
 }
-
 
 const ShowLayout = ({ children }: { children: React.ReactNode }) => {
     const { warehouse } = usePage<any>().props;

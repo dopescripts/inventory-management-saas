@@ -33,18 +33,28 @@ type PageProps = {
 };
 
 export default function CurrencySettings() {
-    const { currencies, currentCurrencyId, billingAddress, billingPhone, billingEmail, taxId, auth } =
-        usePage<PageProps>().props;
+    const {
+        currencies,
+        currentCurrencyId,
+        billingAddress,
+        billingPhone,
+        billingEmail,
+        taxId,
+        auth,
+    } = usePage<PageProps>().props;
 
-    const canEdit = auth.user?.roles?.some((r) => r === 'owner' || r === 'manager') ?? false;
+    const canEdit =
+        auth.user?.roles?.some((r) => r === 'owner' || r === 'manager') ??
+        false;
 
-    const { data, setData, patch, processing, errors, recentlySuccessful } = useForm({
-        default_currency_id: currentCurrencyId?.toString() ?? '',
-        billing_address: billingAddress ?? '',
-        billing_phone: billingPhone ?? '',
-        billing_email: billingEmail ?? '',
-        tax_id: taxId ?? '',
-    });
+    const { data, setData, patch, processing, errors, recentlySuccessful } =
+        useForm({
+            default_currency_id: currentCurrencyId?.toString() ?? '',
+            billing_address: billingAddress ?? '',
+            billing_phone: billingPhone ?? '',
+            billing_email: billingEmail ?? '',
+            tax_id: taxId ?? '',
+        });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,7 +77,9 @@ export default function CurrencySettings() {
                         <FieldLabel>Default Currency</FieldLabel>
                         <Select
                             value={data.default_currency_id}
-                            onValueChange={(value) => setData('default_currency_id', value)}
+                            onValueChange={(value) =>
+                                setData('default_currency_id', value)
+                            }
                             disabled={!canEdit}
                         >
                             <SelectTrigger>
@@ -79,18 +91,24 @@ export default function CurrencySettings() {
                                         key={currency.id}
                                         value={currency.id.toString()}
                                     >
-                                        {currency.symbol} — {currency.name} ({currency.code})
+                                        {currency.symbol} — {currency.name} (
+                                        {currency.code})
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        <FieldError errors={[{ message: errors.default_currency_id }]} />
+                        <FieldError
+                            errors={[{ message: errors.default_currency_id }]}
+                        />
                     </Field>
 
                     <div className="border-t pt-6">
-                        <h3 className="text-sm font-medium">Billing Information</h3>
+                        <h3 className="text-sm font-medium">
+                            Billing Information
+                        </h3>
                         <p className="mt-1 text-sm text-muted-foreground">
-                            This information appears on generated invoices and bills.
+                            This information appears on generated invoices and
+                            bills.
                         </p>
                     </div>
 
@@ -99,22 +117,30 @@ export default function CurrencySettings() {
                         <Input
                             type="email"
                             value={data.billing_email}
-                            onChange={(e) => setData('billing_email', e.target.value)}
+                            onChange={(e) =>
+                                setData('billing_email', e.target.value)
+                            }
                             disabled={!canEdit}
                             placeholder="billing@company.com"
                         />
-                        <FieldError errors={[{ message: errors.billing_email }]} />
+                        <FieldError
+                            errors={[{ message: errors.billing_email }]}
+                        />
                     </Field>
 
                     <Field>
                         <FieldLabel>Billing Phone</FieldLabel>
                         <Input
                             value={data.billing_phone}
-                            onChange={(e) => setData('billing_phone', e.target.value)}
+                            onChange={(e) =>
+                                setData('billing_phone', e.target.value)
+                            }
                             disabled={!canEdit}
                             placeholder="+1 234 567 890"
                         />
-                        <FieldError errors={[{ message: errors.billing_phone }]} />
+                        <FieldError
+                            errors={[{ message: errors.billing_phone }]}
+                        />
                     </Field>
 
                     <Field>
@@ -132,12 +158,16 @@ export default function CurrencySettings() {
                         <FieldLabel>Billing Address</FieldLabel>
                         <Textarea
                             value={data.billing_address}
-                            onChange={(e) => setData('billing_address', e.target.value)}
+                            onChange={(e) =>
+                                setData('billing_address', e.target.value)
+                            }
                             disabled={!canEdit}
                             rows={3}
                             placeholder="Street, City, State, ZIP, Country"
                         />
-                        <FieldError errors={[{ message: errors.billing_address }]} />
+                        <FieldError
+                            errors={[{ message: errors.billing_address }]}
+                        />
                     </Field>
 
                     {canEdit && (
@@ -146,14 +176,17 @@ export default function CurrencySettings() {
                                 {processing ? 'Saving…' : 'Save Changes'}
                             </Button>
                             {recentlySuccessful && (
-                                <p className="text-sm text-muted-foreground">Saved.</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Saved.
+                                </p>
                             )}
                         </div>
                     )}
 
                     {!canEdit && (
                         <p className="text-sm text-muted-foreground">
-                            Only owners and managers can update currency and billing settings.
+                            Only owners and managers can update currency and
+                            billing settings.
                         </p>
                     )}
                 </form>
