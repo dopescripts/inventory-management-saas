@@ -30,6 +30,7 @@ import adjustments from '@/routes/adjustments';
 import bills from '@/routes/bills';
 import brands from '@/routes/brands';
 import categories from '@/routes/categories';
+import customers from '@/routes/customers';
 import items from '@/routes/items';
 import orders from '@/routes/orders';
 import purchases from '@/routes/purchases';
@@ -39,7 +40,6 @@ import units from '@/routes/units';
 import vendors from '@/routes/vendors';
 import warehouses from '@/routes/warehouses';
 import type { NavGroup, NavItem } from '@/types';
-import customers from '@/routes/customers';
 
 const footerNavItems: NavItem[] = [];
 

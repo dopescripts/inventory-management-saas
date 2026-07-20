@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import React from 'react';
-import PurchaseForm from './components/purchase-form';
 import purchases from '@/routes/purchases';
+import PurchaseForm from './components/purchase-form';
 
 interface Props {
     vendors: { id: number; name: string }[];

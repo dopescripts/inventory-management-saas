@@ -40,6 +40,7 @@ export default function VendorForm({ vendor }: Props) {
 
         if (isEdit) {
             put(vendors.update({ vendor: vendor!.id }).url);
+
             return;
         }
 

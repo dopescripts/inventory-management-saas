@@ -1,10 +1,10 @@
+import { useForm } from '@inertiajs/react';
+import { Check } from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
-import { useForm } from '@inertiajs/react';
-import { Check } from 'lucide-react';
-import { useState } from 'react';
 
 interface Plan {
     id: number;
@@ -32,7 +32,11 @@ export default function PlanSelectionStep({ plans, currentPlanId }: Props) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedPlan) return;
+
+        if (!selectedPlan) {
+return;
+}
+
         post(`/onboarding/plan?plan_id=${selectedPlan}`);
     };
 

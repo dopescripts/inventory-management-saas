@@ -11,7 +11,7 @@ interface PaginatedWarehouses {
 }
 
 function Index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+     
     const auth = usePage().props.auth;
     const data = warehousesData;
     const columns = useMemo(() => getColumns(auth), [auth]);

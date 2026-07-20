@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -13,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import orders from '@/routes/orders';
 
 interface Customer {
@@ -112,6 +112,7 @@ export default function SalesOrderForm({
     const lineTotal = (item: OrderItem) => {
         const qty = parseFloat(item.ordered_quantity as string) || 0;
         const price = parseFloat(item.unit_price as string) || 0;
+
         return (qty * price).toFixed(2);
     };
 
@@ -125,6 +126,7 @@ export default function SalesOrderForm({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (isEdit) {
             put(orders.update({ order: salesOrder!.id }).url);
         } else {

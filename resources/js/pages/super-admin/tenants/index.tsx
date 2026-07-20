@@ -38,7 +38,10 @@ export default function Index({ tenants }: Props) {
     };
 
     const statusBadge = (status: string | undefined) => {
-        if (!status) return <Badge variant="secondary">No subscription</Badge>;
+        if (!status) {
+return <Badge variant="secondary">No subscription</Badge>;
+}
+
         const variants: Record<
             string,
             'default' | 'secondary' | 'destructive'
@@ -48,6 +51,7 @@ export default function Index({ tenants }: Props) {
             cancelled: 'destructive',
             inactive: 'destructive',
         };
+
         return (
             <Badge variant={variants[status] ?? 'secondary'}>{status}</Badge>
         );

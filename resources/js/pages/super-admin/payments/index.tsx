@@ -39,8 +39,14 @@ export default function Index({ payments, filters }: Props) {
     const statusBadgeVariant = (
         status: string,
     ): 'default' | 'secondary' | 'destructive' => {
-        if (status === 'completed') return 'default';
-        if (status === 'pending') return 'secondary';
+        if (status === 'completed') {
+return 'default';
+}
+
+        if (status === 'pending') {
+return 'secondary';
+}
+
         return 'destructive';
     };
 

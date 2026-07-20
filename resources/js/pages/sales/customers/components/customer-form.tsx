@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -12,6 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import customers from '@/routes/customers';
 
 interface Customer {
@@ -55,6 +55,7 @@ export default function CustomerForm({ customer }: Props) {
 
         if (isEdit) {
             put(customers.update({ customer: customer!.id }).url);
+
             return;
         }
 

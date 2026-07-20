@@ -20,8 +20,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import purchases from '@/routes/purchases';
 import { useCurrency } from '@/lib/currency';
+import purchases from '@/routes/purchases';
 
 interface Warehouse {
     id: number;

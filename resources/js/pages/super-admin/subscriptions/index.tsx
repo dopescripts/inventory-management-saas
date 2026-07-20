@@ -37,8 +37,14 @@ export default function Index({ subscriptions, filters }: Props) {
     const statusBadgeVariant = (
         status: string,
     ): 'default' | 'secondary' | 'destructive' => {
-        if (status === 'active') return 'default';
-        if (status === 'trial') return 'secondary';
+        if (status === 'active') {
+return 'default';
+}
+
+        if (status === 'trial') {
+return 'secondary';
+}
+
         return 'destructive';
     };
 
