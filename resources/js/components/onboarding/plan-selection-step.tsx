@@ -34,8 +34,8 @@ export default function PlanSelectionStep({ plans, currentPlanId }: Props) {
         e.preventDefault();
 
         if (!selectedPlan) {
-return;
-}
+            return;
+        }
 
         post(`/onboarding/plan?plan_id=${selectedPlan}`);
     };

@@ -14,10 +14,23 @@ import {
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-export default function Home() {
+interface Plan {
+    id: number;
+    name: string;
+    max_warehouses: number;
+    max_items: number;
+    max_orders: number;
+    has_whatsapp: boolean;
+    price: number;
+    trial_days: number;
+}
+
+export default function Home({ plans = [] }: { plans: Plan[] }) {
     const [scrollY, setScrollY] = useState(0);
     const [activeNav, setActiveNav] = useState('home');
     const [openFaqId, setOpenFaqId] = useState<string | null>(null);
+
+    const pricingPlans = plans;
 
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
@@ -44,11 +57,10 @@ export default function Home() {
                                 <button
                                     key={item}
                                     onClick={() => setActiveNav(item)}
-                                    className={`text-sm transition-colors ${
-                                        activeNav === item
-                                            ? 'font-semibold text-primary'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    }`}
+                                    className={`text-sm transition-colors ${activeNav === item
+                                        ? 'font-semibold text-primary'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                        }`}
                                 >
                                     {item}
                                 </button>
@@ -153,32 +165,7 @@ export default function Home() {
                             className="relative"
                         >
                             <div className="relative overflow-hidden rounded-xl shadow-2xl">
-                                <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10">
-                                    <div className="w-full space-y-3 px-6">
-                                        <div className="grid grid-cols-3 gap-3">
-                                            {[1, 2, 3].map((i) => (
-                                                <motion.div
-                                                    key={i}
-                                                    initial={{
-                                                        opacity: 0,
-                                                        y: 10,
-                                                    }}
-                                                    animate={{
-                                                        opacity: 1,
-                                                        y: 0,
-                                                    }}
-                                                    transition={{
-                                                        delay: 0.3 + i * 0.1,
-                                                    }}
-                                                    className="flex h-16 items-center justify-center rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm"
-                                                >
-                                                    <Package className="h-6 w-6 text-accent/60" />
-                                                </motion.div>
-                                            ))}
-                                        </div>
-                                        <div className="h-20 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm" />
-                                    </div>
-                                </div>
+                                <img src="/hero-illustration.svg" alt="Package" className="h-auto object-cover w-full text-accent/60" />
                             </div>
                         </motion.div>
                     </div>
@@ -651,13 +638,12 @@ export default function Home() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className={`relative rounded-xl border p-8 transition-all ${
-                                    plan.highlighted
-                                        ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
-                                        : 'border-border bg-card'
-                                }`}
+                                className={`relative rounded-xl border p-8 transition-all ${index === 1
+                                    ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
+                                    : 'border-border bg-card'
+                                    }`}
                             >
-                                {plan.highlighted && (
+                                {index === 1 && (
                                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-semibold text-primary-foreground">
                                         Most Popular
                                     </div>
@@ -666,7 +652,9 @@ export default function Home() {
                                     {plan.name}
                                 </h3>
                                 <p className="mb-6 text-muted-foreground">
-                                    {plan.description}
+                                    {plan.price === 0
+                                        ? 'Free'
+                                        : `Starts from $${plan.price}`}
                                 </p>
                                 <div className="mb-6">
                                     <span className="text-4xl font-bold">
@@ -677,23 +665,40 @@ export default function Home() {
                                     </span>
                                 </div>
                                 <button
-                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${
-                                        plan.highlighted
-                                            ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
-                                            : 'border border-border hover:bg-muted'
-                                    }`}
+                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${index === 1
+                                        ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
+                                        : 'border border-border hover:bg-muted'
+                                        }`}
                                 >
                                     Get Started
                                 </button>
                                 <ul className="space-y-3">
-                                    {plan.features.map((feature, i) => (
-                                        <li key={i} className="flex gap-3">
-                                            <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
-                                            <span className="text-sm">
-                                                {feature}
-                                            </span>
-                                        </li>
-                                    ))}
+                                    <li className="flex gap-3">
+                                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
+                                        <span className="text-sm">
+                                            Max Warehouses:{' '}
+                                            {plan.max_warehouses}
+                                        </span>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
+                                        <span className="text-sm">
+                                            Max Items: {plan.max_items}
+                                        </span>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
+                                        <span className="text-sm">
+                                            Max Orders: {plan.max_orders}
+                                        </span>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
+                                        <span className="text-sm">
+                                            WhatsApp:{' '}
+                                            {plan.has_whatsapp ? 'Yes' : 'No'}
+                                        </span>
+                                    </li>
                                 </ul>
                             </motion.div>
                         ))}
@@ -978,53 +983,6 @@ const features = [
         title: 'Cloud-Based & Scalable',
         description:
             'Grow your business without worrying about infrastructure or capacity limits',
-    },
-];
-
-// Pricing plans
-const pricingPlans = [
-    {
-        name: 'Starter',
-        description: 'Perfect for small businesses',
-        price: 99,
-        highlighted: false,
-        features: [
-            'Up to 1 warehouse',
-            '10 team members',
-            'Basic reporting',
-            'Email support',
-            '99% uptime SLA',
-        ],
-    },
-    {
-        name: 'Professional',
-        description: 'Best for growing businesses',
-        price: 299,
-        highlighted: true,
-        features: [
-            'Up to 5 warehouses',
-            'Unlimited team members',
-            'Advanced analytics',
-            '24/7 priority support',
-            '99.9% uptime SLA',
-            'API access',
-            'Custom integrations',
-        ],
-    },
-    {
-        name: 'Enterprise',
-        description: 'For large-scale operations',
-        price: 999,
-        highlighted: false,
-        features: [
-            'Unlimited warehouses',
-            'Unlimited team members',
-            'Custom reporting',
-            'Dedicated support',
-            '99.99% uptime SLA',
-            'Advanced security',
-            'Custom development',
-        ],
     },
 ];
 

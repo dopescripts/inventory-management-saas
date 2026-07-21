@@ -11,7 +11,6 @@ interface PaginatedWarehouses {
 }
 
 function Index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
-     
     const auth = usePage().props.auth;
     const data = warehousesData;
     const columns = useMemo(() => getColumns(auth), [auth]);

@@ -38,12 +38,12 @@ export default function Index({ subscriptions, filters }: Props) {
         status: string,
     ): 'default' | 'secondary' | 'destructive' => {
         if (status === 'active') {
-return 'default';
-}
+            return 'default';
+        }
 
         if (status === 'trial') {
-return 'secondary';
-}
+            return 'secondary';
+        }
 
         return 'destructive';
     };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Inventory\AdjustmentController;
 use App\Http\Controllers\Inventory\BrandController;
 use App\Http\Controllers\Inventory\CategoryController;
@@ -18,9 +19,10 @@ use App\Http\Controllers\Sales\CustomerController;
 use App\Http\Controllers\Sales\SalesOrderController;
 use App\Http\Controllers\Sales\SalesWorkflowController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'home')->name('home');
+Route::get('/', [WebController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () {
     Route::get('onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
@@ -30,7 +32,7 @@ Route::middleware(['auth', 'verified', 'tenant.permission'])->group(function () 
 });
 
 Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard')->middleware('role:manager|owner|staff');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('role:manager|owner|staff');
 
     Route::middleware('role:owner|manager')->group(function () {
         Route::resource('staff', StaffController::class)->except(['show']);
@@ -232,5 +234,5 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
     Route::resource('orders', SalesOrderController::class);
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/super-admin.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/super-admin.php';

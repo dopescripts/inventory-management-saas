@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { Download, FileText, Package, Truck, User } from 'lucide-react';
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -112,16 +112,16 @@ export default function Show({ bill }: Props) {
 
                         {(bill.status === 'draft' ||
                             bill.status === 'pending') && (
-                            <Button
-                                onClick={() =>
-                                    router.post(
-                                        bills.markPaid({ bill: bill.id }),
-                                    )
-                                }
-                            >
-                                Mark as Paid
-                            </Button>
-                        )}
+                                <Button
+                                    onClick={() =>
+                                        router.post(
+                                            bills.markPaid({ bill: bill.id }),
+                                        )
+                                    }
+                                >
+                                    Mark as Paid
+                                </Button>
+                            )}
 
                         {bill.status === 'draft' && (
                             <Button
@@ -191,11 +191,11 @@ export default function Show({ bill }: Props) {
                             <div className="mt-1 text-sm text-muted-foreground">
                                 {bill.issued_at
                                     ? new Date(
-                                          bill.issued_at,
-                                      ).toLocaleDateString()
+                                        bill.issued_at,
+                                    ).toLocaleDateString()
                                     : new Date(
-                                          bill.created_at,
-                                      ).toLocaleDateString()}
+                                        bill.created_at,
+                                    ).toLocaleDateString()}
                             </div>
                         </CardContent>
                     </Card>

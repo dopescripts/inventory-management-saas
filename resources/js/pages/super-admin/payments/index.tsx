@@ -40,12 +40,12 @@ export default function Index({ payments, filters }: Props) {
         status: string,
     ): 'default' | 'secondary' | 'destructive' => {
         if (status === 'completed') {
-return 'default';
-}
+            return 'default';
+        }
 
         if (status === 'pending') {
-return 'secondary';
-}
+            return 'secondary';
+        }
 
         return 'destructive';
     };
