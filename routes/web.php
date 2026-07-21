@@ -226,6 +226,14 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
             ->middleware('permission:update_bills') // Should be a sales permission eventually
             ->name('confirm');
 
+        Route::post('/{order}/ship', [SalesWorkflowController::class, 'ship'])
+            ->middleware('permission:update_bills')
+            ->name('ship');
+
+        Route::post('/{order}/complete', [SalesWorkflowController::class, 'complete'])
+            ->middleware('permission:update_bills')
+            ->name('complete');
+
         Route::post('/{order}/cancel', [SalesWorkflowController::class, 'cancel'])
             ->middleware('permission:update_bills')
             ->name('cancel');

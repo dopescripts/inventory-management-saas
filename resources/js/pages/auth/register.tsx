@@ -85,7 +85,7 @@ export default function Register({ passwordRules }: Props) {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
-                                    passwordrules={passwordRules}
+                                    showStrength
                                 />
                                 <InputError message={errors.password} />
                             </div>

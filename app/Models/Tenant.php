@@ -13,10 +13,28 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property int $id
  * @property string $name
  * @property string $logo
+ * @property \Illuminate\Support\Carbon|null $onboarding_completed_at
  */
-#[Fillable(['name', 'logo', 'default_currency_id', 'billing_address', 'billing_phone', 'billing_email', 'tax_id'])]
+#[Fillable(['name', 'logo', 'default_currency_id', 'billing_address', 'billing_phone', 'billing_email', 'tax_id', 'onboarding_completed_at'])]
 class Tenant extends Model
 {
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'onboarding_completed_at' => 'datetime',
+        ];
+    }
+
+    public function hasCompletedOnboarding(): bool
+    {
+        return $this->onboarding_completed_at !== null;
+    }
+
     /**
      * Summary of users
      *

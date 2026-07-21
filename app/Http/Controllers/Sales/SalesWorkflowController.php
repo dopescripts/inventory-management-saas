@@ -22,6 +22,28 @@ class SalesWorkflowController extends Controller
         return back()->with('success', 'Sales Order confirmed successfully.');
     }
 
+    public function ship(SalesOrder $order, \App\Services\Inventory\InventoryMovementService $inventoryService)
+    {
+        if ($order->tenant_id !== Auth::user()->tenant_id) {
+            abort(403);
+        }
+
+        $this->salesOrderService->shipOrder($order, $inventoryService, Auth::id());
+
+        return back()->with('success', 'Sales Order shipped successfully.');
+    }
+
+    public function complete(SalesOrder $order)
+    {
+        if ($order->tenant_id !== Auth::user()->tenant_id) {
+            abort(403);
+        }
+
+        $this->salesOrderService->completeOrder($order);
+
+        return back()->with('success', 'Sales Order completed successfully.');
+    }
+
     public function cancel(SalesOrder $order)
     {
         if ($order->tenant_id !== Auth::user()->tenant_id) {

@@ -82,6 +82,7 @@ const statusVariant = (status: string) => {
         case 'received':
             return 'default';
         case 'closed':
+        case 'partially_closed':
             return 'default';
         case 'cancelled':
             return 'destructive';
@@ -209,9 +210,9 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                             </>
                         )}
 
-                        {purchaseOrder.status === 'received' && (
+                        {(purchaseOrder.status === 'received' || purchaseOrder.status === 'partially_received') && (
                             <Button onClick={() => handleAction('close')}>
-                                Close Order
+                                {purchaseOrder.status === 'partially_received' ? 'Close Partially' : 'Close Order'}
                             </Button>
                         )}
                     </div>

@@ -104,6 +104,18 @@ export default function Show({ salesOrder }: Props) {
         }
     };
 
+    const handleShip = () => {
+        if (window.confirm(`Ship order ${salesOrder.number}? This will deduct inventory.`)) {
+            router.post(orders.ship({ order: salesOrder.id }).url);
+        }
+    };
+
+    const handleComplete = () => {
+        if (window.confirm(`Mark order ${salesOrder.number} as complete?`)) {
+            router.post(orders.complete({ order: salesOrder.id }).url);
+        }
+    };
+
     return (
         <>
             <Head title={salesOrder.number} />
@@ -168,12 +180,24 @@ export default function Show({ salesOrder }: Props) {
                             </>
                         )}
                         {salesOrder.status === 'confirmed' && (
-                            <Button
-                                variant="destructive"
-                                onClick={handleCancel}
-                            >
-                                <XCircle className="mr-2 h-4 w-4" />
-                                Cancel Order
+                            <>
+                                <Button onClick={handleShip}>
+                                    <Package className="mr-2 h-4 w-4" />
+                                    Ship Order
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleCancel}
+                                >
+                                    <XCircle className="mr-2 h-4 w-4" />
+                                    Cancel Order
+                                </Button>
+                            </>
+                        )}
+                        {salesOrder.status === 'shipped' && (
+                            <Button onClick={handleComplete}>
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Mark as Complete
                             </Button>
                         )}
                     </div>

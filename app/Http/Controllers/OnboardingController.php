@@ -86,7 +86,7 @@ class OnboardingController extends Controller
             $paymentDetails = $validated;
         }
 
-        return DB::transaction(function () use ($plan, $tenant, $user, $paymentService, $paymentDetails): RedirectResponse {
+        return DB::transaction(function () use ($plan, $tenant, $paymentService, $paymentDetails): RedirectResponse {
             $result = $paymentService->charge($tenant, $plan, $paymentDetails);
 
             $payment = Payment::create([
@@ -121,7 +121,7 @@ class OnboardingController extends Controller
 
             $payment->update(['subscription_id' => Subscription::where('tenant_id', $tenant->id)->latest()->value('id')]);
 
-            $user->update(['onboarding_completed_at' => now()]);
+            $tenant->update(['onboarding_completed_at' => now()]);
 
             session()->forget('onboarding_plan_id');
 

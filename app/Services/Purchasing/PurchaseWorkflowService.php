@@ -85,14 +85,18 @@ class PurchaseWorkflowService
     public function close(PurchaseOrder $purchaseOrder): PurchaseOrder
     {
         return DB::transaction(function () use ($purchaseOrder) {
-            if ($purchaseOrder->status !== PurchaseStatus::Received) {
+            if (! in_array($purchaseOrder->status, [PurchaseStatus::Received, PurchaseStatus::PartiallyReceived])) {
                 throw ValidationException::withMessages([
-                    'status' => 'Only fully received purchase orders can be closed.',
+                    'status' => 'Only received or partially received purchase orders can be closed.',
                 ]);
             }
 
+            $newStatus = $purchaseOrder->status === PurchaseStatus::PartiallyReceived 
+                ? PurchaseStatus::PartiallyClosed 
+                : PurchaseStatus::Closed;
+
             $purchaseOrder->update([
-                'status' => PurchaseStatus::Closed,
+                'status' => $newStatus,
             ]);
 
             return $purchaseOrder;

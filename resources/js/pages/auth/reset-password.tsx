@@ -51,7 +51,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                                 className="mt-1 block w-full"
                                 autoFocus
                                 placeholder="Password"
-                                passwordrules={passwordRules}
+                                showStrength
                             />
                             <InputError message={errors.password} />
                         </div>

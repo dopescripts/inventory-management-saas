@@ -10,7 +10,10 @@ class ClosePurchaseRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->user()->can('close_purchases')
-            && $this->route('purchase_order')->status === PurchaseStatus::Received;
+            && in_array($this->route('purchase_order')->status, [
+                PurchaseStatus::Received,
+                PurchaseStatus::PartiallyReceived,
+            ]);
     }
 
     public function rules(): array

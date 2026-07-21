@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
 import warehouses from '@/routes/warehouses';
+import transfers_routes from '@/routes/transfers';
 
 interface Location {
     id: number;
@@ -52,6 +53,28 @@ interface Warehouse {
     phone: string;
     email: string;
 }
+
+interface WarehouseTransfer {
+    id: number;
+    transfer_number: string;
+    status: string;
+    source_warehouse_id: number;
+    destination_warehouse_id: number;
+    source_warehouse: { id: number; name: string; code: string } | null;
+    destination_warehouse: { id: number; name: string; code: string } | null;
+    requested_by: { id: number; name: string } | null;
+    items_count: number;
+    requested_at: string | null;
+}
+
+const transferStatusLabels: Record<string, string> = {
+    draft: 'Draft',
+    pending_approval: 'Pending Approval',
+    approved: 'Approved',
+    processing: 'In Transit',
+    complete: 'Received',
+    cancelled: 'Cancelled',
+};
 
 const locationColumns: ColumnDef<Location>[] = [
     {
@@ -157,12 +180,14 @@ const inventoryColumns: ColumnDef<any>[] = [
 
 function Show({
     warehouse,
-    inventory,
-    recentMovements,
+    inventory = [],
+    recentMovements = [],
+    transfers = [],
 }: {
     warehouse: Warehouse;
     inventory: any[];
     recentMovements: any[];
+    transfers: WarehouseTransfer[];
 }) {
     const { url } = usePage();
     const queryParams = new URLSearchParams(url.split('?')[1]);
@@ -237,7 +262,7 @@ function Show({
                     <div className="flex items-center gap-2">
                         <Button variant="outline" asChild>
                             <Link
-                                href={warehouses.edit({
+                                href={warehouses.edit.url({
                                     warehouse: warehouse.id,
                                 })}
                             >
@@ -344,7 +369,7 @@ function Show({
                                 </h2>
                                 <Button asChild>
                                     <Link
-                                        href={warehouses.locations.create({
+                                        href={warehouses.locations.create.url({
                                             warehouse: warehouse.id,
                                         })}
                                     >
@@ -379,9 +404,89 @@ function Show({
                     )}
 
                     {activeTab === 'transfers' && (
-                        <div className="py-10 text-center text-muted-foreground">
-                            <ArrowLeftRight className="mx-auto mb-4 h-12 w-12 opacity-20" />
-                            <p>Transfers functionality coming soon.</p>
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold">Transfers</h2>
+                            <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
+                                {transfers?.length > 0 ? (
+                                    <div className="divide-y">
+                                        {transfers.map((transfer) => {
+                                            const isOutbound =
+                                                transfer.source_warehouse_id ===
+                                                warehouse.id;
+                                            const counterpart = isOutbound
+                                                ? transfer.destination_warehouse
+                                                : transfer.source_warehouse;
+
+                                            return (
+                                                <Link
+                                                    key={transfer.id}
+                                                    href={transfers_routes.show.url(
+                                                        { transfer: transfer.id },
+                                                    )}
+                                                    className="flex items-start justify-between p-4 transition-colors hover:bg-muted/50"
+                                                >
+                                                    <div>
+                                                        <p className="flex items-center gap-2 font-medium">
+                                                            <span className="font-mono text-sm">
+                                                                {
+                                                                    transfer.transfer_number
+                                                                }
+                                                            </span>
+                                                            <Badge
+                                                                variant={
+                                                                    isOutbound
+                                                                        ? 'secondary'
+                                                                        : 'default'
+                                                                }
+                                                                className={
+                                                                    isOutbound
+                                                                        ? ''
+                                                                        : 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                                                                }
+                                                            >
+                                                                {isOutbound
+                                                                    ? 'Outbound'
+                                                                    : 'Inbound'}
+                                                            </Badge>
+                                                        </p>
+                                                        <p className="mt-1 text-sm text-muted-foreground">
+                                                            {isOutbound
+                                                                ? 'To'
+                                                                : 'From'}{' '}
+                                                            {counterpart?.name ||
+                                                                'N/A'}{' '}
+                                                            • {transfer.items_count}{' '}
+                                                            item
+                                                            {transfer.items_count ===
+                                                            1
+                                                                ? ''
+                                                                : 's'}
+                                                            {transfer.requested_at
+                                                                ? ` • ${new Date(
+                                                                      transfer.requested_at,
+                                                                  ).toLocaleDateString()}`
+                                                                : ''}
+                                                        </p>
+                                                    </div>
+                                                    <Badge variant="outline">
+                                                        {transferStatusLabels[
+                                                            transfer.status
+                                                        ] || transfer.status}
+                                                    </Badge>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="py-10 text-center text-muted-foreground">
+                                        <ArrowLeftRight className="mx-auto mb-4 h-12 w-12 opacity-20" />
+                                        <p>
+                                            No transfers involving this
+                                            warehouse yet.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
 
@@ -484,10 +589,10 @@ const ShowLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'Warehouses', href: warehouses.index() },
+                { title: 'Warehouses', href: warehouses.index.url() },
                 {
                     title: warehouse?.name || 'Details',
-                    href: warehouses.show({ warehouse: warehouse?.id }),
+                    href: warehouses.show.url({ warehouse: warehouse?.id }),
                 },
             ]}
         >

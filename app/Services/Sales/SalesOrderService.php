@@ -104,7 +104,61 @@ class SalesOrderService
             throw new InvalidArgumentException('Only draft orders can be confirmed.');
         }
 
-        $order->update(['status' => 'confirmed']);
+        return DB::transaction(function () use ($order) {
+            $order->update(['status' => 'confirmed']);
+
+            foreach ($order->items as $item) {
+                \App\Models\InventoryReservation::create([
+                    'tenant_id' => $order->tenant_id,
+                    'sales_order_id' => $order->id,
+                    'sales_order_item_id' => $item->id,
+                    'item_id' => $item->item_id,
+                    'reserved_quantity' => $item->ordered_quantity,
+                    'status' => 'reserved',
+                ]);
+            }
+
+            return $order;
+        });
+    }
+
+    public function shipOrder(SalesOrder $order, \App\Services\Inventory\InventoryMovementService $inventoryService, ?int $userId = null): SalesOrder
+    {
+        if ($order->status !== 'confirmed') {
+            throw new InvalidArgumentException('Only confirmed orders can be shipped.');
+        }
+
+        return DB::transaction(function () use ($order, $inventoryService, $userId) {
+            $order->update(['status' => 'shipped']);
+
+            foreach ($order->items as $item) {
+                // Deduct stock
+                $inventoryService->adjustStock(
+                    $item->item_id,
+                    $order->warehouse_id,
+                    null, // No specific location selected
+                    \App\Enums\InventoryMovementDirection::Out,
+                    $item->ordered_quantity,
+                    "Sales Order #{$order->number} Shipped",
+                    $userId
+                );
+
+                // Fulfill reservations
+                \App\Models\InventoryReservation::where('sales_order_item_id', $item->id)
+                    ->update(['status' => 'fulfilled']);
+            }
+
+            return $order;
+        });
+    }
+
+    public function completeOrder(SalesOrder $order): SalesOrder
+    {
+        if ($order->status !== 'shipped') {
+            throw new InvalidArgumentException('Only shipped orders can be completed.');
+        }
+
+        $order->update(['status' => 'completed']);
 
         return $order;
     }
@@ -115,9 +169,16 @@ class SalesOrderService
             throw new InvalidArgumentException('Order cannot be cancelled from its current status.');
         }
 
-        $order->update(['status' => 'cancelled']);
+        return DB::transaction(function () use ($order) {
+            $order->update(['status' => 'cancelled']);
 
-        return $order;
+            // Release any reservations if confirmed
+            \App\Models\InventoryReservation::where('sales_order_id', $order->id)
+                ->where('status', 'reserved')
+                ->update(['status' => 'released']);
+
+            return $order;
+        });
     }
 
     private function generateOrderNumber(int $tenantId): string

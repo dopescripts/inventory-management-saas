@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Inventory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\WarehouseRequest;
 use App\Models\InventoryMovement;
+use App\Models\Transfers;
 use App\Models\Warehouse;
 use App\Services\PlanGate;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
@@ -77,26 +77,51 @@ class WarehouseController extends Controller implements HasMiddleware
             ->take(20)
             ->get();
 
+        $transfers = Transfers::query()
+            ->where(function ($query) use ($warehouse) {
+                $query->where('source_warehouse_id', $warehouse->id)
+                    ->orWhere('destination_warehouse_id', $warehouse->id);
+            })
+            ->with([
+                'sourceWarehouse:id,name,code',
+                'destinationWarehouse:id,name,code',
+                'requestedBy:id,name',
+            ])
+            ->withCount('items')
+            ->latest()
+            ->take(20)
+            ->get();
+
         return Inertia::render('inventory/warehouse/show', [
             'warehouse' => $warehouse,
             'inventory' => $inventory,
             'recentMovements' => $recentMovements,
+            'transfers' => $transfers,
         ]);
     }
 
-    public function edit(string $id): void
+    public function edit(Warehouse $warehouse): Response
     {
-        //
+        return Inertia::render('inventory/warehouse/edit', [
+            'warehouse' => $warehouse,
+        ]);
     }
 
-    public function update(Request $request, string $id): void
+    public function update(WarehouseRequest $request, Warehouse $warehouse): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        $warehouse->update($validated);
+
+        return redirect()->route('warehouses.index')->with('success', 'Warehouse updated successfully.');
     }
 
-    public function destroy(string $id): void
+    public function destroy(Warehouse $warehouse): RedirectResponse
     {
-        //
+        $warehouse->delete();
+
+        return redirect()->route('warehouses.index')->with('success', 'Warehouse deleted successfully.');
     }
 
     /**

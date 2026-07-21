@@ -41,10 +41,11 @@ interface DashboardProps {
 export default function Dashboard({
     totalItems = 0,
     totalWarehouses = 0,
-    profitAndLoss = { revenue: 0, expenses: 0, net: 0 },
+    profitAndLoss,
     inventoryTrend = [],
 }: DashboardProps) {
-    const isProfit = profitAndLoss.net >= 0;
+    const safeProfitAndLoss = profitAndLoss || { revenue: 0, expenses: 0, net: 0 };
+    const isProfit = safeProfitAndLoss.net >= 0;
 
     return (
         <>
@@ -125,7 +126,7 @@ export default function Dashboard({
                         <CardContent>
                             <div className="text-3xl font-bold text-green-600 dark:text-green-500">
                                 $
-                                {profitAndLoss.revenue.toLocaleString(
+                                {safeProfitAndLoss.revenue.toLocaleString(
                                     undefined,
                                     {
                                         minimumFractionDigits: 2,
@@ -163,7 +164,7 @@ export default function Dashboard({
                                 className={`text-3xl font-bold ${isProfit ? 'text-emerald-600 dark:text-emerald-500' : 'text-rose-600 dark:text-rose-500'}`}
                             >
                                 $
-                                {Math.abs(profitAndLoss.net).toLocaleString(
+                                {Math.abs(safeProfitAndLoss.net).toLocaleString(
                                     undefined,
                                     {
                                         minimumFractionDigits: 2,
@@ -178,7 +179,7 @@ export default function Dashboard({
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">
                                 Revenue minus $
-                                {profitAndLoss.expenses.toLocaleString()}{' '}
+                                {safeProfitAndLoss.expenses.toLocaleString()}{' '}
                                 expenses
                             </p>
                         </CardContent>
@@ -290,7 +291,7 @@ export default function Dashboard({
                                         </span>
                                         <span className="font-medium text-green-600 dark:text-green-500">
                                             +$
-                                            {profitAndLoss.revenue.toLocaleString(
+                                            {safeProfitAndLoss.revenue.toLocaleString(
                                                 undefined,
                                                 {
                                                     minimumFractionDigits: 2,
@@ -306,7 +307,7 @@ export default function Dashboard({
                                         </span>
                                         <span className="font-medium text-rose-600 dark:text-rose-500">
                                             -$
-                                            {profitAndLoss.expenses.toLocaleString(
+                                            {safeProfitAndLoss.expenses.toLocaleString(
                                                 undefined,
                                                 {
                                                     minimumFractionDigits: 2,
@@ -331,7 +332,7 @@ export default function Dashboard({
                                         >
                                             {isProfit ? '+' : '-'}$
                                             {Math.abs(
-                                                profitAndLoss.net,
+                                                safeProfitAndLoss.net,
                                             ).toLocaleString(undefined, {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2,

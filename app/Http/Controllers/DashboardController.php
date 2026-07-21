@@ -10,17 +10,19 @@ use App\Models\SalesOrder;
 use App\Models\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        $tenantId = tenant()->id;
+        $tenantId = Auth::guard('web')->user()->tenant_id;
 
         $totalItems = Item::where('tenant_id', $tenantId)->where('is_active', true)->count();
         $totalWarehouses = Warehouse::where('tenant_id', $tenantId)->where('is_active', true)->count();
@@ -53,7 +55,7 @@ class DashboardController extends Controller
         while ($runningDate <= $now) {
             $dateString = $runningDate->format('Y-m-d');
             $movementForDate = $movements->firstWhere('date', $dateString);
-            
+
             $trend[] = [
                 'date' => $runningDate->format('M d'),
                 'quantity' => $movementForDate ? (float) $movementForDate->net_quantity : 0,

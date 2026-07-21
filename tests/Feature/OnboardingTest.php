@@ -77,10 +77,8 @@ class OnboardingTest extends TestCase
 
     public function test_user_with_completed_onboarding_can_access_dashboard()
     {
-        $this->user->update([
-            'email_verified_at' => now(),
-            'onboarding_completed_at' => now(),
-        ]);
+        $this->user->update(['email_verified_at' => now()]);
+        $this->tenant->update(['onboarding_completed_at' => now()]);
 
         Subscription::create([
             'tenant_id' => $this->tenant->id,
@@ -91,6 +89,33 @@ class OnboardingTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)->get(route('dashboard'));
+
+        $response->assertOk();
+    }
+
+    public function test_staff_inherit_tenant_onboarding_completion()
+    {
+        $this->tenant->update(['onboarding_completed_at' => now()]);
+
+        Subscription::create([
+            'tenant_id' => $this->tenant->id,
+            'plan_id' => Plan::where('name', 'Free Trial')->first()->id,
+            'starts_at' => now()->toDateString(),
+            'expires_at' => now()->addDays(14)->toDateString(),
+            'status' => 'trial',
+        ]);
+
+        $staff = User::create([
+            'name' => 'Staff Member',
+            'email' => 'staff@example.com',
+            'password' => 'password',
+            'tenant_id' => $this->tenant->id,
+            'email_verified_at' => now(),
+        ]);
+        setPermissionsTeamId($this->tenant->id);
+        $staff->assignRole('staff');
+
+        $response = $this->actingAs($staff)->get(route('dashboard'));
 
         $response->assertOk();
     }
@@ -118,7 +143,7 @@ class OnboardingTest extends TestCase
     public function test_plan_can_be_selected()
     {
         $this->user->update(['email_verified_at' => now()]);
-        $plan = Plan::where('name', 'Starter')->first();
+        $plan = Plan::where('name', 'Starter Plan')->first();
 
         $response = $this->actingAs($this->user)->post(route('onboarding.plan'), [
             'plan_id' => $plan->id,
@@ -139,8 +164,8 @@ class OnboardingTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
 
-        $this->user->refresh();
-        $this->assertNotNull($this->user->onboarding_completed_at);
+        $this->tenant->refresh();
+        $this->assertNotNull($this->tenant->onboarding_completed_at);
         $this->assertDatabaseHas('payments', [
             'tenant_id' => $this->tenant->id,
             'status' => 'completed',
@@ -150,7 +175,7 @@ class OnboardingTest extends TestCase
     public function test_payment_completes_onboarding_for_paid_plan()
     {
         $this->user->update(['email_verified_at' => now()]);
-        $plan = Plan::where('name', 'Starter')->first();
+        $plan = Plan::where('name', 'Starter Plan')->first();
 
         $response = $this->actingAs($this->user)
             ->withSession(['onboarding_plan_id' => $plan->id])
@@ -163,8 +188,8 @@ class OnboardingTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
 
-        $this->user->refresh();
-        $this->assertNotNull($this->user->onboarding_completed_at);
+        $this->tenant->refresh();
+        $this->assertNotNull($this->tenant->onboarding_completed_at);
         $this->assertDatabaseHas('payments', [
             'tenant_id' => $this->tenant->id,
             'amount' => $plan->price,

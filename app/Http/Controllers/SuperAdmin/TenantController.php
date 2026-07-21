@@ -65,6 +65,7 @@ class TenantController extends Controller
                 'billing_email' => $request->validated('billing_email'),
                 'billing_phone' => $request->validated('billing_phone'),
                 'billing_address' => $request->validated('billing_address'),
+                'onboarding_completed_at' => now(),
             ]);
 
             $user = User::create([
@@ -72,7 +73,6 @@ class TenantController extends Controller
                 'email' => $request->validated('owner_email'),
                 'password' => Hash::make($request->validated('owner_password')),
                 'tenant_id' => $tenant->id,
-                'onboarding_completed_at' => now(),
             ]);
 
             if ($request->validated('plan_id')) {

@@ -12,8 +12,11 @@ class EnsureOnboardingCompleted
     {
         $user = $request->user();
 
-        if ($user && $user->onboarding_completed_at === null) {
-            return redirect()->route('onboarding.show');
+        if ($user && $user->tenant && $user->tenant->onboarding_completed_at === null) {
+            if ($user->hasRole('owner')) {
+                return redirect()->route('onboarding.show');
+            }
+            abort(403, 'Your organization has not completed onboarding yet. Please wait for the owner to complete the setup.');
         }
 
         return $next($request);

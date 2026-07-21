@@ -106,7 +106,7 @@ export function getColumns(auth: any): ColumnDef<any>[] {
             cell: ({ row }) => {
                 return (
                     <Link
-                        href={warehouses.show({ warehouse: row.original.id })}
+                        href={warehouses.show.url({ warehouse: row.original.id })}
                     >
                         <Button variant="link">
                             {row.original.locations_count}
@@ -153,7 +153,7 @@ export function getColumns(auth: any): ColumnDef<any>[] {
                                 className="cursor-pointer"
                             >
                                 <Link
-                                    href={warehouses.show({
+                                    href={warehouses.show.url({
                                         warehouse: warehouse.id,
                                     })}
                                 >
@@ -167,7 +167,7 @@ export function getColumns(auth: any): ColumnDef<any>[] {
                                     className="cursor-pointer"
                                 >
                                     <Link
-                                        href={warehouses.edit({
+                                        href={warehouses.edit.url({
                                             warehouse: warehouse.id,
                                         })}
                                     >

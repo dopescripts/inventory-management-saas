@@ -24,7 +24,7 @@ function Index({ warehousesData }: { warehousesData: PaginatedWarehouses }) {
                     {(auth?.user?.permissions?.includes('create_warehouses') ||
                         auth?.user?.roles?.includes('manager')) && (
                         <Button asChild>
-                            <Link href={warehouses.create()}>
+                            <Link href={warehouses.create.url()}>
                                 Create Warehouse
                             </Link>
                         </Button>
@@ -44,7 +44,7 @@ Index.layout = {
         },
         {
             title: 'Warehouses',
-            href: warehouses.index(),
+            href: warehouses.index.url(),
         },
     ],
 };
