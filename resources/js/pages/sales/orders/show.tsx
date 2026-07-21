@@ -105,7 +105,11 @@ export default function Show({ salesOrder }: Props) {
     };
 
     const handleShip = () => {
-        if (window.confirm(`Ship order ${salesOrder.number}? This will deduct inventory.`)) {
+        if (
+            window.confirm(
+                `Ship order ${salesOrder.number}? This will deduct inventory.`,
+            )
+        ) {
             router.post(orders.ship({ order: salesOrder.id }).url);
         }
     };

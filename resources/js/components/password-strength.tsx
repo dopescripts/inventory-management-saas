@@ -50,7 +50,7 @@ export function PasswordStrength({
                             'flex items-center gap-2 transition-colors',
                             rule.met
                                 ? 'text-green-600 dark:text-green-500'
-                                : 'text-muted-foreground'
+                                : 'text-muted-foreground',
                         )}
                     >
                         {rule.met ? (

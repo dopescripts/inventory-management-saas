@@ -106,7 +106,9 @@ export function getColumns(auth: any): ColumnDef<any>[] {
             cell: ({ row }) => {
                 return (
                     <Link
-                        href={warehouses.show.url({ warehouse: row.original.id })}
+                        href={warehouses.show.url({
+                            warehouse: row.original.id,
+                        })}
                     >
                         <Button variant="link">
                             {row.original.locations_count}

@@ -44,7 +44,11 @@ export default function Dashboard({
     profitAndLoss,
     inventoryTrend = [],
 }: DashboardProps) {
-    const safeProfitAndLoss = profitAndLoss || { revenue: 0, expenses: 0, net: 0 };
+    const safeProfitAndLoss = profitAndLoss || {
+        revenue: 0,
+        expenses: 0,
+        net: 0,
+    };
     const isProfit = safeProfitAndLoss.net >= 0;
 
     return (

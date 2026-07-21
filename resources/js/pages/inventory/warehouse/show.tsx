@@ -23,8 +23,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
-import warehouses from '@/routes/warehouses';
 import transfers_routes from '@/routes/transfers';
+import warehouses from '@/routes/warehouses';
 
 interface Location {
     id: number;
@@ -421,7 +421,10 @@ function Show({
                                                 <Link
                                                     key={transfer.id}
                                                     href={transfers_routes.show.url(
-                                                        { transfer: transfer.id },
+                                                        {
+                                                            transfer:
+                                                                transfer.id,
+                                                        },
                                                     )}
                                                     className="flex items-start justify-between p-4 transition-colors hover:bg-muted/50"
                                                 >
@@ -455,7 +458,10 @@ function Show({
                                                                 : 'From'}{' '}
                                                             {counterpart?.name ||
                                                                 'N/A'}{' '}
-                                                            • {transfer.items_count}{' '}
+                                                            •{' '}
+                                                            {
+                                                                transfer.items_count
+                                                            }{' '}
                                                             item
                                                             {transfer.items_count ===
                                                             1

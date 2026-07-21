@@ -57,10 +57,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 <button
                                     key={item}
                                     onClick={() => setActiveNav(item)}
-                                    className={`text-sm transition-colors ${activeNav === item
-                                        ? 'font-semibold text-primary'
-                                        : 'text-muted-foreground hover:text-foreground'
-                                        }`}
+                                    className={`text-sm transition-colors ${
+                                        activeNav === item
+                                            ? 'font-semibold text-primary'
+                                            : 'text-muted-foreground hover:text-foreground'
+                                    }`}
                                 >
                                     {item}
                                 </button>
@@ -165,7 +166,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                             className="relative"
                         >
                             <div className="relative overflow-hidden rounded-xl shadow-2xl">
-                                <img src="/hero-illustration.svg" alt="Package" className="h-auto object-cover w-full text-accent/60" />
+                                <img
+                                    src="/hero-illustration.svg"
+                                    alt="Package"
+                                    className="h-auto w-full object-cover text-accent/60"
+                                />
                             </div>
                         </motion.div>
                     </div>
@@ -638,10 +643,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className={`relative rounded-xl border p-8 transition-all ${index === 1
-                                    ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
-                                    : 'border-border bg-card'
-                                    }`}
+                                className={`relative rounded-xl border p-8 transition-all ${
+                                    index === 1
+                                        ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
+                                        : 'border-border bg-card'
+                                }`}
                             >
                                 {index === 1 && (
                                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-semibold text-primary-foreground">
@@ -665,10 +671,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                     </span>
                                 </div>
                                 <button
-                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${index === 1
-                                        ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
-                                        : 'border border-border hover:bg-muted'
-                                        }`}
+                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${
+                                        index === 1
+                                            ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
+                                            : 'border border-border hover:bg-muted'
+                                    }`}
                                 >
                                     Get Started
                                 </button>

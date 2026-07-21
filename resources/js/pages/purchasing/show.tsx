@@ -210,9 +210,12 @@ export default function Show({ purchaseOrder, warehouses }: Props) {
                             </>
                         )}
 
-                        {(purchaseOrder.status === 'received' || purchaseOrder.status === 'partially_received') && (
+                        {(purchaseOrder.status === 'received' ||
+                            purchaseOrder.status === 'partially_received') && (
                             <Button onClick={() => handleAction('close')}>
-                                {purchaseOrder.status === 'partially_received' ? 'Close Partially' : 'Close Order'}
+                                {purchaseOrder.status === 'partially_received'
+                                    ? 'Close Partially'
+                                    : 'Close Order'}
                             </Button>
                         )}
                     </div>

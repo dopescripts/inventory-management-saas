@@ -15,7 +15,9 @@ export default function PasswordInput({
     showStrength?: boolean;
 }) {
     const [showPassword, setShowPassword] = useState(false);
-    const [internalValue, setInternalValue] = useState(props.defaultValue || '');
+    const [internalValue, setInternalValue] = useState(
+        props.defaultValue || '',
+    );
 
     return (
         <div className={cn('w-full', className)}>
@@ -34,7 +36,9 @@ export default function PasswordInput({
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:outline-none"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={
+                        showPassword ? 'Hide password' : 'Show password'
+                    }
                     tabIndex={-1}
                 >
                     {showPassword ? (
@@ -45,7 +49,9 @@ export default function PasswordInput({
                 </button>
             </div>
             {showStrength && (
-                <PasswordStrength password={(props.value as string) ?? internalValue} />
+                <PasswordStrength
+                    password={(props.value as string) ?? internalValue}
+                />
             )}
         </div>
     );
