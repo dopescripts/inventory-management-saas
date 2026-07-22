@@ -30,3 +30,4 @@ yarn-error.log
 /.zed
 litellm_config.yaml
 .htaccess
+public/storage/*
