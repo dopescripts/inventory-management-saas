@@ -34,8 +34,7 @@ export function useCurrency() {
             return `${symbol} ${Number(amount).toLocaleString(undefined, {
                 minimumFractionDigits: decimals,
                 maximumFractionDigits: decimals,
-            })
-                } `;
+            })} `;
         },
     };
 }

@@ -68,8 +68,8 @@ class SendDailyNotifications extends Command
             ->get();
 
         foreach ($bills as $bill) {
-            $amountDue = (float)$bill->total - (float)$bill->paid_amount;
-            
+            $amountDue = (float) $bill->total - (float) $bill->paid_amount;
+
             if ($amountDue <= 0) {
                 continue;
             }

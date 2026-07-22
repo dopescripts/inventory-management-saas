@@ -684,17 +684,26 @@ export default function ItemForm({
 
                     {data.track_inventory && (
                         <Field>
-                            <FieldLabel htmlFor="low_stock_threshold">Low Stock</FieldLabel>
+                            <FieldLabel htmlFor="low_stock_threshold">
+                                Low Stock
+                            </FieldLabel>
                             <Input
                                 id="low_stock_threshold"
                                 type="number"
                                 min="0"
                                 value={data.low_stock_threshold}
                                 onChange={(event) =>
-                                    setData('low_stock_threshold', event.target.value)
+                                    setData(
+                                        'low_stock_threshold',
+                                        event.target.value,
+                                    )
                                 }
                             />
-                            <FieldError errors={[{ message: errors.low_stock_threshold }]} />
+                            <FieldError
+                                errors={[
+                                    { message: errors.low_stock_threshold },
+                                ]}
+                            />
                         </Field>
                     )}
                 </div>

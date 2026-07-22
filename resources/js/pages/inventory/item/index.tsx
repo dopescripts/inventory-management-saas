@@ -69,7 +69,11 @@ export default function Index({
                                         {item.brand?.name ?? 'None'}
                                     </td>
                                     <td className="px-6 py-4 text-right font-medium">
-                                        {item.track_inventory ? Number(item.total_stock ?? 0).toLocaleString() : 'N/A'}
+                                        {item.track_inventory
+                                            ? Number(
+                                                  item.total_stock ?? 0,
+                                              ).toLocaleString()
+                                            : 'N/A'}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.unit
@@ -110,9 +114,11 @@ export default function Index({
                                                 asChild
                                             >
                                                 <Link
-                                                    href={items.show({
-                                                        item: item.id,
-                                                    }).url}
+                                                    href={
+                                                        items.show({
+                                                            item: item.id,
+                                                        }).url
+                                                    }
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>

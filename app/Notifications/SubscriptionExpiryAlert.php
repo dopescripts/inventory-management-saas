@@ -35,8 +35,8 @@ class SubscriptionExpiryAlert extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $message = $this->isPastDue 
-            ? "Your subscription is past due. Please renew immediately to avoid service interruption."
+        $message = $this->isPastDue
+            ? 'Your subscription is past due. Please renew immediately to avoid service interruption.'
             : "Your subscription expires in {$this->daysUntilExpiry} days. Please renew soon.";
 
         return [

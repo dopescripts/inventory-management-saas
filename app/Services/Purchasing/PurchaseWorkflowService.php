@@ -17,8 +17,7 @@ class PurchaseWorkflowService
     public function __construct(
         public InventoryMovementService $inventoryMovementService,
         public BillService $billService,
-    ) {
-    }
+    ) {}
 
     public function submit(PurchaseOrder $purchaseOrder): PurchaseOrder
     {
@@ -89,7 +88,7 @@ class PurchaseWorkflowService
     public function close(PurchaseOrder $purchaseOrder): PurchaseOrder
     {
         return DB::transaction(function () use ($purchaseOrder) {
-            if (!in_array($purchaseOrder->status, [PurchaseStatus::Received, PurchaseStatus::PartiallyReceived])) {
+            if (! in_array($purchaseOrder->status, [PurchaseStatus::Received, PurchaseStatus::PartiallyReceived])) {
                 throw ValidationException::withMessages([
                     'status' => 'Only received or partially received purchase orders can be closed.',
                 ]);
@@ -109,15 +108,12 @@ class PurchaseWorkflowService
 
     /**
      * Summary of receive
-     * @param PurchaseOrder $purchaseOrder
-     * @param array $data
-     * @return PurchaseOrder
      */
     public function receive(PurchaseOrder $purchaseOrder, array $data): PurchaseOrder
     {
 
         return DB::transaction(function () use ($purchaseOrder, $data) {
-            if (!in_array($purchaseOrder->status, [PurchaseStatus::Approved, PurchaseStatus::PartiallyReceived])) {
+            if (! in_array($purchaseOrder->status, [PurchaseStatus::Approved, PurchaseStatus::PartiallyReceived])) {
                 throw ValidationException::withMessages([
                     'status' => 'Only approved or partially received purchase orders can receive goods.',
                 ]);

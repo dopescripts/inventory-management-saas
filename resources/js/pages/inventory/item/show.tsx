@@ -70,7 +70,7 @@ export default function Show({
     return (
         <>
             <Head title={`Item: ${item.name}`} />
-            
+
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -81,9 +81,11 @@ export default function Show({
                         </Button>
                         <div>
                             <h1 className="text-2xl font-bold">{item.name}</h1>
-                            <p className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                            <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                                 SKU: {item.sku}
-                                {item.barcode && <>&bull; Barcode: {item.barcode}</>}
+                                {item.barcode && (
+                                    <>&bull; Barcode: {item.barcode}</>
+                                )}
                             </p>
                         </div>
                     </div>
@@ -99,15 +101,29 @@ export default function Show({
                 <div className="grid gap-6 md:grid-cols-3">
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Status</CardTitle>
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Status
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="flex gap-2">
-                                <Badge variant={item.is_active ? 'default' : 'secondary'}>
+                                <Badge
+                                    variant={
+                                        item.is_active ? 'default' : 'secondary'
+                                    }
+                                >
                                     {item.is_active ? 'Active' : 'Inactive'}
                                 </Badge>
-                                <Badge variant={item.track_inventory ? 'outline' : 'secondary'}>
-                                    {item.track_inventory ? 'Tracked' : 'Service'}
+                                <Badge
+                                    variant={
+                                        item.track_inventory
+                                            ? 'outline'
+                                            : 'secondary'
+                                    }
+                                >
+                                    {item.track_inventory
+                                        ? 'Tracked'
+                                        : 'Service'}
                                 </Badge>
                             </div>
                         </CardContent>
@@ -115,7 +131,9 @@ export default function Show({
 
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Category & Brand</CardTitle>
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Category & Brand
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-lg font-medium">
@@ -129,12 +147,16 @@ export default function Show({
 
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Total Stock</CardTitle>
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Total Stock
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {item.track_inventory ? Number(totalStock).toLocaleString() : 'N/A'}
-                                <span className="text-sm font-normal text-muted-foreground ml-1">
+                                {item.track_inventory
+                                    ? Number(totalStock).toLocaleString()
+                                    : 'N/A'}
+                                <span className="ml-1 text-sm font-normal text-muted-foreground">
                                     {item.unit?.short_name}
                                 </span>
                             </div>
@@ -152,28 +174,55 @@ export default function Show({
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="flex-1">
-                                {stockByLocation.length === 0 && stockByWarehouse.length === 0 ? (
-                                    <div className="flex h-full items-center justify-center text-sm text-muted-foreground p-8 border-2 border-dashed rounded-lg">
+                                {stockByLocation.length === 0 &&
+                                stockByWarehouse.length === 0 ? (
+                                    <div className="flex h-full items-center justify-center rounded-lg border-2 border-dashed p-8 text-sm text-muted-foreground">
                                         No stock found in any location.
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
                                         {stockByWarehouse.map((sw) => (
-                                            <div key={`w-${sw.warehouse_id}`} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                            <div
+                                                key={`w-${sw.warehouse_id}`}
+                                                className="flex items-center justify-between border-b pb-4 last:border-0"
+                                            >
                                                 <div>
-                                                    <div className="font-medium">{sw.warehouse?.name}</div>
-                                                    <div className="text-sm text-muted-foreground">Warehouse default</div>
+                                                    <div className="font-medium">
+                                                        {sw.warehouse?.name}
+                                                    </div>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        Warehouse default
+                                                    </div>
                                                 </div>
-                                                <div className="font-semibold text-lg">{Number(sw.total).toLocaleString()}</div>
+                                                <div className="text-lg font-semibold">
+                                                    {Number(
+                                                        sw.total,
+                                                    ).toLocaleString()}
+                                                </div>
                                             </div>
                                         ))}
                                         {stockByLocation.map((sl) => (
-                                            <div key={`l-${sl.location_id}`} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                            <div
+                                                key={`l-${sl.location_id}`}
+                                                className="flex items-center justify-between border-b pb-4 last:border-0"
+                                            >
                                                 <div>
-                                                    <div className="font-medium">{sl.location?.name}</div>
-                                                    <div className="text-sm text-muted-foreground">{sl.location?.warehouse?.name}</div>
+                                                    <div className="font-medium">
+                                                        {sl.location?.name}
+                                                    </div>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        {
+                                                            sl.location
+                                                                ?.warehouse
+                                                                ?.name
+                                                        }
+                                                    </div>
                                                 </div>
-                                                <div className="font-semibold text-lg">{Number(sl.total).toLocaleString()}</div>
+                                                <div className="text-lg font-semibold">
+                                                    {Number(
+                                                        sl.total,
+                                                    ).toLocaleString()}
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -190,45 +239,86 @@ export default function Show({
                             </CardHeader>
                             <CardContent className="flex-1 p-0">
                                 {recentMovements.length === 0 ? (
-                                    <div className="flex h-full items-center justify-center text-sm text-muted-foreground p-8 m-6 border-2 border-dashed rounded-lg">
+                                    <div className="m-6 flex h-full items-center justify-center rounded-lg border-2 border-dashed p-8 text-sm text-muted-foreground">
                                         No recent movements.
                                     </div>
                                 ) : (
                                     <div className="divide-y">
                                         {recentMovements.map((movement) => {
-                                            const performedBy = movement.performedBy || movement.performed_by;
+                                            const performedBy =
+                                                movement.performedBy ||
+                                                movement.performed_by;
+
                                             return (
-                                                <div key={movement.id} className="flex items-start justify-between p-4 hover:bg-muted/30">
+                                                <div
+                                                    key={movement.id}
+                                                    className="flex items-start justify-between p-4 hover:bg-muted/30"
+                                                >
                                                     <div className="space-y-1">
                                                         <div className="flex items-center gap-2">
-                                                            <Badge variant={movement.direction === 'in' ? 'default' : 'destructive'} className="uppercase text-[10px]">
-                                                                {movement.direction}
+                                                            <Badge
+                                                                variant={
+                                                                    movement.direction ===
+                                                                    'in'
+                                                                        ? 'default'
+                                                                        : 'destructive'
+                                                                }
+                                                                className="text-[10px] uppercase"
+                                                            >
+                                                                {
+                                                                    movement.direction
+                                                                }
                                                             </Badge>
-                                                            <span className="font-medium text-sm">
-                                                                {movement.reference_type ? (
-                                                                    `${movement.reference_type} #${movement.reference_id}`
-                                                                ) : 'Manual Adjustment'}
+                                                            <span className="text-sm font-medium">
+                                                                {movement.reference_type
+                                                                    ? `${movement.reference_type} #${movement.reference_id}`
+                                                                    : 'Manual Adjustment'}
                                                             </span>
                                                         </div>
                                                         <div className="text-xs text-muted-foreground">
-                                                            {new Date(movement.created_at).toLocaleString()}
-                                                            {performedBy && ` • by ${performedBy.name}`}
+                                                            {new Date(
+                                                                movement.created_at,
+                                                            ).toLocaleString()}
+                                                            {performedBy &&
+                                                                ` • by ${performedBy.name}`}
                                                         </div>
                                                         <div className="text-xs text-muted-foreground">
-                                                            {movement.warehouse?.name} 
-                                                            {movement.location?.name && ` > ${movement.location.name}`}
+                                                            {
+                                                                movement
+                                                                    .warehouse
+                                                                    ?.name
+                                                            }
+                                                            {movement.location
+                                                                ?.name &&
+                                                                ` > ${movement.location.name}`}
                                                         </div>
                                                         {movement.notes && (
-                                                            <div className="text-xs italic text-muted-foreground mt-1">"{movement.notes}"</div>
+                                                            <div className="mt-1 text-xs text-muted-foreground italic">
+                                                                "
+                                                                {movement.notes}
+                                                                "
+                                                            </div>
                                                         )}
                                                     </div>
                                                     <div className="text-right">
-                                                        <div className={`font-semibold ${movement.direction === 'in' ? 'text-green-600' : 'text-red-600'}`}>
-                                                            {movement.direction === 'in' ? '+' : '-'}{Number(movement.quantity).toLocaleString()}
+                                                        <div
+                                                            className={`font-semibold ${movement.direction === 'in' ? 'text-green-600' : 'text-red-600'}`}
+                                                        >
+                                                            {movement.direction ===
+                                                            'in'
+                                                                ? '+'
+                                                                : '-'}
+                                                            {Number(
+                                                                movement.quantity,
+                                                            ).toLocaleString()}
                                                         </div>
-                                                        {movement.balance_after !== null && (
-                                                            <div className="text-xs text-muted-foreground mt-1">
-                                                                Bal: {Number(movement.balance_after).toLocaleString()}
+                                                        {movement.balance_after !==
+                                                            null && (
+                                                            <div className="mt-1 text-xs text-muted-foreground">
+                                                                Bal:{' '}
+                                                                {Number(
+                                                                    movement.balance_after,
+                                                                ).toLocaleString()}
                                                             </div>
                                                         )}
                                                     </div>
@@ -255,6 +345,6 @@ Show.layout = {
         {
             title: 'Item Details',
             href: '#',
-        }
+        },
     ],
 };

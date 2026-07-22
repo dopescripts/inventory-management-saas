@@ -19,6 +19,7 @@ class NotificationController extends Controller
 
         if ($notification) {
             $notification->markAsRead();
+
             return back()->with('success', 'Notification marked as read.');
         }
 

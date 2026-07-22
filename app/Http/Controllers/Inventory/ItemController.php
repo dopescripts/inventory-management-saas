@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Inventory\ItemRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\InventoryMovement;
 use App\Models\Item;
 use App\Models\Unit;
+use App\Services\Inventory\InventoryMovementService;
 use App\Services\PlanGate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -34,8 +36,8 @@ class ItemController extends Controller implements HasMiddleware
             ->with(['category:id,name', 'brand:id,name', 'unit:id,name,short_name'])
             ->addSelect([
                 '*',
-                'total_stock' => \App\Models\InventoryMovement::selectRaw('COALESCE(SUM(CASE WHEN direction = "in" THEN quantity ELSE quantity * -1 END), 0)')
-                    ->whereColumn('item_id', 'items.id')
+                'total_stock' => InventoryMovement::selectRaw('COALESCE(SUM(CASE WHEN direction = "in" THEN quantity ELSE quantity * -1 END), 0)')
+                    ->whereColumn('item_id', 'items.id'),
             ])
             ->latest()
             ->paginate(10);
@@ -75,7 +77,7 @@ class ItemController extends Controller implements HasMiddleware
     {
         $item = Item::with(['category', 'brand', 'unit'])->findOrFail($id);
 
-        $stockByLocation = \App\Models\InventoryMovement::query()
+        $stockByLocation = InventoryMovement::query()
             ->where('item_id', $item->id)
             ->whereNotNull('location_id')
             ->select('location_id')
@@ -83,8 +85,8 @@ class ItemController extends Controller implements HasMiddleware
             ->groupBy('location_id')
             ->with('location.warehouse')
             ->get();
-            
-        $stockByWarehouse = \App\Models\InventoryMovement::query()
+
+        $stockByWarehouse = InventoryMovement::query()
             ->where('item_id', $item->id)
             ->whereNull('location_id')
             ->whereNotNull('warehouse_id')
@@ -94,15 +96,15 @@ class ItemController extends Controller implements HasMiddleware
             ->with('warehouse')
             ->get();
 
-        $recentMovements = \App\Models\InventoryMovement::query()
+        $recentMovements = InventoryMovement::query()
             ->where('item_id', $item->id)
             ->with(['warehouse', 'location', 'performedBy'])
             ->latest()
             ->limit(20)
             ->get();
 
-        $totalStock = $item->track_inventory 
-            ? app(\App\Services\Inventory\InventoryMovementService::class)->itemBalance($item->tenant_id, $item->id) 
+        $totalStock = $item->track_inventory
+            ? app(InventoryMovementService::class)->itemBalance($item->tenant_id, $item->id)
             : 0;
 
         return Inertia::render('inventory/item/show', [
