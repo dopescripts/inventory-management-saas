@@ -24,7 +24,7 @@ class StaffManagementTest extends TestCase
 
     public function test_owner_can_view_staff_list(): void
     {
-        $tenant = Tenant::create(['name' => 'Test Tenant']);
+        $tenant = Tenant::create(['name' => 'Test Tenant', 'onboarding_completed_at' => now()]);
         $owner = User::factory()->create(['tenant_id' => $tenant->id]);
 
         setPermissionsTeamId($tenant->id);
@@ -37,7 +37,7 @@ class StaffManagementTest extends TestCase
 
     public function test_staff_cannot_view_staff_list(): void
     {
-        $tenant = Tenant::create(['name' => 'Test Tenant']);
+        $tenant = Tenant::create(['name' => 'Test Tenant', 'onboarding_completed_at' => now()]);
         $staff = User::factory()->create(['tenant_id' => $tenant->id]);
 
         setPermissionsTeamId($tenant->id);
@@ -52,7 +52,7 @@ class StaffManagementTest extends TestCase
     {
         Mail::fake();
 
-        $tenant = Tenant::create(['name' => 'Test Tenant']);
+        $tenant = Tenant::create(['name' => 'Test Tenant', 'onboarding_completed_at' => now()]);
         $owner = User::factory()->create(['tenant_id' => $tenant->id]);
 
         setPermissionsTeamId($tenant->id);
@@ -82,12 +82,12 @@ class StaffManagementTest extends TestCase
 
     public function test_owner_cannot_modify_staff_from_another_tenant(): void
     {
-        $tenantA = Tenant::create(['name' => 'Tenant A']);
+        $tenantA = Tenant::create(['name' => 'Tenant A', 'onboarding_completed_at' => now()]);
         $ownerA = User::factory()->create(['tenant_id' => $tenantA->id]);
         setPermissionsTeamId($tenantA->id);
         $ownerA->assignRole('owner');
 
-        $tenantB = Tenant::create(['name' => 'Tenant B']);
+        $tenantB = Tenant::create(['name' => 'Tenant B', 'onboarding_completed_at' => now()]);
         $staffB = User::factory()->create(['tenant_id' => $tenantB->id]);
         setPermissionsTeamId($tenantB->id);
         $staffB->assignRole('staff');

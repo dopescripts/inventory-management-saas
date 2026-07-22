@@ -3,6 +3,7 @@
 namespace App\Services\Purchasing;
 
 use App\Enums\InventoryMovementDirection;
+use App\Enums\InventoryMovementReferenceType;
 use App\Enums\PurchaseStatus;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseReceive;
@@ -151,7 +152,9 @@ class PurchaseWorkflowService
                     direction: InventoryMovementDirection::In,
                     quantity: $quantityToReceive,
                     notes: "Received for PO {$purchaseOrder->purchase_number}",
-                    performedBy: Auth::id()
+                    performedBy: Auth::id(),
+                    referenceType: InventoryMovementReferenceType::PurchaseReceive,
+                    referenceId: $receive->id
                 );
             }
 

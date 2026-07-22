@@ -22,6 +22,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { useCurrency } from '@/lib/currency';
 import { dashboard } from '@/routes';
 
 interface DashboardProps {
@@ -44,6 +45,7 @@ export default function Dashboard({
     profitAndLoss,
     inventoryTrend = [],
 }: DashboardProps) {
+    const { format } = useCurrency();
     const safeProfitAndLoss = profitAndLoss || {
         revenue: 0,
         expenses: 0,
@@ -129,14 +131,7 @@ export default function Dashboard({
                         </CardHeader>
                         <CardContent>
                             <div className="text-3xl font-bold text-green-600 dark:text-green-500">
-                                $
-                                {safeProfitAndLoss.revenue.toLocaleString(
-                                    undefined,
-                                    {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    },
-                                )}
+                                {format(safeProfitAndLoss.revenue)}
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">
                                 Total sales orders
@@ -167,14 +162,8 @@ export default function Dashboard({
                             <div
                                 className={`text-3xl font-bold ${isProfit ? 'text-emerald-600 dark:text-emerald-500' : 'text-rose-600 dark:text-rose-500'}`}
                             >
-                                $
-                                {Math.abs(safeProfitAndLoss.net).toLocaleString(
-                                    undefined,
-                                    {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    },
-                                )}
+                                {isProfit ? '' : '-'}
+                                {format(Math.abs(safeProfitAndLoss.net))}
                                 {!isProfit && (
                                     <span className="ml-1 text-lg opacity-70">
                                         (Loss)
@@ -182,9 +171,8 @@ export default function Dashboard({
                                 )}
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">
-                                Revenue minus $
-                                {safeProfitAndLoss.expenses.toLocaleString()}{' '}
-                                expenses
+                                Revenue minus{' '}
+                                {format(safeProfitAndLoss.expenses)} expenses
                             </p>
                         </CardContent>
                     </Card>
@@ -294,14 +282,7 @@ export default function Dashboard({
                                             Gross Revenue
                                         </span>
                                         <span className="font-medium text-green-600 dark:text-green-500">
-                                            +$
-                                            {safeProfitAndLoss.revenue.toLocaleString(
-                                                undefined,
-                                                {
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2,
-                                                },
-                                            )}
+                                            +{format(safeProfitAndLoss.revenue)}
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
@@ -310,14 +291,8 @@ export default function Dashboard({
                                             Total Expenses
                                         </span>
                                         <span className="font-medium text-rose-600 dark:text-rose-500">
-                                            -$
-                                            {safeProfitAndLoss.expenses.toLocaleString(
-                                                undefined,
-                                                {
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2,
-                                                },
-                                            )}
+                                            -
+                                            {format(safeProfitAndLoss.expenses)}
                                         </span>
                                     </div>
 
@@ -334,13 +309,10 @@ export default function Dashboard({
                                                     : 'text-rose-600 dark:text-rose-500'
                                             }
                                         >
-                                            {isProfit ? '+' : '-'}$
-                                            {Math.abs(
-                                                safeProfitAndLoss.net,
-                                            ).toLocaleString(undefined, {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2,
-                                            })}
+                                            {isProfit ? '+' : '-'}
+                                            {format(
+                                                Math.abs(safeProfitAndLoss.net),
+                                            )}
                                         </span>
                                     </div>
                                 </div>

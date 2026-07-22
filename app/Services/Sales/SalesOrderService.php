@@ -3,6 +3,7 @@
 namespace App\Services\Sales;
 
 use App\Enums\InventoryMovementDirection;
+use App\Enums\InventoryMovementReferenceType;
 use App\Models\InventoryReservation;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
@@ -143,7 +144,9 @@ class SalesOrderService
                     InventoryMovementDirection::Out,
                     $item->ordered_quantity,
                     "Sales Order #{$order->number} Shipped",
-                    $userId
+                    $userId,
+                    InventoryMovementReferenceType::Sale,
+                    $order->id
                 );
 
                 // Fulfill reservations

@@ -1,4 +1,3 @@
-import { Auth } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -13,7 +12,8 @@ import {
     Globe,
     TrendingUp,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import type { Auth } from '@/types';
 
 interface Plan {
     id: number;
@@ -27,20 +27,12 @@ interface Plan {
 }
 
 export default function Home({ plans = [] }: { plans: Plan[] }) {
-    const [scrollY, setScrollY] = useState(0);
     const [activeNav, setActiveNav] = useState('home');
     const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
     const { auth } = usePage<{ auth: Auth }>().props;
 
     const pricingPlans = plans;
-
-    useEffect(() => {
-        const handleScroll = () => setScrollY(window.scrollY);
-        window.addEventListener('scroll', handleScroll);
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     return (
         <div className="min-h-screen bg-secondary text-foreground">
@@ -60,10 +52,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 <button
                                     key={item}
                                     onClick={() => setActiveNav(item)}
-                                    className={`text-sm transition-colors ${activeNav === item
-                                        ? 'font-semibold text-primary'
-                                        : 'text-muted-foreground hover:text-foreground'
-                                        }`}
+                                    className={`text-sm transition-colors ${
+                                        activeNav === item
+                                            ? 'font-semibold text-primary'
+                                            : 'text-muted-foreground hover:text-foreground'
+                                    }`}
                                 >
                                     {item}
                                 </button>
@@ -80,22 +73,20 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                     </button>
                                 </Link>
                             </>
-                        )
-                            : (
-                                <>
-                                    <Link href={'/login'}>
-                                        <button className="cursor-pointer px-4 py-2 text-sm font-medium transition-colors hover:text-primary">
-                                            Sign In
-                                        </button>
-                                    </Link>
-                                    <Link href={'/register'}>
-                                        <button className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
-                                            Get Started
-                                        </button>
-                                    </Link>
-                                </>
-                            )
-                        }
+                        ) : (
+                            <>
+                                <Link href={'/login'}>
+                                    <button className="cursor-pointer px-4 py-2 text-sm font-medium transition-colors hover:text-primary">
+                                        Sign In
+                                    </button>
+                                </Link>
+                                <Link href={'/register'}>
+                                    <button className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
+                                        Get Started
+                                    </button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -659,10 +650,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className={`relative rounded-xl border p-8 transition-all ${index === 1
-                                    ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
-                                    : 'border-border bg-card'
-                                    }`}
+                                className={`relative rounded-xl border p-8 transition-all ${
+                                    index === 1
+                                        ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
+                                        : 'border-border bg-card'
+                                }`}
                             >
                                 {index === 1 && (
                                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-semibold text-primary-foreground">
@@ -686,10 +678,11 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                     </span>
                                 </div>
                                 <button
-                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${index === 1
-                                        ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
-                                        : 'border border-border hover:bg-muted'
-                                        }`}
+                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${
+                                        index === 1
+                                            ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
+                                            : 'border border-border hover:bg-muted'
+                                    }`}
                                 >
                                     Get Started
                                 </button>

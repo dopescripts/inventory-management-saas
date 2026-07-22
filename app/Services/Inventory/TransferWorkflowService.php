@@ -3,6 +3,7 @@
 namespace App\Services\Inventory;
 
 use App\Enums\InventoryMovementDirection;
+use App\Enums\InventoryMovementReferenceType;
 use App\Enums\TransferStatus;
 use App\Models\Transfers;
 use Illuminate\Support\Facades\Auth;
@@ -107,7 +108,9 @@ class TransferWorkflowService
                     direction: InventoryMovementDirection::Out,
                     quantity: $quantityToShip,
                     notes: "Shipped for transfer {$transfer->transfer_number}",
-                    performedBy: Auth::id()
+                    performedBy: Auth::id(),
+                    referenceType: InventoryMovementReferenceType::TransferOut,
+                    referenceId: $transfer->id
                 );
 
                 $transferItem->quantity_shipped = ($transferItem->quantity_shipped ?? 0) + $quantityToShip;
@@ -143,7 +146,9 @@ class TransferWorkflowService
                     direction: InventoryMovementDirection::In,
                     quantity: $quantityToReceive,
                     notes: "Received for transfer {$transfer->transfer_number}",
-                    performedBy: Auth::id()
+                    performedBy: Auth::id(),
+                    referenceType: InventoryMovementReferenceType::TransferIn,
+                    referenceId: $transfer->id
                 );
 
                 $transferItem->quantity_received = ($transferItem->quantity_received ?? 0) + $quantityToReceive;

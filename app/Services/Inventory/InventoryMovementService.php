@@ -25,6 +25,8 @@ class InventoryMovementService
         string|float|int $quantity,
         ?string $notes = null,
         ?int $performedBy = null,
+        InventoryMovementReferenceType $referenceType = InventoryMovementReferenceType::Adjustment,
+        ?int $referenceId = null,
     ): InventoryMovement {
         $tenantId = Auth::guard('web')->user()->tenant_id;
         $currentBalance = $this->itemBalance($tenantId, $itemId, $warehouseId, $locationId);
@@ -41,7 +43,8 @@ class InventoryMovementService
             'item_id' => $itemId,
             'warehouse_id' => $warehouseId,
             'location_id' => $locationId,
-            'reference_type' => InventoryMovementReferenceType::Adjustment,
+            'reference_type' => $referenceType,
+            'reference_id' => $referenceId,
             'direction' => $direction,
             'quantity' => $quantity,
             'balance_after' => $balanceAfter,

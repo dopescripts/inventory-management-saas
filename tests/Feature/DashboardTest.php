@@ -23,7 +23,7 @@ class DashboardTest extends TestCase
 
     public function test_authenticated_users_can_visit_the_dashboard()
     {
-        $tenant = Tenant::create(['name' => 'Acme Inventory']);
+        $tenant = Tenant::create(['name' => 'Acme Inventory', 'onboarding_completed_at' => now()]);
         $user = User::factory()->create(['tenant_id' => $tenant->id]);
         $plan = Plan::create([
             'name' => 'Free Trial',

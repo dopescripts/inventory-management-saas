@@ -1,11 +1,18 @@
 import { Head } from '@inertiajs/react';
 import { Download } from 'lucide-react';
 import React from 'react';
+import { InertiaPagination as Pagination } from '@/components/inertia-pagination';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { InertiaPagination as Pagination } from '@/components/inertia-pagination';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { useCurrency } from '@/lib/currency';
 import * as reports from '@/routes/reports';
 
@@ -37,12 +44,14 @@ export default function SalesReport({ orders }: Props) {
     return (
         <>
             <Head title="Sales Report" />
-            
+
             <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Sales Report</h1>
-                        <p className="text-muted-foreground mt-2">
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            Sales Report
+                        </h1>
+                        <p className="mt-2 text-muted-foreground">
                             Review historical sales orders and revenue.
                         </p>
                     </div>
@@ -65,26 +74,54 @@ export default function SalesReport({ orders }: Props) {
                                         <TableHead>Customer</TableHead>
                                         <TableHead>Date</TableHead>
                                         <TableHead>Status</TableHead>
-                                        <TableHead className="text-right">Total</TableHead>
+                                        <TableHead className="text-right">
+                                            Total
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {orders.data.map((order) => (
                                         <TableRow key={order.id}>
-                                            <TableCell className="font-medium">{order.number}</TableCell>
-                                            <TableCell>{order.customer?.name || 'N/A'}</TableCell>
-                                            <TableCell>{order.order_date ? new Date(order.order_date).toLocaleDateString() : 'N/A'}</TableCell>
+                                            <TableCell className="font-medium">
+                                                {order.number}
+                                            </TableCell>
                                             <TableCell>
-                                                <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
-                                                    {order.status.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                                                {order.customer?.name || 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {order.order_date
+                                                    ? new Date(
+                                                          order.order_date,
+                                                      ).toLocaleDateString()
+                                                    : 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    variant={
+                                                        order.status ===
+                                                        'completed'
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    }
+                                                >
+                                                    {order.status
+                                                        .replace('_', ' ')
+                                                        .replace(/\b\w/g, (c) =>
+                                                            c.toUpperCase(),
+                                                        )}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-right font-medium text-green-600">{format(order.total)}</TableCell>
+                                            <TableCell className="text-right font-medium text-green-600">
+                                                {format(order.total)}
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                     {orders.data.length === 0 && (
                                         <TableRow>
-                                            <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
+                                            <TableCell
+                                                colSpan={5}
+                                                className="py-6 text-center text-muted-foreground"
+                                            >
                                                 No sales orders found.
                                             </TableCell>
                                         </TableRow>
@@ -93,7 +130,10 @@ export default function SalesReport({ orders }: Props) {
                             </Table>
                         </div>
                         <div className="mt-4">
-                            <Pagination links={orders.links} meta={orders.meta} />
+                            <Pagination
+                                links={orders.links}
+                                meta={orders.meta}
+                            />
                         </div>
                     </CardContent>
                 </Card>

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\BillStatus;
 use App\Models\InventoryMovement;
 use App\Models\Item;
-use App\Models\PurchaseBill;
+use App\Models\PurchaseOrder;
 use App\Models\SalesOrder;
 use App\Models\Warehouse;
 use Carbon\Carbon;
@@ -31,8 +30,8 @@ class DashboardController extends Controller
             ->whereNotIn('status', ['cancelled', 'draft'])
             ->sum('total');
 
-        $expenses = PurchaseBill::where('tenant_id', $tenantId)
-            ->whereNotIn('status', [BillStatus::Cancelled, BillStatus::Draft])
+        $expenses = PurchaseOrder::where('tenant_id', $tenantId)
+            ->whereNotIn('status', ['cancelled', 'draft'])
             ->sum('total');
 
         // Inventory trend over the last 30 days

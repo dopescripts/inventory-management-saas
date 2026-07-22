@@ -5,6 +5,7 @@ export function formatCurrency(
     amount: number | string,
     currency?: Currency | null,
 ): string {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const page = usePage<{
         auth: { tenant: { currency: Currency | null } | null };
     }>();
@@ -30,10 +31,11 @@ export function useCurrency() {
             const decimals = currency?.decimal_places ?? 2;
             const symbol = currency?.symbol ?? '$';
 
-            return `${symbol}${Number(amount).toLocaleString(undefined, {
+            return `${symbol} ${Number(amount).toLocaleString(undefined, {
                 minimumFractionDigits: decimals,
                 maximumFractionDigits: decimals,
-            })}`;
+            })
+                } `;
         },
     };
 }
