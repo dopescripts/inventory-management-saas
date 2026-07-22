@@ -8,6 +8,8 @@ export type User = {
     updated_at: string;
     roles: string[];
     permissions: string[];
+    unread_notifications_count: number;
+    recent_notifications: any[];
     [key: string]: unknown;
 };
 

@@ -32,6 +32,11 @@ class ItemController extends Controller implements HasMiddleware
     {
         $items = Item::query()
             ->with(['category:id,name', 'brand:id,name', 'unit:id,name,short_name'])
+            ->addSelect([
+                '*',
+                'total_stock' => \App\Models\InventoryMovement::selectRaw('COALESCE(SUM(CASE WHEN direction = "in" THEN quantity ELSE quantity * -1 END), 0)')
+                    ->whereColumn('item_id', 'items.id')
+            ])
             ->latest()
             ->paginate(10);
 
@@ -51,7 +56,6 @@ class ItemController extends Controller implements HasMiddleware
 
     public function store(ItemRequest $request, PlanGate $gate): RedirectResponse
     {
-
         if ($gate->canCreateProduct(Auth::guard('web')->user()->tenant)) {
             Item::create([
                 ...$request->validated(),
@@ -67,9 +71,47 @@ class ItemController extends Controller implements HasMiddleware
         return redirect()->route('items.index')->with('error', 'You have reached the maximum number of items allowed in your current plan');
     }
 
-    public function show(string $id): never
+    public function show(string $id): Response
     {
-        abort(404);
+        $item = Item::with(['category', 'brand', 'unit'])->findOrFail($id);
+
+        $stockByLocation = \App\Models\InventoryMovement::query()
+            ->where('item_id', $item->id)
+            ->whereNotNull('location_id')
+            ->select('location_id')
+            ->selectRaw('COALESCE(SUM(CASE WHEN direction = "in" THEN quantity ELSE quantity * -1 END), 0) as total')
+            ->groupBy('location_id')
+            ->with('location.warehouse')
+            ->get();
+            
+        $stockByWarehouse = \App\Models\InventoryMovement::query()
+            ->where('item_id', $item->id)
+            ->whereNull('location_id')
+            ->whereNotNull('warehouse_id')
+            ->select('warehouse_id')
+            ->selectRaw('COALESCE(SUM(CASE WHEN direction = "in" THEN quantity ELSE quantity * -1 END), 0) as total')
+            ->groupBy('warehouse_id')
+            ->with('warehouse')
+            ->get();
+
+        $recentMovements = \App\Models\InventoryMovement::query()
+            ->where('item_id', $item->id)
+            ->with(['warehouse', 'location', 'performedBy'])
+            ->latest()
+            ->limit(20)
+            ->get();
+
+        $totalStock = $item->track_inventory 
+            ? app(\App\Services\Inventory\InventoryMovementService::class)->itemBalance($item->tenant_id, $item->id) 
+            : 0;
+
+        return Inertia::render('inventory/item/show', [
+            'item' => $item,
+            'stockByLocation' => $stockByLocation,
+            'stockByWarehouse' => $stockByWarehouse,
+            'recentMovements' => $recentMovements,
+            'totalStock' => $totalStock,
+        ]);
     }
 
     public function edit(Item $item): Response

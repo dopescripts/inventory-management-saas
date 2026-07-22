@@ -113,7 +113,7 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
 
     Route::resource('units', UnitController::class)->except(['show']);
 
-    Route::resource('items', ItemController::class)->except(['show']);
+    Route::resource('items', ItemController::class);
 
     Route::resource('adjustments', AdjustmentController::class)->only(['index', 'create', 'store']);
 

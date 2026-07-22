@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Eye, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import items from '@/routes/items';
@@ -15,6 +15,7 @@ type Item = {
     category?: { name: string } | null;
     brand?: { name: string } | null;
     unit?: { name: string; short_name: string } | null;
+    total_stock?: string;
 };
 
 export default function Index({
@@ -41,6 +42,7 @@ export default function Index({
                                 <th className="px-6 py-3">SKU</th>
                                 <th className="px-6 py-3">Category</th>
                                 <th className="px-6 py-3">Brand</th>
+                                <th className="px-6 py-3 text-right">Stock</th>
                                 <th className="px-6 py-3">Unit</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3 text-right">
@@ -65,6 +67,9 @@ export default function Index({
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.brand?.name ?? 'None'}
+                                    </td>
+                                    <td className="px-6 py-4 text-right font-medium">
+                                        {item.track_inventory ? Number(item.total_stock ?? 0).toLocaleString() : 'N/A'}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.unit
@@ -99,6 +104,19 @@ export default function Index({
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={items.show({
+                                                        item: item.id,
+                                                    }).url}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                </Link>
+                                            </Button>
                                             <Button
                                                 variant="outline"
                                                 size="icon"
