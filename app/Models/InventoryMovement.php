@@ -64,9 +64,9 @@ class InventoryMovement extends Model
         ];
     }
 
-
     /**
      * Summary of item
+     *
      * @return BelongsTo<Item, $this>
      */
     public function item()

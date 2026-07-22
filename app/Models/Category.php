@@ -31,10 +31,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Category extends Model
 {
+    use BelongsToTenant;
+
     /** @use HasFactory<CategoryFactory> */
     use HasFactory;
-
-    use BelongsToTenant;
 
     /**
      * @return BelongsTo<Tenant, $this>

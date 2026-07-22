@@ -15,6 +15,7 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Purchasing\PurchaseBillController;
 use App\Http\Controllers\Purchasing\PurchaseOrderController;
 use App\Http\Controllers\Purchasing\PurchaseWorkflowController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Sales\CustomerController;
 use App\Http\Controllers\Sales\SalesOrderController;
 use App\Http\Controllers\Sales\SalesWorkflowController;
@@ -240,7 +241,22 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
     });
 
     Route::resource('orders', SalesOrderController::class);
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportsController::class, 'index'])->name('index');
+        Route::get('/inventory', [ReportsController::class, 'inventory'])->name('inventory');
+        Route::get('/inventory/export', [ReportsController::class, 'exportInventory'])->name('inventory.export');
+
+        Route::get('/financial', [ReportsController::class, 'financial'])->name('financial');
+        Route::get('/financial/export', [ReportsController::class, 'exportFinancial'])->name('financial.export');
+
+        Route::get('/sales', [ReportsController::class, 'sales'])->name('sales');
+        Route::get('/sales/export', [ReportsController::class, 'exportSales'])->name('sales.export');
+
+        Route::get('/purchases', [ReportsController::class, 'purchases'])->name('purchases');
+        Route::get('/purchases/export', [ReportsController::class, 'exportPurchases'])->name('purchases.export');
+    });
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/super-admin.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/super-admin.php';

@@ -84,6 +84,6 @@ class TransferService
             ? intval(substr($last->transfer_number, 4)) + 1
             : 1;
 
-        return 'TRF-' . str_pad($next, 6, '0', STR_PAD_LEFT);
+        return 'TRF-'.str_pad($next, 6, '0', STR_PAD_LEFT);
     }
 }

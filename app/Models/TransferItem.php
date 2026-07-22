@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -28,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class TransferItem extends Model
 {
-
     use BelongsToTenant;
 
     protected function casts(): array
@@ -39,8 +37,10 @@ class TransferItem extends Model
             'quantity_received' => 'decimal:4',
         ];
     }
+
     /**
      * Summary of transfer
+     *
      * @return BelongsTo<Transfers, $this>
      */
     public function transfer(): BelongsTo
@@ -50,6 +50,7 @@ class TransferItem extends Model
 
     /**
      * Summary of item
+     *
      * @return BelongsTo<Item, $this>
      */
     public function item(): BelongsTo
@@ -59,6 +60,7 @@ class TransferItem extends Model
 
     /**
      * Summary of tenant
+     *
      * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo

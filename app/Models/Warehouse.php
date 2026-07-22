@@ -87,7 +87,8 @@ class Warehouse extends Model
 
     /**
      * Summary of scopeActive
-     * @param Builder<$this> $query
+     *
+     * @param  Builder<$this>  $query
      * @return Builder<$this>
      */
     public function scopeActive(Builder $query): Builder

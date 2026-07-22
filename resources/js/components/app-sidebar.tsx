@@ -34,6 +34,7 @@ import customers from '@/routes/customers';
 import items from '@/routes/items';
 import orders from '@/routes/orders';
 import purchases from '@/routes/purchases';
+import * as reports from '@/routes/reports';
 import staff from '@/routes/staff';
 import transfers from '@/routes/transfers';
 import units from '@/routes/units';
@@ -152,6 +153,16 @@ export function AppSidebar() {
                     icon: User,
                     href: customers.index(),
                     permission: 'view_customers',
+                },
+            ],
+        },
+        {
+            title: 'Analytics',
+            items: [
+                {
+                    title: 'Reports',
+                    icon: FileText,
+                    href: reports.index(),
                 },
             ],
         },

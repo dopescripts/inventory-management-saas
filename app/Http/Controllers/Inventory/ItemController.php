@@ -52,7 +52,6 @@ class ItemController extends Controller implements HasMiddleware
     public function store(ItemRequest $request, PlanGate $gate): RedirectResponse
     {
 
-
         if ($gate->canCreateProduct(Auth::guard('web')->user()->tenant)) {
             Item::create([
                 ...$request->validated(),
@@ -108,7 +107,7 @@ class ItemController extends Controller implements HasMiddleware
         return Category::query()
             ->orderBy('name')
             ->get(['id', 'name'])
-            ->map(fn(Category $category): array => ['id' => $category->id, 'name' => $category->name])
+            ->map(fn (Category $category): array => ['id' => $category->id, 'name' => $category->name])
             ->all();
     }
 
@@ -120,7 +119,7 @@ class ItemController extends Controller implements HasMiddleware
         return Brand::query()
             ->orderBy('name')
             ->get(['id', 'name'])
-            ->map(fn(Brand $brand): array => ['id' => $brand->id, 'name' => $brand->name])
+            ->map(fn (Brand $brand): array => ['id' => $brand->id, 'name' => $brand->name])
             ->all();
     }
 
@@ -132,7 +131,7 @@ class ItemController extends Controller implements HasMiddleware
         return Unit::query()
             ->orderBy('name')
             ->get(['id', 'name', 'short_name'])
-            ->map(fn(Unit $unit): array => ['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name])
+            ->map(fn (Unit $unit): array => ['id' => $unit->id, 'name' => $unit->name, 'short_name' => $unit->short_name])
             ->all();
     }
 }

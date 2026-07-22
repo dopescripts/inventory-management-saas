@@ -39,7 +39,7 @@ class TransferController extends Controller
             'warehouses' => Warehouse::active()->with([
                 'locations' => function ($query) {
                     $query->active();
-                }
+                },
             ])->get(),
             'items' => Item::active()
                 ->select('id', 'name', 'sku')

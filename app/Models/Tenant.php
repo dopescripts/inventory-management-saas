@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $logo
- * @property \Illuminate\Support\Carbon|null $onboarding_completed_at
+ * @property Carbon|null $onboarding_completed_at
  */
 #[Fillable(['name', 'logo', 'default_currency_id', 'billing_address', 'billing_phone', 'billing_email', 'tax_id', 'onboarding_completed_at'])]
 class Tenant extends Model

@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Enums\TransferStatus;
 use App\Models\Concerns\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $transfer_number
@@ -22,10 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $approved_by
  * @property int|null $received_by
  * @property int $tenant_id
- * @property \Illuminate\Support\Carbon $requested_at
- * @property \Illuminate\Support\Carbon|null $approved_at
- * @property \Illuminate\Support\Carbon|null $shipped_at
- * @property \Illuminate\Support\Carbon|null $received_at
+ * @property Carbon $requested_at
+ * @property Carbon|null $approved_at
+ * @property Carbon|null $shipped_at
+ * @property Carbon|null $received_at
  */
 #[Fillable([
     'transfer_number',
@@ -46,7 +46,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Transfers extends Model
 {
-
     use BelongsToTenant;
 
     protected function casts(): array
@@ -62,6 +61,7 @@ class Transfers extends Model
 
     /**
      * Summary of tenant
+     *
      * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
@@ -71,10 +71,12 @@ class Transfers extends Model
 
     /**
      * Summary of sourceWarehouse
+     *
      * @return BelongsTo<Warehouse, $this>
      */
     /**
      * Summary of sourceWarehouse
+     *
      * @return BelongsTo<Warehouse, $this>
      */
     public function sourceWarehouse(): BelongsTo
@@ -84,6 +86,7 @@ class Transfers extends Model
 
     /**
      * Summary of sourceLocation
+     *
      * @return BelongsTo<Location, $this>
      */
     public function sourceLocation(): BelongsTo
@@ -93,6 +96,7 @@ class Transfers extends Model
 
     /**
      * Summary of destinationWarehouse
+     *
      * @return BelongsTo<Warehouse, $this>
      */
     public function destinationWarehouse(): BelongsTo
@@ -102,6 +106,7 @@ class Transfers extends Model
 
     /**
      * Summary of destinationLocation
+     *
      * @return BelongsTo<Location, $this>
      */
     public function destinationLocation(): BelongsTo
@@ -111,6 +116,7 @@ class Transfers extends Model
 
     /**
      * Summary of requestedBy
+     *
      * @return BelongsTo<User, $this>
      */
     public function requestedBy(): BelongsTo
@@ -120,6 +126,7 @@ class Transfers extends Model
 
     /**
      * Summary of approvedBy
+     *
      * @return BelongsTo<User, $this>
      */
     public function approvedBy(): BelongsTo
@@ -129,6 +136,7 @@ class Transfers extends Model
 
     /**
      * Summary of receivedBy
+     *
      * @return BelongsTo<User, $this>
      */
     public function receivedBy(): BelongsTo
@@ -138,6 +146,7 @@ class Transfers extends Model
 
     /**
      * Summary of items
+     *
      * @return HasMany<TransferItem, $this>
      */
     public function items(): HasMany

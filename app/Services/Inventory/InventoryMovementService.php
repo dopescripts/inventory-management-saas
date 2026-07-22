@@ -161,7 +161,7 @@ class InventoryMovementService
     }
 
     /**
-     * @param Builder<InventoryMovement> $query
+     * @param  Builder<InventoryMovement>  $query
      * @param  array<string, int|null>  $filters
      */
     private function applyFilters(Builder $query, array $filters): void

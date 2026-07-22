@@ -15,17 +15,17 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sales_order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
-            
+
             $table->decimal('ordered_quantity', 15, 4);
             $table->decimal('picked_quantity', 15, 4)->default(0);
             $table->decimal('shipped_quantity', 15, 4)->default(0);
             $table->decimal('returned_quantity', 15, 4)->default(0);
-            
+
             $table->decimal('unit_price', 15, 4)->default(0);
             $table->decimal('discount', 15, 4)->default(0);
             $table->decimal('tax', 15, 4)->default(0);
             $table->decimal('total', 15, 4)->default(0);
-            
+
             $table->timestamps();
         });
     }

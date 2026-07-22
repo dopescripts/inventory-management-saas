@@ -33,10 +33,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Unit extends Model
 {
-    /** @use HasFactory<UnitFactory> */
-    use HasFactory;
     use BelongsToTenant;
 
+    /** @use HasFactory<UnitFactory> */
+    use HasFactory;
 
     /**
      * @return BelongsTo<Tenant, $this>

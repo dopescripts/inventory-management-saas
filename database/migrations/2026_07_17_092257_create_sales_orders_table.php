@@ -20,13 +20,13 @@ return new class extends Migration
             $table->string('status')->default('draft');
             $table->date('order_date');
             $table->date('expected_ship_date')->nullable();
-            
+
             $table->decimal('subtotal', 15, 4)->default(0);
             $table->decimal('discount', 15, 4)->default(0);
             $table->decimal('tax', 15, 4)->default(0);
             $table->decimal('shipping', 15, 4)->default(0);
             $table->decimal('total', 15, 4)->default(0);
-            
+
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

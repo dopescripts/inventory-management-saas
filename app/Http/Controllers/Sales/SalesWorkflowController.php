@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Models\SalesOrder;
+use App\Services\Inventory\InventoryMovementService;
 use App\Services\Sales\SalesOrderService;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,7 @@ class SalesWorkflowController extends Controller
         return back()->with('success', 'Sales Order confirmed successfully.');
     }
 
-    public function ship(SalesOrder $order, \App\Services\Inventory\InventoryMovementService $inventoryService)
+    public function ship(SalesOrder $order, InventoryMovementService $inventoryService)
     {
         if ($order->tenant_id !== Auth::user()->tenant_id) {
             abort(403);

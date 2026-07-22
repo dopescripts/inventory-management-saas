@@ -97,7 +97,7 @@ class StoreTransferRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if (!$this->filled('items')) {
+        if (! $this->filled('items')) {
             $this->merge([
                 'items' => [],
             ]);

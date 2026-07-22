@@ -15,7 +15,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -36,7 +36,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -78,7 +78,7 @@ class PlanGate
     {
         $plan = $this->currentPlan($tenant);
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 

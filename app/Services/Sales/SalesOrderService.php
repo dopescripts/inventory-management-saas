@@ -2,8 +2,11 @@
 
 namespace App\Services\Sales;
 
+use App\Enums\InventoryMovementDirection;
+use App\Models\InventoryReservation;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
+use App\Services\Inventory\InventoryMovementService;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
@@ -108,7 +111,7 @@ class SalesOrderService
             $order->update(['status' => 'confirmed']);
 
             foreach ($order->items as $item) {
-                \App\Models\InventoryReservation::create([
+                InventoryReservation::create([
                     'tenant_id' => $order->tenant_id,
                     'sales_order_id' => $order->id,
                     'sales_order_item_id' => $item->id,
@@ -122,7 +125,7 @@ class SalesOrderService
         });
     }
 
-    public function shipOrder(SalesOrder $order, \App\Services\Inventory\InventoryMovementService $inventoryService, ?int $userId = null): SalesOrder
+    public function shipOrder(SalesOrder $order, InventoryMovementService $inventoryService, ?int $userId = null): SalesOrder
     {
         if ($order->status !== 'confirmed') {
             throw new InvalidArgumentException('Only confirmed orders can be shipped.');
@@ -137,14 +140,14 @@ class SalesOrderService
                     $item->item_id,
                     $order->warehouse_id,
                     null, // No specific location selected
-                    \App\Enums\InventoryMovementDirection::Out,
+                    InventoryMovementDirection::Out,
                     $item->ordered_quantity,
                     "Sales Order #{$order->number} Shipped",
                     $userId
                 );
 
                 // Fulfill reservations
-                \App\Models\InventoryReservation::where('sales_order_item_id', $item->id)
+                InventoryReservation::where('sales_order_item_id', $item->id)
                     ->update(['status' => 'fulfilled']);
             }
 
@@ -173,7 +176,7 @@ class SalesOrderService
             $order->update(['status' => 'cancelled']);
 
             // Release any reservations if confirmed
-            \App\Models\InventoryReservation::where('sales_order_id', $order->id)
+            InventoryReservation::where('sales_order_id', $order->id)
                 ->where('status', 'reserved')
                 ->update(['status' => 'released']);
 

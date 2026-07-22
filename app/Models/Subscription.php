@@ -43,8 +43,6 @@ class Subscription extends Model
 
     /**
      * Summary of checkActiveSubscription
-     *
-     * @return self|null
      */
     public function checkActiveSubscription(): ?self
     {

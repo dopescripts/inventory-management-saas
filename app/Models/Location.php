@@ -86,9 +86,9 @@ class Location extends Model
         return $this->hasMany(InventoryMovement::class);
     }
 
-
     /**
      * Summary of getBalanceAttribute
+     *
      * @return string
      */
     public function getBalanceAttribute()
@@ -98,7 +98,8 @@ class Location extends Model
 
     /**
      * Summary of scopeActive
-     * @param Builder<$this> $query
+     *
+     * @param  Builder<$this>  $query
      * @return Builder<$this>
      */
     public function scopeActive(Builder $query): Builder

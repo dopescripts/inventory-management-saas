@@ -91,8 +91,8 @@ class PurchaseWorkflowService
                 ]);
             }
 
-            $newStatus = $purchaseOrder->status === PurchaseStatus::PartiallyReceived 
-                ? PurchaseStatus::PartiallyClosed 
+            $newStatus = $purchaseOrder->status === PurchaseStatus::PartiallyReceived
+                ? PurchaseStatus::PartiallyClosed
                 : PurchaseStatus::Closed;
 
             $purchaseOrder->update([

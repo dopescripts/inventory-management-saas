@@ -47,10 +47,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Item extends Model
 {
+    use BelongsToTenant;
+
     /** @use HasFactory<ItemFactory> */
     use HasFactory;
-
-    use BelongsToTenant;
 
     /**
      * Get the attributes that should be cast.
@@ -67,6 +67,7 @@ class Item extends Model
 
     /**
      * Summary of tenant
+     *
      * @return BelongsTo<Tenant, $this>
      */
     public function tenant(): BelongsTo
@@ -116,7 +117,8 @@ class Item extends Model
 
     /**
      * Summary of scopeActive
-     * @param Builder<$this> $query
+     *
+     * @param  Builder<$this>  $query
      * @return Builder<$this>
      */
     public function scopeActive(Builder $query): Builder
