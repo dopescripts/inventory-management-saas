@@ -61,6 +61,7 @@ class ItemRequest extends FormRequest
             ],
             'type' => ['required', 'string', Rule::in(['stock', 'service'])],
             'track_inventory' => ['nullable', 'boolean'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
             'description' => ['nullable', 'string', 'max:1000'],
             'is_active' => ['nullable', 'boolean'],
         ];

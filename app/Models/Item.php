@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $unit_id
  * @property string $type
  * @property bool $track_inventory
+ * @property int $low_stock_threshold
  * @property bool $is_active
  * @property string|null $description
  * @property int|null $created_by
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Brand|null $brand
  * @property-read Unit $unit
  * @property-read User|null $createdBy
+ * @property-read HasMany<InventoryMovement> $inventoryMovements
  */
 #[Fillable([
     'tenant_id',
@@ -41,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'unit_id',
     'type',
     'track_inventory',
+    'low_stock_threshold',
     'is_active',
     'description',
     'created_by',
@@ -61,6 +64,7 @@ class Item extends Model
     {
         return [
             'track_inventory' => 'boolean',
+            'low_stock_threshold' => 'integer',
             'is_active' => 'boolean',
         ];
     }

@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Menu, Search, Bell } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -185,6 +185,51 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                             >
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
+                            
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="relative group h-9 w-9 cursor-pointer"
+                                    >
+                                        <Bell className="!size-5 opacity-80 group-hover:opacity-100" />
+                                        {(auth.user?.unread_notifications_count ?? 0) > 0 && (
+                                            <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-red-600"></span>
+                                        )}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-80" align="end">
+                                    <div className="flex items-center justify-between px-4 py-2 border-b">
+                                        <span className="font-semibold text-sm">Notifications</span>
+                                        {(auth.user?.unread_notifications_count ?? 0) > 0 && (
+                                            <Link href="/notifications/mark-all-read" method="post" as="button" className="text-xs text-blue-600 hover:underline">
+                                                Mark all read
+                                            </Link>
+                                        )}
+                                    </div>
+                                    <div className="max-h-[300px] overflow-y-auto">
+                                        {auth.user?.recent_notifications?.length ? (
+                                            auth.user.recent_notifications.map((notification: any) => (
+                                                <div key={notification.id} className={cn("p-4 border-b text-sm last:border-b-0", notification.read_at ? "opacity-75" : "bg-neutral-50 dark:bg-neutral-800/50")}>
+                                                    <p>{notification.data.message}</p>
+                                                    <div className="mt-2 flex items-center justify-between text-xs text-neutral-500">
+                                                        <span>{new Date(notification.created_at).toLocaleDateString()}</span>
+                                                        {!notification.read_at && (
+                                                            <Link href={`/notifications/${notification.id}/mark-read`} method="post" as="button" className="text-blue-600 hover:underline">
+                                                                Mark read
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="p-4 text-center text-sm text-neutral-500">No recent notifications</div>
+                                        )}
+                                    </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
                             <div className="ml-1 hidden gap-1 lg:flex">
                                 {rightNavItems.map((item) => (
                                     <Tooltip key={item.title}>

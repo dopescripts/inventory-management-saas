@@ -11,6 +11,7 @@ use App\Http\Controllers\Inventory\UnitController;
 use App\Http\Controllers\Inventory\VendorController;
 use App\Http\Controllers\Inventory\WarehouseController;
 use App\Http\Controllers\Inventory\WarehouseLocationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Purchasing\PurchaseBillController;
 use App\Http\Controllers\Purchasing\PurchaseOrderController;
@@ -255,6 +256,11 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
 
         Route::get('/purchases', [ReportsController::class, 'purchases'])->name('purchases');
         Route::get('/purchases/export', [ReportsController::class, 'exportPurchases'])->name('purchases.export');
+    });
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+        Route::post('/{id}/mark-read', [NotificationController::class, 'markAsRead'])->name('mark-read');
     });
 });
 

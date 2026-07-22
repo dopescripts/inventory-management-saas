@@ -104,7 +104,26 @@ class InventoryMovementService
     protected function record(array $attributes): InventoryMovement
     {
         return DB::transaction(function () use ($attributes): InventoryMovement {
-            return InventoryMovement::create($this->normalizeAttributes($attributes));
+            $movement = InventoryMovement::create($this->normalizeAttributes($attributes));
+
+            if (isset($attributes['item_id'])) {
+                $item = \App\Models\Item::find($attributes['item_id']);
+                if ($item && $item->track_inventory && $item->low_stock_threshold > 0) {
+                    $balanceAfter = $attributes['balance_after'] ?? $this->itemBalance($attributes['tenant_id'], $item->id);
+                    
+                    $qty = (float)$movement->quantity;
+                    $balanceBefore = $movement->direction === InventoryMovementDirection::Out->value || $movement->direction === InventoryMovementDirection::Out
+                        ? (float)$balanceAfter + $qty
+                        : (float)$balanceAfter - $qty;
+                    
+                    if ((float)$balanceAfter <= (float)$item->low_stock_threshold && $balanceBefore > (float)$item->low_stock_threshold) {
+                        $users = \App\Models\User::where('tenant_id', $attributes['tenant_id'])->get();
+                        \Illuminate\Support\Facades\Notification::send($users, new \App\Notifications\LowStockAlert($item, (float)$balanceAfter));
+                    }
+                }
+            }
+
+            return $movement;
         });
     }
 

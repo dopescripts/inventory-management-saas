@@ -50,10 +50,11 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                /** @var User|null $user */
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
                     'permissions' => $user->getAllPermissions()->pluck('name'),
+                    'unread_notifications_count' => $user->unreadNotifications()->count(),
+                    'recent_notifications' => $user->notifications()->take(10)->get(),
                 ]) : null,
                 'tenant' => $user?->tenant ? [
                     'id' => $user->tenant->id,

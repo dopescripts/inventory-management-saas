@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Download, Eye, MoreHorizontal, Plus } from 'lucide-react';
+import { Download, Eye, MoreHorizontal } from 'lucide-react';
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -170,12 +170,12 @@ export default function Index({ bills: paginatedBills }: Props) {
                             Manage vendor bills and payments.
                         </p>
                     </div>
-                    <Button asChild>
+                    {/* <Button asChild>
                         <Link href={bills.create()}>
                             <Plus className="mr-2 h-4 w-4" />
                             New Bill
                         </Link>
-                    </Button>
+                    </Button> */}
                 </div>
 
                 <div className="rounded-lg border">

@@ -57,6 +57,7 @@ class ItemController extends Controller implements HasMiddleware
                 ...$request->validated(),
                 'created_by' => $request->user()->id,
                 'track_inventory' => $request->boolean('track_inventory', true),
+                'low_stock_threshold' => $request->integer('low_stock_threshold', 0),
                 'is_active' => $request->boolean('is_active', true),
             ]);
 

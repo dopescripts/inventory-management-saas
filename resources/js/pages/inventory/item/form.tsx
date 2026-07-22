@@ -39,6 +39,7 @@ type ItemFormData = {
     unit_id: string;
     type: string;
     track_inventory: boolean;
+    low_stock_threshold: string;
     description: string;
     is_active: boolean;
 };
@@ -54,6 +55,7 @@ type ItemFormProps = {
         unit_id: number;
         type: string;
         track_inventory: boolean;
+        low_stock_threshold: number;
         description: string | null;
         is_active: boolean;
     };
@@ -466,6 +468,7 @@ export default function ItemForm({
             unit_id: item?.unit_id?.toString() ?? '',
             type: item?.type ?? 'stock',
             track_inventory: item?.track_inventory ?? true,
+            low_stock_threshold: item?.low_stock_threshold?.toString() ?? '0',
             description: item?.description ?? '',
             is_active: item?.is_active ?? true,
         });
@@ -644,7 +647,7 @@ export default function ItemForm({
                     </Field>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-3">
                     <Field>
                         <FieldLabel htmlFor="type">Type</FieldLabel>
                         <Select
@@ -678,6 +681,22 @@ export default function ItemForm({
                         />
                         <Label htmlFor="track_inventory">Track Inventory</Label>
                     </div>
+
+                    {data.track_inventory && (
+                        <Field>
+                            <FieldLabel htmlFor="low_stock_threshold">Low Stock</FieldLabel>
+                            <Input
+                                id="low_stock_threshold"
+                                type="number"
+                                min="0"
+                                value={data.low_stock_threshold}
+                                onChange={(event) =>
+                                    setData('low_stock_threshold', event.target.value)
+                                }
+                            />
+                            <FieldError errors={[{ message: errors.low_stock_threshold }]} />
+                        </Field>
+                    )}
                 </div>
 
                 <Field>
