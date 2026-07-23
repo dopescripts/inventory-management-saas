@@ -21,13 +21,10 @@ export default function AppLogo() {
                 )}
             </div>
             <div className="ml-2 grid flex-1 text-left text-sm leading-tight text-gray-300">
-                <span className='truncate font-bold text-white text-xl'>
+                <span className="truncate text-xl font-bold text-white">
                     {name as string}
                 </span>
-                <span className="truncate">
-                    {companyName as string}
-                </span>
-
+                <span className="truncate">{companyName as string}</span>
             </div>
         </>
     );
