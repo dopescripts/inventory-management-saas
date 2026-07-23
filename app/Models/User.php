@@ -32,10 +32,10 @@ use Spatie\Permission\Traits\HasRoles;
  */
 #[Fillable(['name', 'email', 'password', 'tenant_id', 'onboarding_completed_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasPermissions, HasRoles, MustVerifyEmail, Notifiable;
+    use HasFactory, HasPermissions, HasRoles, Notifiable;
 
     /**
      * Get the attributes that should be cast.
