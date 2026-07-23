@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,7 +28,7 @@ class CurrencyController extends Controller
     {
         $user = $request->user();
 
-        if (! $user->hasAnyRole(['owner', 'manager'])) {
+        if (!$user->hasAnyRole(['owner', 'manager'])) {
             abort(403);
         }
 
@@ -40,6 +41,9 @@ class CurrencyController extends Controller
         ]);
 
         $user->tenant?->update($validated);
+
+        // @phpstan-ignore property.notFound
+        Cache::forget("tenant:{$user->tenant_id}:auth_payload");
 
         return redirect()
             ->route('currency.edit')

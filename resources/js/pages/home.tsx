@@ -30,7 +30,7 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
     const [activeNav, setActiveNav] = useState('home');
     const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
-    const { auth } = usePage<{ auth: Auth }>().props;
+    const { auth, name } = usePage<{ auth: Auth, name: string }>().props;
 
     const pricingPlans = plans;
 
@@ -41,9 +41,9 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-2">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-                            SF
+                            {name[0] + name[1]}
                         </div>
-                        <span className="text-lg font-bold">StockFlow</span>
+                        <span className="text-lg font-bold">{name}</span>
                     </div>
 
                     <div className="hidden flex-1 items-center justify-center gap-8 md:flex">
@@ -52,11 +52,10 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 <button
                                     key={item}
                                     onClick={() => setActiveNav(item)}
-                                    className={`text-sm transition-colors ${
-                                        activeNav === item
-                                            ? 'font-semibold text-primary'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    }`}
+                                    className={`text-sm transition-colors ${activeNav === item
+                                        ? 'font-semibold text-primary'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                        }`}
                                 >
                                     {item}
                                 </button>
@@ -65,12 +64,24 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {auth ? (
+                        {auth.user ? (
                             <>
-                                <Link href={'/dashboard'}>
+                                <Link
+                                    href={'/dashboard'}
+                                    className="flex items-center gap-1"
+                                >
                                     <button className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
                                         Dashboard
                                     </button>
+                                    {auth.tenant?.logo ? (
+                                        <img
+                                            src={auth.tenant?.logo}
+                                            className="h-auto w-8 rounded-full border bg-white"
+                                            alt=""
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
                                 </Link>
                             </>
                         ) : (
@@ -119,7 +130,7 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
 
                             <h1 className="mb-6 text-5xl leading-tight font-bold text-balance md:text-6xl lg:text-6xl">
                                 Inventory Management That{' '}
-                                <span className="bg-gradient-to-r from-accent to-accent/60 bg-clip-text text-transparent">
+                                <span className="bg-linear-to-r from-accent to-accent/60 bg-clip-text text-transparent">
                                     Keeps Your Business Moving
                                 </span>
                             </h1>
@@ -650,11 +661,10 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 viewport={{ once: true }}
-                                className={`relative rounded-xl border p-8 transition-all ${
-                                    index === 1
-                                        ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
-                                        : 'border-border bg-card'
-                                }`}
+                                className={`relative rounded-xl border p-8 transition-all ${index === 1
+                                    ? 'scale-105 border-accent bg-gradient-to-br from-accent/5 to-primary/5 shadow-xl'
+                                    : 'border-border bg-card'
+                                    }`}
                             >
                                 {index === 1 && (
                                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-semibold text-primary-foreground">
@@ -678,11 +688,10 @@ export default function Home({ plans = [] }: { plans: Plan[] }) {
                                     </span>
                                 </div>
                                 <button
-                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${
-                                        index === 1
-                                            ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
-                                            : 'border border-border hover:bg-muted'
-                                    }`}
+                                    className={`mb-8 w-full rounded-lg py-3 font-semibold transition-all ${index === 1
+                                        ? 'bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/20'
+                                        : 'border border-border hover:bg-muted'
+                                        }`}
                                 >
                                     Get Started
                                 </button>

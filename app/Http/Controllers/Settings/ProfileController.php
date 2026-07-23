@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -60,8 +61,16 @@ class ProfileController extends Controller
             }
 
             $request->user()->tenant?->update([
-                'logo' => Storage::disk('public')->putFileAs('tenants/logos', $request->file('company_logo'), $request->user()->tenant->id.'.'.$request->file('company_logo')->getClientOriginalExtension()),
+                'logo' => Storage::disk('public')->putFileAs('tenants/logos', $request->file('company_logo'), $request->user()->tenant->id . '.' . $request->file('company_logo')->getClientOriginalExtension()),
             ]);
+        }
+
+        // @phpstan-ignore method.notFound
+        if ($request->user()->hasRole('owner')) {
+
+            // @phpstan-ignore property.notFound
+            Cache::forget("tenant:{$request->user()->tenant_id}:auth_payload");
+
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
