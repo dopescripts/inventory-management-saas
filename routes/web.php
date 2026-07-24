@@ -259,10 +259,10 @@ Route::middleware(['auth', 'verified', 'tenant.permission', 'onboarding'])->grou
     });
 
     Route::prefix('notifications')->name('notifications.')->group(function () {
-        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllRead'])->name('mark-all-read');
         Route::post('/{id}/mark-read', [NotificationController::class, 'markAsRead'])->name('mark-read');
     });
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/super-admin.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/super-admin.php';
