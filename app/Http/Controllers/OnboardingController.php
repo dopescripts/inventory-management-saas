@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,7 +45,7 @@ class OnboardingController extends Controller
         $tenant = Auth::guard('web')->user()->tenant;
 
         if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('tenant-logos', 'public');
+            $validated['logo'] = Storage::disk('public')->putFileAs('tenants/logos', $request->file('logo'), $tenant->id . '.' . $request->file('logo')->getClientOriginalExtension());
         }
 
         $tenant->update($validated);
@@ -67,7 +68,7 @@ class OnboardingController extends Controller
     {
         $planId = session('onboarding_plan_id');
 
-        if (! $planId) {
+        if (!$planId) {
             return redirect()->route('onboarding.show');
         }
 
@@ -100,7 +101,7 @@ class OnboardingController extends Controller
                 'paid_at' => $result->success ? now() : null,
             ]);
 
-            if (! $result->success) {
+            if (!$result->success) {
                 return redirect()->route('onboarding.show')
                     ->with('error', 'Payment failed. Please try again.');
             }
@@ -131,13 +132,13 @@ class OnboardingController extends Controller
 
     private function determineStep($tenant): int
     {
-        if (! $tenant->billing_address && ! $tenant->billing_email && ! $tenant->logo) {
+        if (!$tenant->billing_address && !$tenant->billing_email && !$tenant->logo) {
             return 1;
         }
 
         $planId = session('onboarding_plan_id');
 
-        if (! $planId || ! Plan::where('id', $planId)->where('is_active', true)->exists()) {
+        if (!$planId || !Plan::where('id', $planId)->where('is_active', true)->exists()) {
             session()->forget('onboarding_plan_id');
 
             return 2;

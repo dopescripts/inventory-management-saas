@@ -31,9 +31,12 @@ interface PurchaseBill {
     issued_at: string | null;
     notes: string | null;
     created_at: string;
-    purchase_order: { id: number; purchase_number: string } | null;
+    purchase_order: {
+        id: number;
+        purchase_number: string;
+        vendor: { id: number; name: string };
+    } | null;
     purchase_receive: { id: number; received_at: string } | null;
-    vendor: { id: number; name: string } | null;
     currency: {
         id: number;
         code: string;
@@ -92,8 +95,8 @@ export default function Show({ bill }: Props) {
                         {bill.purchase_order && (
                             <p className="mt-2 text-muted-foreground">
                                 Bill for PO{' '}
-                                {bill.purchase_order.purchase_number}
-                                {bill.vendor && ` from ${bill.vendor.name}`}
+                                {bill.purchase_order?.purchase_number}
+                                {bill.purchase_order?.vendor && ` from ${bill.purchase_order?.vendor.name}`}
                             </p>
                         )}
                     </div>
@@ -112,16 +115,16 @@ export default function Show({ bill }: Props) {
 
                         {(bill.status === 'draft' ||
                             bill.status === 'pending') && (
-                            <Button
-                                onClick={() =>
-                                    router.post(
-                                        bills.markPaid({ bill: bill.id }),
-                                    )
-                                }
-                            >
-                                Mark as Paid
-                            </Button>
-                        )}
+                                <Button
+                                    onClick={() =>
+                                        router.post(
+                                            bills.markPaid({ bill: bill.id }),
+                                        )
+                                    }
+                                >
+                                    Mark as Paid
+                                </Button>
+                            )}
 
                         {bill.status === 'draft' && (
                             <Button
@@ -146,7 +149,7 @@ export default function Show({ bill }: Props) {
                         </CardHeader>
                         <CardContent>
                             <div className="font-medium">
-                                {bill.vendor?.name ?? '—'}
+                                {bill.purchase_order?.vendor?.name ?? '—'}
                             </div>
                         </CardContent>
                     </Card>
@@ -191,11 +194,11 @@ export default function Show({ bill }: Props) {
                             <div className="mt-1 text-sm text-muted-foreground">
                                 {bill.issued_at
                                     ? new Date(
-                                          bill.issued_at,
-                                      ).toLocaleDateString()
+                                        bill.issued_at,
+                                    ).toLocaleDateString()
                                     : new Date(
-                                          bill.created_at,
-                                      ).toLocaleDateString()}
+                                        bill.created_at,
+                                    ).toLocaleDateString()}
                             </div>
                         </CardContent>
                     </Card>

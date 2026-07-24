@@ -24,8 +24,11 @@ interface Bill {
     due_date: string | null;
     issued_at: string | null;
     created_at: string;
-    purchase_order?: { id: number; purchase_number: string };
-    vendor?: { id: number; name: string };
+    purchase_order?: {
+        id: number;
+        purchase_number: string;
+        vendor: { id: number; name: string };
+    };
 }
 
 interface Props {
@@ -75,7 +78,7 @@ export default function Index({ bills: paginatedBills }: Props) {
         {
             accessorKey: 'vendor.name',
             header: 'Vendor',
-            cell: ({ row }) => row.original.vendor?.name ?? '—',
+            cell: ({ row }) => row.original.purchase_order?.vendor?.name ?? '—',
         },
         {
             accessorKey: 'total',
