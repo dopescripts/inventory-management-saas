@@ -49,11 +49,11 @@ const mainNavItems: NavItem[] = [
         href: '/super-admin/payments',
         icon: Receipt,
     },
-    {
-        title: 'Admins',
-        href: '/super-admin/admins',
-        icon: Users,
-    },
+    // {
+    //     title: 'Admins',
+    //     href: '/super-admin/admins',
+    //     icon: Users,
+    // },
 ];
 
 export function SuperAdminSidebar() {
