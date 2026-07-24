@@ -1,7 +1,6 @@
 import { Link } from '@inertiajs/react';
 import {
     LayoutGrid,
-    Users,
     Building2,
     ShieldCheck,
     CreditCard,
